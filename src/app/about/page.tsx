@@ -94,7 +94,7 @@ export default function AboutPage() {
                             <span className="text-zinc-300">EXCELLENCE.</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-zinc-500 font-light leading-relaxed max-w-2xl">
-                            I am a student at <strong className="font-bold text-zinc-900">Universitas Negeri Malang</strong>, majoring in <strong className="font-bold text-zinc-900">Pendidikan Teknik Informatika</strong>. I bridge academic theory with real-world application to build robust digital solutions.
+                            I am a student at <strong className="font-bold text-zinc-900">Universitas Negeri Malang</strong>, majoring in <strong className="font-bold text-zinc-900">Informatics Engineering Education</strong>. I bridge academic theory with real-world application to build robust digital solutions.
                         </p>
                     </motion.div>
                 </div>
@@ -103,13 +103,13 @@ export default function AboutPage() {
             {/* 2. The Photo Grid (Brutalist Style) */}
             <section className="py-12 border-y border-zinc-100 overflow-hidden">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-[600px] md:h-[500px]">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                         {/* Main Photo */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8 }}
-                            className="md:col-span-8 h-full relative group overflow-hidden bg-zinc-100"
+                            className="md:col-span-8 h-[400px] md:h-[600px] relative group overflow-hidden bg-zinc-100"
                         >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
@@ -123,12 +123,12 @@ export default function AboutPage() {
                         </motion.div>
 
                         {/* Secondary Photos Stack */}
-                        <div className="md:col-span-4 flex flex-col gap-6 h-full">
+                        <div className="md:col-span-4 flex flex-col gap-6">
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="flex-1 relative group overflow-hidden bg-zinc-100"
+                                className="h-[250px] md:h-[280px] relative group overflow-hidden bg-zinc-100"
                             >
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
@@ -141,12 +141,12 @@ export default function AboutPage() {
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.4 }}
-                                className="flex-1 bg-zinc-900 p-8 flex flex-col justify-between text-white"
+                                className="h-[200px] md:h-[300px] bg-zinc-900 p-6 md:p-8 flex flex-col justify-between text-white"
                             >
-                                <Globe className="w-8 h-8" />
+                                <Globe className="w-6 h-6 md:w-8 md:h-8" />
                                 <div>
-                                    <h3 className="text-3xl font-bold mb-1">Malang</h3>
-                                    <p className="text-zinc-500 text-sm uppercase tracking-wider">Universitas Negeri Malang</p>
+                                    <h3 className="text-2xl md:text-3xl font-bold mb-1">Malang</h3>
+                                    <p className="text-zinc-500 text-xs md:text-sm uppercase tracking-wider">Universitas Negeri Malang</p>
                                 </div>
                             </motion.div>
                         </div>

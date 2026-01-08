@@ -92,11 +92,11 @@ export function Hero({
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-zinc-900 leading-[0.9]"
+                            className="text-4xl md:text-8xl lg:text-8xl font-black tracking-tighter text-zinc-900 leading-[0.9]"
                         >
                             FULL STACK
                             <br />
-                            <span className="text-zinc-400">DEVELOPER</span>
+                            <span className="text-zinc-400">WEB DEVELOPER</span>
                         </motion.h1>
 
                         {/* Decorative element next to title */}
@@ -120,7 +120,7 @@ export function Hero({
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="text-xl md:text-2xl text-zinc-600 max-w-2xl font-medium leading-relaxed mb-10"
                     >
-                        I build <span className="text-zinc-900 font-bold underline decoration-2 decoration-zinc-300 underline-offset-4">scalable web & mobile apps</span> with a focus on performance, modern UI, and Artificial Intelligence.
+                        I'm a <span className="text-zinc-900 font-bold underline decoration-2 decoration-zinc-300 underline-offset-4">Full Stack Web Developer</span> currently expanding my expertise into mobile development, machine learning, and data science.
                     </motion.p>
 
                     {/* Action Buttons */}

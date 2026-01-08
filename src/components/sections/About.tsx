@@ -45,13 +45,14 @@ export function About() {
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="space-y-6"
-                        >
+                        >   
+                            {/* Refactored biographical content focusing on web development, machine learning, and data science */}
                             <p className="text-xl md:text-2xl text-zinc-600 leading-relaxed font-light">
-                                I&apos;m an undergraduate student at <strong className="font-semibold text-zinc-900">Universitas Negeri Malang</strong>, focusing on Full Stack Engineering. Passionate about building scalable web & mobile applications.
+                                I&apos;m an undergraduate student at <strong className="font-semibold text-zinc-900">Universitas Negeri Malang</strong>, specializing in Full Stack Web Development. I focus on building robust, scalable applications with a seamless user experience.
                             </p>
 
                             <p className="text-lg text-zinc-500 leading-relaxed">
-                                Recently, I&apos;ve been diving deep into <strong className="font-semibold text-zinc-900">Machine Learning</strong>, exploring data analysis and predictive modeling to create smarter, more adaptive digital experiences.
+                                Currently, I am deepening my expertise in modern web architectures while expanding my horizons into <strong className="font-semibold text-zinc-900">Machine Learning</strong> and <strong className="font-semibold text-zinc-900">Data Science</strong> to create more intelligent, data-driven digital solutions.
                             </p>
 
                             <div className="pt-6">
