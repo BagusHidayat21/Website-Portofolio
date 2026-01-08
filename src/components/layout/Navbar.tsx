@@ -1,11 +1,10 @@
 'use client';
 
-// Impressive Navbar with blur backdrop, animated links, and mobile menu
+// Premium Navbar with Full Screen Mobile Menu
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Github, Linkedin, FileText } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Menu, X, Github, Linkedin, ArrowUpRight, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 
@@ -16,8 +15,8 @@ const navLinks = [
 ];
 
 const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/BagusHidayat21', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/bagushidayat-id/', label: 'LinkedIn' },
 ];
 
 export function Navbar() {
@@ -34,165 +33,153 @@ export function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Lock body scroll when menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [isOpen]);
+
     return (
-        <motion.header
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                    ? 'bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800/50'
+        <>
+            <motion.header
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+                className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled
+                    ? 'bg-white/80 backdrop-blur-xl border-b border-zinc-200/50'
                     : 'bg-transparent'
-                }`}
-        >
-            <nav className="container mx-auto px-6 h-16 flex items-center justify-between">
-                {/* Logo */}
-                <Link href="/" className="group flex items-center gap-2">
-                    <motion.div
-                        className="h-8 w-8 rounded-lg bg-white flex items-center justify-center"
-                        whileHover={{ scale: 1.05, rotate: 5 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <span className="text-black font-bold text-sm">Hid.</span>
-                    </motion.div>
-                    <span className="font-semibold text-lg hidden sm:block group-hover:text-zinc-300 transition-colors">
-                        Portfolio
-                    </span>
-                </Link>
+                    }`}
+            >
+                <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
+                    {/* Logo */}
+                    <Link href="/" className="relative z-50 group flex items-center gap-3">
+                        <div className="h-10 w-10 bg-zinc-900 flex items-center justify-center rounded-sm transition-transform group-hover:scale-105 active:scale-95">
+                            <span className="text-white font-bold text-sm">HID</span>
+                        </div>
+                    </Link>
 
-                {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-1">
-                    {navLinks.map((link) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="relative px-4 py-2 text-sm font-medium transition-colors"
-                            >
-                                <span className={`relative z-10 ${isActive ? 'text-white' : 'text-zinc-400 hover:text-white'}`}>
-                                    {link.label}
-                                </span>
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeNav"
-                                        className="absolute inset-0 bg-zinc-800/50 rounded-lg"
-                                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                    />
-                                )}
-                            </Link>
-                        );
-                    })}
-                </div>
-
-                {/* Right side - Social & CTA */}
-                <div className="hidden md:flex items-center gap-4">
-                    {/* Social Links */}
-                    <div className="flex items-center gap-2">
-                        {socialLinks.map((social) => (
-                            <motion.a
-                                key={social.label}
-                                href={social.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2 text-zinc-400 hover:text-white transition-colors"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <social.icon className="h-4 w-4" />
-                            </motion.a>
-                        ))}
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center gap-8">
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="relative text-sm font-medium transition-colors"
+                                >
+                                    <span className={`${isActive ? 'text-zinc-900' : 'text-zinc-500 hover:text-zinc-900'}`}>
+                                        {link.label}
+                                    </span>
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="desktopNav"
+                                            className="absolute -bottom-1 left-0 right-0 h-px bg-zinc-900"
+                                        />
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
 
-                    {/* Divider */}
-                    <div className="h-4 w-px bg-zinc-700" />
-
-                    {/* CTA Button */}
-                    <Button asChild size="sm" className="gap-2 bg-white text-black hover:bg-zinc-200">
-                        <a href="mailto:hello@example.com">
-                            <FileText className="h-3 w-3" />
-                            Hire Me
-                        </a>
-                    </Button>
-                </div>
-
-                {/* Mobile Menu */}
-                <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                    <SheetTrigger asChild className="md:hidden">
-                        <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
-                            <Menu className="h-5 w-5" />
+                    {/* Desktop Actions */}
+                    <div className="hidden md:flex items-center gap-4">
+                        <Button asChild variant="outline" size="sm" className="hidden lg:flex gap-2 rounded-full border-zinc-200 hover:bg-zinc-50 text-zinc-600">
+                            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                                <FileText className="h-4 w-4" />
+                                Resume
+                            </a>
                         </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                        side="right"
-                        className="w-full sm:w-[400px] bg-zinc-950 border-zinc-800 p-0"
+                        <Button asChild size="sm" className="gap-2 rounded-full bg-zinc-900 text-white hover:bg-zinc-800 shadow-lg shadow-zinc-900/20">
+                            <a href="mailto:bagus.hidayat.id@gmail.com">
+                                Hire Me
+                                <ArrowUpRight className="h-4 w-4" />
+                            </a>
+                        </Button>
+                    </div>
+
+                    {/* Mobile Menu Trigger */}
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="md:hidden relative z-[101] p-2 text-zinc-900 hover:bg-zinc-100 rounded-full transition-colors"
                     >
-                        <div className="flex flex-col h-full">
-                            {/* Header */}
-                            <div className="flex items-center justify-between p-6 border-b border-zinc-800">
-                                <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center">
-                                    <span className="text-black font-bold text-sm">BH</span>
-                                </div>
-                                <SheetClose asChild>
-                                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
-                                        <X className="h-5 w-5" />
-                                    </Button>
-                                </SheetClose>
-                            </div>
+                        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                    </button>
+                </nav>
+            </motion.header>
 
-                            {/* Navigation */}
-                            <nav className="flex-1 p-6">
-                                <div className="space-y-2">
-                                    {navLinks.map((link, i) => {
-                                        const isActive = pathname === link.href;
-                                        return (
-                                            <motion.div
-                                                key={link.href}
-                                                initial={{ opacity: 0, x: 20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: i * 0.1 }}
-                                            >
-                                                <SheetClose asChild>
-                                                    <Link
-                                                        href={link.href}
-                                                        className={`block py-4 px-4 text-2xl font-medium rounded-lg transition-colors ${isActive
-                                                                ? 'text-white bg-zinc-800/50'
-                                                                : 'text-zinc-400 hover:text-white hover:bg-zinc-800/30'
-                                                            }`}
-                                                    >
-                                                        {link.label}
-                                                    </Link>
-                                                </SheetClose>
-                                            </motion.div>
-                                        );
-                                    })}
-                                </div>
-                            </nav>
+            {/* Full Screen Mobile Menu - Rendered Sibling to Header to escape Transform Context */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
+                        animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
+                        exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
+                        transition={{ duration: 0.5, ease: [0.32, 0, 0.67, 0] }}
+                        className="fixed inset-0 bg-white z-[99] flex flex-col pt-32 px-6 pb-12 overflow-y-auto"
+                    >
+                        <div className="flex flex-col gap-6">
+                            {navLinks.map((link, i) => (
+                                <motion.div
+                                    key={link.href}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
+                                >
+                                    <Link
+                                        href={link.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className={`text-5xl font-black tracking-tighter ${pathname === link.href ? 'text-zinc-900' : 'text-zinc-300 hover:text-zinc-900'
+                                            } transition-colors`}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
 
-                            {/* Footer */}
-                            <div className="p-6 border-t border-zinc-800">
-                                <div className="flex items-center gap-4 mb-6">
-                                    {socialLinks.map((social) => (
-                                        <a
-                                            key={social.label}
-                                            href={social.href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="p-3 rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors"
-                                        >
-                                            <social.icon className="h-5 w-5" />
-                                        </a>
-                                    ))}
-                                </div>
-                                <Button asChild className="w-full gap-2 bg-white text-black hover:bg-zinc-200">
-                                    <a href="mailto:hello@example.com">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="mt-auto pt-12"
+                        >
+                            <div className="h-px w-full bg-zinc-100 mb-8" />
+
+                            <div className="grid grid-cols-2 gap-4 mb-8">
+                                <Button asChild variant="outline" size="lg" className="w-full gap-2 rounded-xl border-zinc-200 h-14">
+                                    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                                        <FileText className="h-5 w-5" />
+                                        Resume
+                                    </a>
+                                </Button>
+                                <Button asChild size="lg" className="w-full gap-2 rounded-xl bg-zinc-900 text-white h-14 hover:bg-zinc-800">
+                                    <a href="mailto:bagus.hidayat.id@gmail.com">
                                         Hire Me
+                                        <ArrowUpRight className="h-5 w-5" />
                                     </a>
                                 </Button>
                             </div>
-                        </div>
-                    </SheetContent>
-                </Sheet>
-            </nav>
-        </motion.header>
+
+                            <div className="flex gap-6">
+                                {socialLinks.map((social) => (
+                                    <a
+                                        key={social.label}
+                                        href={social.href}
+                                        className="text-zinc-400 hover:text-zinc-900 transition-colors font-medium text-sm uppercase tracking-widest"
+                                    >
+                                        {social.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

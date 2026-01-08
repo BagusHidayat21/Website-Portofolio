@@ -1,169 +1,113 @@
 'use client';
 
-// Impressive Footer with multiple sections and animations
-import { motion, useInView } from 'framer-motion';
-import { Github, Linkedin, Twitter, Mail, Heart, ArrowUp, MapPin, Phone } from 'lucide-react';
+// Minimalist Swiss-Style Footer
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRef } from 'react';
-
-const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:hello@example.com', label: 'Email' },
-];
-
-const quickLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/projects', label: 'Projects' },
-    { href: '/about', label: 'About' },
-];
-
-const services = [
-    'Web Development',
-    'Frontend Development',
-    'UI/UX Design',
-    'API Integration',
-];
+import { useEffect, useState } from 'react';
 
 export function Footer() {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
+    const [time, setTime] = useState('');
+    const currentYear = new Date().getFullYear();
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    // Live Clock for Malang (WIB)
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            setTime(now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+                timeZone: 'Asia/Jakarta'
+            }));
+        };
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const links = [
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: 'About', href: '/about' },
+    ];
+
+    const socials = [
+        { label: 'LinkedIn', href: "https://www.linkedin.com/in/bagushidayat-id/" },
+        { label: 'GitHub', href: "https://github.com/BagusHidayat21" },
+    ];
 
     return (
-        <footer ref={ref} className="relative border-t border-zinc-800 bg-zinc-950">
-            {/* Scroll to top button */}
-            <motion.button
-                onClick={scrollToTop}
-                className="absolute -top-5 left-1/2 -translate-x-1/2 p-3 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all"
-                whileHover={{ y: -3, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-            >
-                <ArrowUp className="h-5 w-5" />
-            </motion.button>
+        <footer className="bg-zinc-950 text-white py-20 border-t border-zinc-900">
+            <div className="container mx-auto px-6">
 
-            <div className="container mx-auto px-6 pt-20 pb-12">
-                {/* Main Footer Content */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                    {/* Brand Column */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.1 }}
-                        className="lg:col-span-1"
-                    >
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="h-10 w-10 rounded-lg bg-white flex items-center justify-center">
-                                <span className="text-black font-bold">BH</span>
-                            </div>
-                            <span className="font-semibold text-xl">Portfolio</span>
-                        </div>
-                        <p className="text-sm text-zinc-500 mb-6 max-w-xs">
-                            Creating beautiful, performant, and user-friendly web experiences. Let&apos;s build something amazing together.
+                {/* Top Row: Brand & Contact */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-8">
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-black tracking-tighter mb-2">Bagus Hidayat.</h2>
+                        <p className="text-zinc-500 max-w-sm">
+                            Full-Stack Developer & Machine Learning Enthusiast.
+                            Building digital products with code and data.
                         </p>
-                        {/* Contact Info */}
-                        <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-sm text-zinc-500">
-                                <MapPin className="h-4 w-4" />
-                                <span>Indonesia</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-zinc-500">
-                                <Mail className="h-4 w-4" />
-                                <a href="mailto:hello@example.com" className="hover:text-white transition-colors">
-                                    hello@example.com
-                                </a>
-                            </div>
-                        </div>
-                    </motion.div>
+                    </div>
+                </div>
 
-                    {/* Quick Links */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <h3 className="font-semibold mb-4 text-zinc-300">Quick Links</h3>
+                {/* Divider */}
+                <div className="w-full h-px bg-zinc-900 mb-8" />
+
+                {/* Bottom Row: Grid Layout */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+
+                    {/* Navigation */}
+                    <div>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-6">Explore</h4>
                         <ul className="space-y-3">
-                            {quickLinks.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-sm text-zinc-500 hover:text-white transition-colors inline-flex items-center gap-1 group"
-                                    >
-                                        <span className="w-0 group-hover:w-2 overflow-hidden transition-all">→</span>
+                            {links.map(link => (
+                                <li key={link.label}>
+                                    <Link href={link.href} className="text-zinc-400 hover:text-white transition-colors">
                                         {link.label}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
-                    </motion.div>
+                    </div>
 
-                    {/* Services */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <h3 className="font-semibold mb-4 text-zinc-300">Services</h3>
+                    {/* Socials */}
+                    <div>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-6">Connect</h4>
                         <ul className="space-y-3">
-                            {services.map((service) => (
-                                <li key={service} className="text-sm text-zinc-500">
-                                    {service}
+                            {socials.map(social => (
+                                <li key={social.label}>
+                                    <a href={social.href} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2">
+                                        {social.label}
+                                    </a>
                                 </li>
                             ))}
                         </ul>
-                    </motion.div>
+                    </div>
 
-                    {/* Newsletter / CTA */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.4 }}
-                    >
-                        <h3 className="font-semibold mb-4 text-zinc-300">Let&apos;s Connect</h3>
-                        <p className="text-sm text-zinc-500 mb-4">
-                            Follow me on social media for updates and insights.
-                        </p>
+                    {/* Location */}
+                    <div>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-6">Location</h4>
+                        <p className="text-zinc-400">Malang, Indonesia</p>
+                        <p className="text-zinc-600 text-sm mt-1">Universitas Negeri Malang</p>
+                    </div>
+
+                    {/* Status / Time */}
+                    <div>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-6">Local Time</h4>
                         <div className="flex items-center gap-3">
-                            {socialLinks.map((social) => (
-                                <motion.a
-                                    key={social.label}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-2.5 rounded-lg border border-zinc-800 text-zinc-500 hover:text-white hover:border-zinc-600 hover:bg-zinc-800/50 transition-all"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    title={social.label}
-                                >
-                                    <social.icon className="h-4 w-4" />
-                                </motion.a>
-                            ))}
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            <span className="font-mono text-zinc-400">{time} WIB</span>
                         </div>
-                    </motion.div>
+                        <p className="text-zinc-600 text-xs mt-4">
+                            &copy; {currentYear} Bagus Hidayat.
+                        </p>
+                    </div>
+
                 </div>
-
-                {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent mb-8" />
-
-                {/* Bottom Bar */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ delay: 0.5 }}
-                    className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-zinc-500"
-                >
-                    <p>
-                        © {new Date().getFullYear()} Portfolio. All rights reserved.
-                    </p>
-                    <p className="flex items-center gap-1">
-                        Made with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> in Indonesia
-                    </p>
-                </motion.div>
             </div>
         </footer>
     );

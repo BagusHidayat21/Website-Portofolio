@@ -13,22 +13,27 @@ export interface GithubRepo {
 }
 
 export interface ProjectWithRepo {
-    id: number;
-    githubId: number;
-    repoName: string;
-    url: string;
+    id: number | string; // Changed to support dummy string IDs
+    githubId?: number; // Optional now
+    repoName?: string; // Optional
+    url: string | null;
     liveUrl?: string | null;
     title: string | null;
-    description: string | null; // From DB or Fallback to Repo
+    description: string | null;
     images: string[];
     tags: string[];
     techStack: string[];
-    isFeatured: boolean;
-    isVisible: boolean;
-    order: number;
-    // Merged Data from GitHub (Real-time/Cached)
+    isFeatured?: boolean;
+    isVisible?: boolean;
+    order?: number;
     stars?: number;
     githubDescription?: string | null;
     lastUpdated?: string;
     language?: string | null;
+    // Enhanced fields for Case Studies
+    role?: string;
+    timeline?: string;
+    year?: string;
+    challenge?: string;
+    solution?: string;
 }

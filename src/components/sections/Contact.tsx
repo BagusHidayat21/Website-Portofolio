@@ -1,11 +1,11 @@
 'use client';
 
-// Contact section with CTA cards and social links
+// Premium Minimalist Contact Section - Refined
 import { motion, useInView } from 'framer-motion';
-import { Mail, Send, Clock, ArrowRight, Github, Linkedin, Twitter, MessageCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, Copy, Check, Mail, HandMetal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { useRef } from 'react';
 
 interface ContactProps {
     email?: string;
@@ -17,179 +17,124 @@ interface ContactProps {
 }
 
 export function Contact({
-    email = 'bagus@example.com',
+    email = 'bagus.hidayat.id@gmail.com',
     socialLinks = {
-        github: 'https://github.com',
-        linkedin: 'https://linkedin.com',
-        twitter: 'https://twitter.com',
+        github: 'https://github.com/BagusHidayat21',
+        linkedin: 'https://www.linkedin.com/in/bagushidayat-id/',
     },
 }: ContactProps) {
     const containerRef = useRef(null);
     const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+    const [copied, setCopied] = useState(false);
 
-    const contactMethods = [
-        {
-            icon: Mail,
-            title: 'Email',
-            value: email,
-            description: 'Drop me an email anytime',
-        },
-        {
-            icon: MessageCircle,
-            title: 'Social',
-            value: '@bagushidayat',
-            description: 'Let\'s connect on social media',
-        },
-        {
-            icon: Clock,
-            title: 'Response Time',
-            value: '< 24 hours',
-            description: 'I\'ll get back to you quickly',
-        },
-    ];
+    const handleCopy = () => {
+        navigator.clipboard.writeText(email);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
-    const socialItems = [
-        { icon: Github, href: socialLinks.github, label: 'GitHub' },
-        { icon: Linkedin, href: socialLinks.linkedin, label: 'LinkedIn' },
-        { icon: Twitter, href: socialLinks.twitter, label: 'Twitter' },
+    const socials = [
+        { label: 'GitHub', href: socialLinks.github },
+        { label: 'LinkedIn', href: socialLinks.linkedin },
     ];
 
     return (
-        <section ref={containerRef} className="relative py-32 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-900/50 to-zinc-950" />
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent" />
-
+        <section ref={containerRef} className="relative py-24 md:py-32 bg-white border-t border-zinc-100 overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-20">
+                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+
+                    {/* Left: Heading & Context */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800/50 border border-zinc-700/50 mb-6"
+                        transition={{ duration: 0.6 }}
+                        className="lg:w-1/2"
                     >
-                        <Sparkles className="h-4 w-4 text-yellow-500" />
-                        <span className="text-sm text-zinc-300">Get in Touch</span>
+                        <div className="flex items-center gap-2 mb-6">
+                            <span className="p-2 rounded-lg bg-zinc-100">
+                                <HandMetal className="w-5 h-5 text-zinc-900" />
+                            </span>
+                            <span className="text-sm font-bold tracking-widest uppercase text-zinc-500">Say Hello</span>
+                        </div>
+
+                        <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 mb-6 leading-tight">
+                            Have an idea? <br />
+                            <span className="text-zinc-400">Let&apos;s build it.</span>
+                        </h2>
+
+                        <p className="text-lg text-zinc-500 leading-relaxed mb-8 max-w-md">
+                            I&apos;m currently available for freelance work and open to full-time opportunities. If you have a project that needs some creative touch, I&apos;d love to hear about it.
+                        </p>
+
+                        {/* Socials Grid */}
+                        <div className="grid grid-cols-2 gap-4 max-w-sm">
+                            {socials.map((social) => (
+                                <a
+                                    key={social.label}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between p-4 rounded-xl border border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 transition-all group"
+                                >
+                                    <span className="font-medium text-zinc-600 group-hover:text-zinc-900">{social.label}</span>
+                                    <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-900 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                                </a>
+                            ))}
+                        </div>
                     </motion.div>
 
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+                    {/* Right: Email Action Card */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="lg:w-1/2 w-full"
                     >
-                        Let&apos;s Work{' '}
-                        <span className="bg-gradient-to-r from-zinc-300 to-zinc-500 bg-clip-text text-transparent">
-                            Together
-                        </span>
-                    </motion.h2>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg text-zinc-400 max-w-2xl mx-auto"
-                    >
-                        Have a project in mind? I&apos;d love to hear about it. Let&apos;s discuss how we can work together.
-                    </motion.p>
-                </div>
-
-                {/* Contact Cards */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.3 }}
-                    className="grid md:grid-cols-3 gap-6 mb-16"
-                >
-                    {contactMethods.map((method, i) => (
-                        <motion.div
-                            key={method.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ delay: 0.4 + i * 0.1 }}
-                            whileHover={{ y: -5 }}
-                        >
-                            <Card className="bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-all h-full group">
-                                <CardContent className="p-6 text-center">
-                                    <div className="p-4 rounded-xl bg-zinc-800/50 w-fit mx-auto mb-4 group-hover:bg-zinc-700/50 transition-colors">
-                                        <method.icon className="h-6 w-6 text-zinc-300" />
-                                    </div>
-                                    <h3 className="font-semibold text-lg mb-1">{method.title}</h3>
-                                    <p className="text-zinc-300 font-medium mb-1">{method.value}</p>
-                                    <p className="text-sm text-zinc-500">{method.description}</p>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </motion.div>
-
-                {/* Main CTA */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.6 }}
-                    className="max-w-2xl mx-auto"
-                >
-                    <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800 overflow-hidden">
-                        <CardContent className="p-8 md:p-12 text-center relative">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_var(--tw-gradient-stops))] from-zinc-800/30 to-transparent" />
+                        <Card className="bg-zinc-900 text-white border-0 overflow-hidden relative min-h-[400px] flex flex-col justify-between p-8 md:p-12 shadow-2xl">
+                            {/* Texture */}
+                            <div className="absolute inset-0 opacity-20"
+                                style={{
+                                    backgroundImage: `radial-gradient(circle, #333 1px, transparent 1px)`,
+                                    backgroundSize: '20px 20px'
+                                }}
+                            />
 
                             <div className="relative z-10">
-                                <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={isInView ? { scale: 1 } : {}}
-                                    transition={{ delay: 0.7, type: 'spring' }}
-                                    className="inline-flex p-4 rounded-full bg-zinc-800/50 mb-6"
-                                >
-                                    <Mail className="h-8 w-8 text-zinc-300" />
-                                </motion.div>
+                                <h3 className="text-2xl font-semibold mb-2">Send me a message</h3>
+                                <p className="text-zinc-400">Directly to my inbox, I reply quickly.</p>
+                            </div>
 
-                                <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                                    Ready to start a project?
-                                </h3>
-                                <p className="text-zinc-400 mb-8 max-w-md mx-auto">
-                                    I&apos;m currently available for freelance work and exciting opportunities.
-                                </p>
+                            <div className="relative z-10 mt-auto">
+                                <div className="flex flex-col gap-4">
+                                    <a
+                                        href={`mailto:${email}`}
+                                        className="group flex items-center justify-between w-full p-6 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 hover:border-white/20 transition-all backdrop-blur-sm"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 rounded-full bg-white text-zinc-900">
+                                                <Mail className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-xl md:text-2xl font-medium tracking-tight break-all">{email}</span>
+                                        </div>
+                                        <ArrowRight className="w-6 h-6 rotate-45 group-hover:rotate-0 transition-transform" />
+                                    </a>
 
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                    <Button asChild size="lg" className="gap-2 px-8 bg-white text-black hover:bg-zinc-200">
-                                        <a href={`mailto:${email}`}>
-                                            <Send className="h-4 w-4" />
-                                            Send Me an Email
-                                        </a>
-                                    </Button>
-                                    <Button asChild variant="outline" size="lg" className="gap-2 border-zinc-700 hover:bg-zinc-800">
-                                        <a href="/projects">
-                                            View My Work
-                                            <ArrowRight className="h-4 w-4" />
-                                        </a>
+                                    <Button
+                                        onClick={handleCopy}
+                                        variant="ghost"
+                                        className="w-full justify-between h-auto py-4 px-6 rounded-2xl text-zinc-400 hover:text-white hover:bg-white/5 font-normal"
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                                            {copied ? 'Copied to clipboard' : 'Copy address'}
+                                        </span>
+                                        <span className="text-xs uppercase tracking-wider opacity-50">Click to copy</span>
                                     </Button>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-
-                {/* Social Links */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.8 }}
-                    className="flex items-center justify-center gap-4 mt-12"
-                >
-                    {socialItems.map((social) => (
-                        <motion.a
-                            key={social.label}
-                            href={social.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-4 rounded-full border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 hover:bg-zinc-800/50 transition-all"
-                            whileHover={{ scale: 1.1, y: -3 }}
-                            whileTap={{ scale: 0.95 }}
-                            title={social.label}
-                        >
-                            <social.icon className="h-5 w-5" />
-                        </motion.a>
-                    ))}
-                </motion.div>
+                        </Card>
+                    </motion.div>
+                </div>
             </div>
         </section>
     );

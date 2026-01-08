@@ -1,227 +1,134 @@
 'use client';
 
-// Featured Projects section with visual cards and image previews
-import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ExternalLink, Github, Star, Eye, Sparkles } from 'lucide-react';
+// Premium Minimalist Projects Section
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import { ProjectWithRepo } from '@/types';
 
 interface FeaturedProjectsProps {
     projects?: ProjectWithRepo[];
 }
 
-// Placeholder projects for demo
+// Placeholder data if none provided
 const placeholderProjects: ProjectWithRepo[] = [
     {
         id: 1,
         githubId: 1,
-        repoName: 'ecommerce-platform',
-        url: 'https://github.com',
-        liveUrl: 'https://example.com',
+        repoName: 'ecommerce',
+        url: '#',
+        liveUrl: '#',
         title: 'E-Commerce Platform',
-        description: 'A modern, full-featured e-commerce platform built with Next.js and Stripe integration.',
-        images: [],
-        tags: ['Next.js', 'TypeScript', 'Stripe', 'Prisma'],
-        techStack: ['React', 'Node.js', 'PostgreSQL'],
+        description: 'A headless e-commerce solution built for performance and scalability. Features real-time inventory, seamless checkout, and an intuitive admin dashboard.',
+        images: [], // We'll use random images in the component
+        tags: ['Next.js', 'Stripe', 'PostgreSQL'],
+        techStack: [],
         isFeatured: true,
         isVisible: true,
         order: 0,
-        stars: 128,
-        language: 'TypeScript',
+        stars: 0,
+        language: 'TypeScript'
     },
     {
         id: 2,
         githubId: 2,
-        repoName: 'ai-chat-app',
-        url: 'https://github.com',
-        liveUrl: 'https://example.com',
-        title: 'AI Chat Application',
-        description: 'Real-time AI-powered chat with WebSocket and OpenAI integration.',
+        repoName: 'ai-dashboard',
+        url: '#',
+        liveUrl: '#',
+        title: 'AI Analytics Dashboard',
+        description: 'Real-time data visualization platform processing thousands of events per second with AI-driven insights and predictive modeling.',
         images: [],
-        tags: ['React', 'OpenAI', 'WebSocket'],
-        techStack: ['Node.js', 'Redis'],
+        tags: ['React', 'Python', 'D3.js'],
+        techStack: [],
         isFeatured: true,
         isVisible: true,
         order: 1,
-        stars: 89,
-        language: 'TypeScript',
+        stars: 0,
+        language: 'TypeScript'
     },
     {
         id: 3,
         githubId: 3,
-        repoName: 'dashboard-analytics',
-        url: 'https://github.com',
-        title: 'Analytics Dashboard',
-        description: 'Beautiful data visualization with interactive charts.',
+        repoName: 'banking-app',
+        url: '#',
+        liveUrl: '#',
+        title: 'Modern Banking App',
+        description: 'Secure and compliant fintech application focused on user experience. Biometric authentication, instant transfers, and spending analytics.',
         images: [],
-        tags: ['React', 'D3.js', 'Tailwind'],
-        techStack: ['Node.js', 'MongoDB'],
+        tags: ['React Native', 'Node.js', 'Redis'],
+        techStack: [],
         isFeatured: true,
         isVisible: true,
         order: 2,
-        stars: 67,
-        language: 'TypeScript',
-    },
+        stars: 0,
+        language: 'TypeScript'
+    }
 ];
 
-// Project card component
-function ProjectCard({ project, index, large = false }: { project: ProjectWithRepo; index: number; large?: boolean }) {
-    const [isHovered, setIsHovered] = useState(false);
-    const router = useRouter();
-    const imageUrl = `https://picsum.photos/seed/featured${project.id}/800/600`;
-
-    const handleCardClick = () => {
-        router.push(`/projects/${project.id}`);
-    };
-
+function ProjectItem({ project, index }: { project: ProjectWithRepo; index: number }) {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 + index * 0.1, type: 'spring' }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={handleCardClick}
-            className={`cursor-pointer ${large ? 'lg:col-span-2' : ''}`}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-10%" }}
+            transition={{ duration: 0.7, delay: index * 0.1 }}
+            className="group py-12 md:py-24 border-b border-zinc-200 last:border-0"
         >
-            <motion.div
-                whileHover={{ y: -8 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-            >
-                <Card className="bg-zinc-900/50 border-zinc-800 overflow-hidden group hover:border-purple-500/30 transition-all h-full">
-                    {/* Image Preview */}
-                    <div className={`relative overflow-hidden bg-zinc-800 ${large ? 'aspect-[2/1]' : 'aspect-video'}`}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <motion.img
-                            src={imageUrl}
-                            alt={project.title || 'Project'}
-                            className="w-full h-full object-cover"
-                            animate={{ scale: isHovered ? 1.1 : 1 }}
-                            transition={{ duration: 0.5 }}
-                        />
-
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/20 to-transparent" />
-
-                        {/* Hover overlay */}
-                        <motion.div
-                            className="absolute inset-0 bg-black/60 flex items-center justify-center gap-3"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isHovered ? 1 : 0 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <motion.div
-                                initial={{ scale: 0, rotate: -180 }}
-                                animate={{ scale: isHovered ? 1 : 0, rotate: isHovered ? 0 : -180 }}
-                                transition={{ delay: 0.05, type: 'spring' }}
-                                className="p-3 rounded-full bg-white text-black"
-                            >
-                                <Eye className="h-5 w-5" />
-                            </motion.div>
-                            <motion.button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.open(project.url!, '_blank');
-                                }}
-                                initial={{ scale: 0, rotate: -180 }}
-                                animate={{ scale: isHovered ? 1 : 0, rotate: isHovered ? 0 : -180 }}
-                                transition={{ delay: 0.1, type: 'spring' }}
-                                className="p-3 rounded-full bg-zinc-800 text-white hover:bg-zinc-700"
-                            >
-                                <Github className="h-5 w-5" />
-                            </motion.button>
-                            {project.liveUrl && (
-                                <motion.button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        window.open(project.liveUrl!, '_blank');
-                                    }}
-                                    initial={{ scale: 0, rotate: -180 }}
-                                    animate={{ scale: isHovered ? 1 : 0, rotate: isHovered ? 0 : -180 }}
-                                    transition={{ delay: 0.15, type: 'spring' }}
-                                    className="p-3 rounded-full bg-purple-600 text-white hover:bg-purple-500"
-                                >
-                                    <ExternalLink className="h-5 w-5" />
-                                </motion.button>
-                            )}
-                        </motion.div>
-
-                        {/* Featured badge */}
-                        <div className="absolute top-3 left-3">
-                            <motion.div
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0.3 + index * 0.1 }}
-                            >
-                                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 border-0 text-white">
-                                    <Sparkles className="h-3 w-3 mr-1" />
-                                    Featured
-                                </Badge>
-                            </motion.div>
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+                {/* Visual Side */}
+                <div className={`lg:w-3/5 w-full ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                    <Link href={`/projects/${project.id}`}>
+                        <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100 rounded-sm">
+                            <div className="absolute inset-0 bg-zinc-900/5 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                            {/* Image Placeholder */}
+                            <motion.img
+                                src={`https://picsum.photos/seed/${project.id + 10}/1600/1000`}
+                                alt={project.title}
+                                className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700"
+                                whileHover={{ scale: 1.03 }}
+                            />
                         </div>
+                    </Link>
+                </div>
 
-                        {/* Language */}
-                        {project.language && (
-                            <div className="absolute top-3 right-3">
-                                <Badge variant="outline" className="bg-black/50 backdrop-blur-sm border-zinc-700 text-white">
-                                    <span className="w-2 h-2 rounded-full bg-blue-500 mr-1.5" />
-                                    {project.language}
-                                </Badge>
-                            </div>
-                        )}
+                {/* Content Side */}
+                <div className="lg:w-2/5 w-full flex flex-col gap-6">
+                    <div className="flex items-center gap-4">
+                        <span className="text-xs font-mono text-zinc-400">0{index + 1}</span>
+                        <div className="h-px w-12 bg-zinc-200" />
                     </div>
 
-                    {/* Content */}
-                    <CardContent className="p-5">
-                        <div className="flex items-start justify-between mb-2">
-                            <h3 className={`font-semibold group-hover:text-purple-400 transition-colors ${large ? 'text-xl' : 'text-lg'}`}>
-                                {project.title}
-                            </h3>
-                            <motion.div
-                                animate={{ x: isHovered ? 0 : -5, opacity: isHovered ? 1 : 0 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <ArrowUpRight className="h-5 w-5 text-purple-400" />
-                            </motion.div>
-                        </div>
+                    <h3 className="text-3xl md:text-5xl font-bold text-zinc-900 leading-tight group-hover:underline decoration-1 underline-offset-8 decoration-zinc-300 transition-all">
+                        <Link href={`/projects/${project.id}`}>
+                            {project.title}
+                        </Link>
+                    </h3>
 
-                        <p className={`text-zinc-400 mb-4 ${large ? 'text-base' : 'text-sm line-clamp-2'}`}>
-                            {project.description}
-                        </p>
+                    <p className="text-zinc-500 text-lg leading-relaxed">
+                        {project.description}
+                    </p>
 
-                        {/* Stats */}
-                        <div className="flex items-center gap-4 text-xs text-zinc-500 mb-4">
-                            <div className="flex items-center gap-1">
-                                <Star className="h-3.5 w-3.5 text-yellow-500" />
-                                <span>{project.stars}</span>
-                            </div>
-                        </div>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {project.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="bg-zinc-100 text-zinc-600 hover:bg-zinc-200 font-normal rounded-md px-3 py-1">
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
 
-                        {/* Tech Stack */}
-                        <div className="flex flex-wrap gap-1.5">
-                            {project.tags.slice(0, large ? 5 : 3).map((tag) => (
-                                <Badge
-                                    key={tag}
-                                    variant="secondary"
-                                    className="bg-zinc-800/80 text-zinc-300 text-xs"
-                                >
-                                    {tag}
-                                </Badge>
-                            ))}
-                            {project.tags.length > (large ? 5 : 3) && (
-                                <Badge variant="secondary" className="bg-zinc-800/50 text-zinc-500 text-xs">
-                                    +{project.tags.length - (large ? 5 : 3)}
-                                </Badge>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </motion.div>
+                    <div className="pt-4">
+                        <Button asChild variant="outline" className="rounded-full h-12 px-6 border-zinc-200 text-zinc-900 hover:bg-zinc-900 hover:text-white transition-colors group/btn">
+                            <Link href={`/projects/${project.id}`}>
+                                View Case Study
+                                <ArrowUpRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </motion.div>
     );
 }
@@ -230,79 +137,33 @@ export function FeaturedProjects({ projects = placeholderProjects }: FeaturedPro
     const displayProjects = projects.slice(0, 3);
 
     return (
-        <section className="relative py-32 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-900/30 to-transparent" />
+        <section className="bg-white py-24 md:py-32">
+            <div className="container mx-auto px-6">
 
-            <div className="container mx-auto px-6 relative z-10">
-                {/* Section Header */}
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32 gap-6">
                     <div>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ type: 'spring' }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6"
-                        >
-                            <motion.div
-                                animate={{ rotate: [0, 360] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                            >
-                                <Star className="h-4 w-4 text-yellow-500" />
-                            </motion.div>
-                            <span className="text-sm text-purple-300">Featured Work</span>
-                        </motion.div>
-
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="text-4xl md:text-5xl font-bold mb-4"
-                        >
-                            <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
-                                Selected Projects
-                            </span>
-                        </motion.h2>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-lg text-zinc-400 max-w-xl"
-                        >
-                            A showcase of my best work, featuring modern web applications built with cutting-edge technologies.
-                        </motion.p>
+                        <h2 className="text-5xl md:text-7xl font-bold text-zinc-900 tracking-tight mb-4">
+                            Selected Works
+                        </h2>
+                        <p className="text-zinc-500 text-lg md:text-xl max-w-md">
+                            A curation of projects that showcase my passion for design and engineering.
+                        </p>
                     </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <Button asChild variant="outline" className="gap-2 group border-zinc-700 hover:bg-purple-500/10 hover:border-purple-500/30">
-                            <Link href="/projects">
-                                View All Projects
-                                <motion.span
-                                    animate={{ x: [0, 4, 0] }}
-                                    transition={{ duration: 1.5, repeat: Infinity }}
-                                >
-                                    <ArrowRight className="h-4 w-4" />
-                                </motion.span>
-                            </Link>
-                        </Button>
-                    </motion.div>
+                    <Button asChild variant="link" className="text-zinc-900 text-lg p-0 h-auto underline-offset-4 hover:text-zinc-600">
+                        <Link href="/projects">
+                            See all archive
+                        </Link>
+                    </Button>
                 </div>
 
-                {/* Projects Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {displayProjects.map((project, i) => (
-                        <ProjectCard
-                            key={project.id}
-                            project={project}
-                            index={i}
-                            large={i === 0}
-                        />
+                {/* Projects List */}
+                <div className="flex flex-col">
+                    {displayProjects.map((project, index) => (
+                        <ProjectItem key={project.id} project={project} index={index} />
                     ))}
                 </div>
+
             </div>
         </section>
     );

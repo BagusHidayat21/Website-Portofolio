@@ -2,12 +2,13 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+// Premium card with elegant shadow and hover effects
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-white text-zinc-900 flex flex-col gap-6 rounded-xl border border-zinc-200/80 py-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-300/80",
         className
       )}
       {...props}
@@ -32,7 +33,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      className={cn("leading-none font-semibold text-zinc-900", className)}
       {...props}
     />
   )
@@ -42,7 +43,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-zinc-500 text-sm", className)}
       {...props}
     />
   )

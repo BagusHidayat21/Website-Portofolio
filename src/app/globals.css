@@ -3,37 +3,43 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Dark mode monochromatic theme - default */
+/* Premium Monochrome Light Theme */
 :root {
   --radius: 0.625rem;
 
-  /* Dark theme as default */
-  --background: #09090b;
-  --foreground: #fafafa;
+  /* Clean off-white background */
+  --background: #FAFAFA;
+  --foreground: #0A0A0A;
 
-  --card: #18181b;
-  --card-foreground: #fafafa;
+  /* Cards with pure white */
+  --card: #FFFFFF;
+  --card-foreground: #0A0A0A;
 
-  --popover: #18181b;
-  --popover-foreground: #fafafa;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0A0A;
 
-  --primary: #fafafa;
-  --primary-foreground: #18181b;
+  /* Primary - solid black for buttons */
+  --primary: #0A0A0A;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
+  /* Secondary - subtle gray */
+  --secondary: #F4F4F5;
+  --secondary-foreground: #18181B;
 
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
+  /* Muted - for subtle text */
+  --muted: #F4F4F5;
+  --muted-foreground: #71717A;
 
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
+  /* Accent */
+  --accent: #F4F4F5;
+  --accent-foreground: #18181B;
 
-  --destructive: #ef4444;
+  --destructive: #DC2626;
 
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #a1a1aa;
+  /* Borders - refined gray */
+  --border: #E4E4E7;
+  --input: #E4E4E7;
+  --ring: #A1A1AA;
 }
 
 @theme inline {
@@ -70,23 +76,93 @@
   body {
     @apply bg-background text-foreground antialiased min-h-screen;
   }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-/* Custom utility classes for animations */
+/* Premium utility classes */
 @layer utilities {
+  /* Elegant text gradient - monochrome */
   .text-gradient {
-    @apply bg-gradient-to-r from-white via-zinc-300 to-white bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-zinc-900 via-zinc-600 to-zinc-900 bg-clip-text text-transparent;
   }
 
+  /* Refined glass effect for light theme */
   .glass {
-    @apply bg-zinc-900/50 backdrop-blur-md border border-zinc-800/50;
+    @apply bg-white/80 backdrop-blur-xl border border-zinc-200/60;
   }
 
-  .glow-sm {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  /* Subtle elevation shadows */
+  .shadow-elegant {
+    box-shadow: 
+      0 1px 2px rgba(0, 0, 0, 0.02),
+      0 4px 8px rgba(0, 0, 0, 0.04),
+      0 16px 32px rgba(0, 0, 0, 0.04);
   }
 
-  .glow-md {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+  .shadow-elegant-lg {
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.02),
+      0 8px 16px rgba(0, 0, 0, 0.04),
+      0 24px 48px rgba(0, 0, 0, 0.06);
   }
+
+  /* Smooth hover lift */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Focus ring for accessibility */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2;
+  }
+
+  /* Animated underline for links */
+  .link-underline {
+    @apply relative;
+  }
+
+  .link-underline::after {
+    @apply content-[''] absolute left-0 bottom-0 w-0 h-[1px] bg-current transition-all duration-300;
+  }
+
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+}
+
+/* Custom selection color */
+::selection {
+  @apply bg-zinc-900 text-white;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-zinc-400;
 }

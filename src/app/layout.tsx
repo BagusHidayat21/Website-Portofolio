@@ -11,13 +11,57 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bagus Hidayat | Full-Stack Developer",
-  description: "Full-Stack Developer specializing in React, Next.js, and modern web technologies. Building beautiful, performant, and user-friendly web experiences.",
-  keywords: ["full-stack developer", "frontend developer", "react", "next.js", "typescript", "portfolio", "web developer"],
+  metadataBase: new URL('https://bagus-hidayat.my.id'),
+  title: {
+    default: "Bagus Hidayat | Full-Stack Web Developer",
+    template: "Bagus Hidayat | %s"
+  },
+  description: "Portfolio of Bagus Hidayat, an Undergraduate Student at Universitas Negeri Malang specializing in Data Engineering, Machine Learning, and Robust Full-Stack Development.",
+  keywords: [
+    "Bagus Hidayat",
+    "Full Stack Web Developer",
+    "Data Engineer",
+    "Machine Learning Engineer",
+    "Universitas Negeri Malang",
+    "Next.js",
+    "React Native",
+    "Laravel",
+    "Software Engineering"
+  ],
+  authors: [{ name: "Bagus Hidayat", url: "https://www.linkedin.com/in/bagushidayat-id/" }],
+  creator: "Bagus Hidayat",
   openGraph: {
-    title: "Bagus Hidayat | Full-Stack Developer",
-    description: "Full-Stack Developer specializing in React, Next.js, and modern web technologies.",
     type: "website",
+    locale: "en_US",
+    url: "https://bagus-hidayat.my.ids",
+    title: "Bagus Hidayat | Full-Stack Web Developer",
+    description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
+    siteName: "Bagus Hidayat Portfolio",
+    images: [
+      {
+        url: "/og-image.png", // Ensure this image exists eventually
+        width: 1200,
+        height: 630,
+        alt: "Bagus Hidayat Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bagus Hidayat | Full-Stack Web Developer",
+    description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -33,6 +77,26 @@ export default function RootLayout({
         <Navbar />
         <main className="relative z-10">{children}</main>
         <Footer />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Bagus Hidayat",
+              "url": "https://bagus-hidayat.my.id",
+              "jobTitle": "Full-Stack Web Developer",
+              "alumniOf": {
+                "@type": "CollegeOrUniversity",
+                "name": "Universitas Negeri Malang"
+              },
+              "sameAs": [
+                "https://github.com/BagusHidayat21",
+                "https://www.linkedin.com/in/bagushidayat-id/"
+              ]
+            })
+          }}
+        />
       </body>
     </html>
   );
