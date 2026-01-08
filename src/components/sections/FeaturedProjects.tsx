@@ -75,18 +75,17 @@ function ProjectItem({ project, index }: { project: ProjectWithRepo; index: numb
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.7, delay: index * 0.1 }}
-            className="group py-12 md:py-24 border-b border-zinc-200 last:border-0"
+            className="group py-12 md:py-24 border-b border-zinc-200 dark:border-zinc-800 last:border-0"
         >
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
                 {/* Visual Side */}
                 <div className={`lg:w-3/5 w-full ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
                     <Link href={`/projects/${project.id}`}>
-                        <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100 rounded-sm">
-                            <div className="absolute inset-0 bg-zinc-900/5 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                            {/* Image Placeholder */}
+                        <div className="relative aspect-[16/10] overflow-hidden bg-zinc-100 dark:bg-zinc-800 rounded-sm">
+                            <div className="absolute inset-0 bg-zinc-900/5 dark:bg-zinc-100/5 group-hover:bg-transparent transition-colors duration-500 z-10" />
                             <motion.img
-                                src={`https://picsum.photos/seed/${project.id + 10}/1600/1000`}
-                                alt={project.title}
+                                src={`https://picsum.photos/seed/${Number(project.id) + 10}/1600/1000`}
+                                alt={project.title || 'Project image'}
                                 className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700"
                                 whileHover={{ scale: 1.03 }}
                             />
@@ -97,30 +96,30 @@ function ProjectItem({ project, index }: { project: ProjectWithRepo; index: numb
                 {/* Content Side */}
                 <div className="lg:w-2/5 w-full flex flex-col gap-6">
                     <div className="flex items-center gap-4">
-                        <span className="text-xs font-mono text-zinc-400">0{index + 1}</span>
-                        <div className="h-px w-12 bg-zinc-200" />
+                        <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500">0{index + 1}</span>
+                        <div className="h-px w-12 bg-zinc-200 dark:bg-zinc-800" />
                     </div>
 
-                    <h3 className="text-3xl md:text-5xl font-bold text-zinc-900 leading-tight group-hover:underline decoration-1 underline-offset-8 decoration-zinc-300 transition-all">
+                    <h3 className="text-3xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight group-hover:underline decoration-1 underline-offset-8 decoration-zinc-300 dark:decoration-zinc-700 transition-all">
                         <Link href={`/projects/${project.id}`}>
                             {project.title}
                         </Link>
                     </h3>
 
-                    <p className="text-zinc-500 text-lg leading-relaxed">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-lg leading-relaxed">
                         {project.description}
                     </p>
 
                     <div className="flex flex-wrap gap-2 mt-2">
                         {project.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="bg-zinc-100 text-zinc-600 hover:bg-zinc-200 font-normal rounded-md px-3 py-1">
+                            <Badge key={tag} variant="secondary" className="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-normal rounded-md px-3 py-1">
                                 {tag}
                             </Badge>
                         ))}
                     </div>
 
                     <div className="pt-4">
-                        <Button asChild variant="outline" className="rounded-full h-12 px-6 border-zinc-200 text-zinc-900 hover:bg-zinc-900 hover:text-white transition-colors group/btn">
+                        <Button asChild variant="outline" className="rounded-full h-12 px-6 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-900 dark:hover:bg-zinc-100 hover:text-white dark:hover:text-zinc-900 transition-colors group/btn">
                             <Link href={`/projects/${project.id}`}>
                                 View Case Study
                                 <ArrowUpRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -137,20 +136,20 @@ export function FeaturedProjects({ projects = placeholderProjects }: FeaturedPro
     const displayProjects = projects.slice(0, 3);
 
     return (
-        <section className="bg-white py-24 md:py-32">
+        <section className="bg-white dark:bg-zinc-950 py-24 md:py-32">
             <div className="container mx-auto px-6">
 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-32 gap-6">
                     <div>
-                        <h2 className="text-5xl md:text-7xl font-bold text-zinc-900 tracking-tight mb-4">
+                        <h2 className="text-5xl md:text-7xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-4">
                             Selected Works
                         </h2>
-                        <p className="text-zinc-500 text-lg md:text-xl max-w-md">
+                        <p className="text-zinc-500 dark:text-zinc-400 text-lg md:text-xl max-w-md">
                             A curation of projects that showcase my passion for design and engineering.
                         </p>
                     </div>
-                    <Button asChild variant="link" className="text-zinc-900 text-lg p-0 h-auto underline-offset-4 hover:text-zinc-600">
+                    <Button asChild variant="link" className="text-zinc-900 dark:text-zinc-100 text-lg p-0 h-auto underline-offset-4 hover:text-zinc-600 dark:hover:text-zinc-400">
                         <Link href="/projects">
                             See all archive
                         </Link>

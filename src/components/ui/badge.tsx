@@ -11,13 +11,13 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-zinc-900 text-white",
+          "border-transparent bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900",
         secondary:
-          "border-transparent bg-zinc-100 text-zinc-700",
+          "border-transparent bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300",
         outline:
-          "border-zinc-300 text-zinc-700 bg-white",
+          "border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900",
         muted:
-          "border-transparent bg-zinc-100/80 text-zinc-500",
+          "border-transparent bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400",
       },
     },
     defaultVariants: {
