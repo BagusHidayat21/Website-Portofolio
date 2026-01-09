@@ -9,7 +9,10 @@ export default async function AdminProfilePage() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold tracking-tight mb-8">Edit Profile</h1>
+            <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 mb-2">Edit Profile</h1>
+            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+                Manage the content displayed on your profile page
+            </p>
             <ProfileForm initialData={profile} />
         </div>
     );

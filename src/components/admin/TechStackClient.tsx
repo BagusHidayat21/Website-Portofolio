@@ -77,7 +77,7 @@ export function TechStackClient({ initialData }: TechStackClientProps) {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+                    <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
                         Tech Stack
                     </h1>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-1">

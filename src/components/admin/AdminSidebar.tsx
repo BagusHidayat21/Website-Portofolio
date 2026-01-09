@@ -4,15 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { 
-    LayoutDashboard, 
-    User, 
-    FolderGit2, 
-    Layers, 
+import {
+    LayoutDashboard,
+    User,
+    FolderGit2,
+    Layers,
     Briefcase,
     Home,
     LogOut,
-    Settings
+    Settings,
+    FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -28,9 +29,10 @@ const menuItems = [
         title: 'Content',
         items: [
             { href: '/admin/profile', label: 'Profile', icon: User },
+            { href: '/admin/about', label: 'About', icon: FileText },
             { href: '/admin/projects', label: 'Projects', icon: FolderGit2 },
-            { href: '/admin/tech', label: 'Tech Stack', icon: Layers },
             { href: '/admin/experience', label: 'Experience', icon: Briefcase },
+            { href: '/admin/tech', label: 'Tech Stack', icon: Layers },
         ]
     }
 ];
@@ -66,7 +68,7 @@ export function AdminSidebar() {
                             {section.items.map((item) => {
                                 const isActive = pathname === item.href;
                                 const Icon = item.icon;
-                                
+
                                 return (
                                     <Link
                                         key={item.href}

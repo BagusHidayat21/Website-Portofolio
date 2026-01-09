@@ -80,3 +80,26 @@ model Experience {
   isVisible   Boolean  @default(true)
   order       Int      @default(0)
 }
+
+model AboutContent {
+  id              Int      @id @default(1)
+  heroTitle       String   @default("ENGINEERING")
+  heroSubtitle    String   @default("EXCELLENCE")
+  heroDescription String   @db.Text
+  
+  // Story Section
+  storyTitle      String?
+  storyContent    String?  @db.Text
+  
+  // Images
+  mainImage       String?
+  secondaryImage  String?
+  
+  // Tags for Story Section
+  tags            String[]
+  
+  // Philosophy Cards (stored as JSON array)
+  philosophy      Json?
+  
+  updatedAt       DateTime @updatedAt
+}

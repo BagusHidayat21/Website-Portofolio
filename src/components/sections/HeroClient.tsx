@@ -78,15 +78,14 @@ export function HeroClient({
 
     return (
         <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-900 pt-20 pb-20">
-            {/* Background Grid - Minimalist */}
-            {/* Background Grid - Minimalist */}
-            <div className="absolute inset-0 z-0 opacity-[0.03] dark:hidden"
+            {/* Background Grid - Minimalist with increased visibility in light mode */}
+            <div className="absolute inset-0 z-0 opacity-[0.06] dark:hidden"
                 style={{
                     backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
                     backgroundSize: '40px 40px'
                 }}
             />
-            <div className="absolute inset-0 z-0 hidden dark:block opacity-[0.05]"
+            <div className="absolute inset-0 z-0 hidden dark:block opacity-[0.06]"
                 style={{
                     backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
                     backgroundSize: '40px 40px'
@@ -129,7 +128,7 @@ export function HeroClient({
                             {/* Split tagline for effect if it's 2 words, otherwise just display */}
                             {tagline.split(' ').slice(0, 2).join(' ').toUpperCase()}
                             <br />
-                            <span className="text-zinc-400 dark:text-zinc-500">{tagline.split(' ').slice(2).join(' ').toUpperCase()}</span>
+                            <span className="text-zinc-900 dark:text-zinc-400">{tagline.split(' ').slice(2).join(' ').toUpperCase()}</span>
                         </motion.h1>
 
                         {/* Decorative element next to title */}
