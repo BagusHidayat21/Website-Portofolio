@@ -24,6 +24,7 @@ export async function Hero() {
             email={profile.email}
             location={profile.location}
             marqueeTech={marqueeTech}
+            isAvailableForWork={profile.isAvailableForWork}
         />
     );
 }

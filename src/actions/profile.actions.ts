@@ -39,6 +39,7 @@ export async function updateProfile(data: Partial<Profile>) {
         }
 
         revalidatePath("/")
+        revalidatePath("/admin")
         return { success: true }
     } catch (error) {
         console.error("Error updating profile:", error)

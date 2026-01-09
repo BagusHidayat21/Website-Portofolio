@@ -10,8 +10,12 @@ import { updateProfile } from '@/actions/profile.actions';
 import { Profile } from '@prisma/client';
 import { Save, User, Mail, MapPin, Link as LinkIcon, Github, Linkedin } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
 export function ProfileForm({ initialData }: { initialData: Profile }) {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [isAvailable, setIsAvailable] = useState(initialData.isAvailableForWork ?? true);
 
     async function handleSubmit(formData: FormData) {
         setIsLoading(true);
@@ -26,10 +30,12 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
             projectsCount: parseInt(formData.get('projectsCount') as string),
             githubUrl: formData.get('githubUrl') as string,
             linkedinUrl: formData.get('linkedinUrl') as string,
+            isAvailableForWork: isAvailable,
         };
 
         await updateProfile(data);
         setIsLoading(false);
+        router.refresh();
         alert('Profile updated successfully!');
     }
 
@@ -104,6 +110,39 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                                 </div>
                             )}
                         </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Availability Status */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+                        Work Availability
+                    </CardTitle>
+                    <CardDescription>Set your current availability status</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center justify-between p-4 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                        <div className="space-y-0.5">
+                            <Label className="text-base">Available for Work</Label>
+                            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                {isAvailable ? 'Currently accepting new projects' : 'Currently busy or unavailable'}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsAvailable(!isAvailable)}
+                            className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-zinc-300 dark:focus-visible:ring-offset-zinc-950 ${isAvailable ? 'bg-zinc-900 dark:bg-zinc-50' : 'bg-zinc-200 dark:bg-zinc-800'
+                                }`}
+                        >
+                            <span className="sr-only">Use setting</span>
+                            <span
+                                className={`pointer-events-none block h-6 w-6 rounded-full bg-white dark:bg-zinc-900 shadow-lg ring-0 transition-transform ${isAvailable ? 'translate-x-5' : 'translate-x-0'
+                                    }`}
+                            />
+                        </button>
                     </div>
                 </CardContent>
             </Card>
@@ -250,6 +289,6 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                     )}
                 </Button>
             </div>
-        </form>
+        </form >
     );
 }
