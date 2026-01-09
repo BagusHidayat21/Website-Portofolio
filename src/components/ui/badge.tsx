@@ -18,6 +18,8 @@ const badgeVariants = cva(
           "border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900",
         muted:
           "border-transparent bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400",
+        destructive:
+          "border-transparent bg-red-500 text-white shadow hover:bg-red-500/80",
       },
     },
     defaultVariants: {

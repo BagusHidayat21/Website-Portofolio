@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { AnimatedBackground } from "@/components/ui/animated-background";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
@@ -34,13 +31,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://bagus-hidayat.my.ids",
+    url: "https://bagus-hidayat.my.id",
     title: "Bagus Hidayat | Full-Stack Web Developer",
     description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
     siteName: "Bagus Hidayat Portfolio",
     images: [
       {
-        url: "/og-image.png", // Ensure this image exists eventually
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Bagus Hidayat Portfolio",
@@ -80,10 +77,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AnimatedBackground />
-          <Navbar />
-          <main className="relative z-10">{children}</main>
-          <Footer />
+          {children}
         </ThemeProvider>
         <script
           type="application/ld+json"

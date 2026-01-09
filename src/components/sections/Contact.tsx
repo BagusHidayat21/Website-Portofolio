@@ -2,7 +2,7 @@
 
 // Premium Minimalist Contact Section - Refined
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Copy, Check, Mail, HandMetal } from 'lucide-react';
+import { ArrowRight, Copy, Check, Mail, HandMetal, Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,8 +12,7 @@ interface ContactProps {
     socialLinks?: {
         github?: string;
         linkedin?: string;
-        twitter?: string;
-    };
+    };  
 }
 
 export function Contact({
@@ -34,8 +33,8 @@ export function Contact({
     };
 
     const socials = [
-        { label: 'GitHub', href: socialLinks.github },
-        { label: 'LinkedIn', href: socialLinks.linkedin },
+        { label: 'GitHub', href: socialLinks.github, icon: Github },
+        { label: 'LinkedIn', href: socialLinks.linkedin, icon: Linkedin },
     ];
 
     return (
@@ -76,7 +75,10 @@ export function Contact({
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-between p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all group"
                                 >
-                                    <span className="font-medium text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100">{social.label}</span>
+                                    <span className="flex items-center gap-2 font-medium text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100">
+                                        <social.icon className="w-4 h-4 mr-2" />
+                                        {social.label}
+                                    </span>
                                     <ArrowRight className="w-4 h-4 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                                 </a>
                             ))}
