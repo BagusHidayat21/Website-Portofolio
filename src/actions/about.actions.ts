@@ -68,3 +68,17 @@ export async function updateAboutContent(data: AboutContentData) {
         return { success: false, error }
     }
 }
+
+export async function getExperience() {
+    try {
+        // @ts-ignore - Prisma client may need regeneration
+        const experience = await prisma.experience.findMany({
+            where: { isVisible: true },
+            orderBy: { order: 'asc' }
+        })
+        return experience
+    } catch (error) {
+        console.error("Error fetching experience:", error)
+        return []
+    }
+}

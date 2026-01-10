@@ -117,6 +117,23 @@ export function HeroClient({
                         </motion.div>
                     )}
 
+                    {!isAvailableForWork && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="mb-8"
+                        >
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-sm dark:shadow-zinc-950/50">
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 dark:bg-red-500 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 dark:bg-red-400"></span>
+                                </span>
+                                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">Not available for work</span>
+                            </div>
+                        </motion.div>
+                    )}
+
                     {/* Bold Headline */}
                     <div className="relative mb-8">
                         <motion.h1

@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowDownRight, Briefcase, Globe, Database, BrainCircuit, Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon } from 'lucide-react';
+import { ArrowDownRight, Briefcase, Globe, Database, BrainCircuit, Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -10,6 +10,30 @@ interface PhilosophyItem {
     title: string;
     description: string;
     icon: string;
+}
+
+interface ExperienceItem {
+    id: number;
+    title: string;
+    company: string;
+    year: string;
+    description: string;
+    skills: string[];
+    location?: string | null;
+    isVisible: boolean;
+    order: number;
+}
+
+interface EducationItem {
+    id: number;
+    institution: string;
+    degree: string;
+    field: string;
+    year: string;
+    description: string;
+    location?: string | null;
+    isVisible: boolean;
+    order: number;
 }
 
 interface AboutContentData {
@@ -26,6 +50,8 @@ interface AboutContentData {
 
 interface AboutPageClientProps {
     aboutContent: AboutContentData | null;
+    experience: ExperienceItem[];
+    education: EducationItem[];
 }
 
 // Icon mapping for dynamic philosophy cards
@@ -42,54 +68,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
     Target,
 };
 
-interface TimelineItem {
-    year: string;
-    title: string;
-    company: string;
-    description: string;
-    skills: string[];
-}
-
-// Static data for experience (can be made dynamic later)
-const experience: TimelineItem[] = [
-    {
-        year: '2022 - PRESENT',
-        title: 'Informatics Engineering Education',
-        company: 'Universitas Negeri Malang',
-        description: 'Bachelor of Science (S1). Combining technical expertise in software development, computer systems, and networking with pedagogical knowledge for vocational education.',
-        skills: ['Software Engineering', 'Pedagogy', 'Network Systems', 'Educational Tech']
-    },
-    {
-        year: '2024',
-        title: 'Laravel Developer (HealMe)',
-        company: 'Wintex IID 2024',
-        description: 'Developed a mental health consultation platform using Laravel 10. Implemented secure user authentication, appointment scheduling, mood tracking, and anonymous support forums.',
-        skills: ['Laravel 10', 'System Security', 'Full Stack Development', 'Healthcare Tech']
-    },
-    {
-        year: '2024',
-        title: 'Web Developer (Cahaya Dunia)',
-        company: 'Ngadimulyo Village Govt',
-        description: 'Developed a digital library management system including features for book cataloging, member management, and borrowing/returning processes.',
-        skills: ['Web Development', 'Library Management', 'Admin Dashboard', 'Training']
-    },
-    {
-        year: '2023',
-        title: 'API Developer (J-TAG)',
-        company: 'SMK Negeri 1 Jenangan',
-        description: 'Developed a RESTful API for an RFID-based attendance system. Focused on real-time data processing and seamless integration.',
-        skills: ['RESTful API', 'Real-time Data', 'RFID Integration', 'Backend Engineering']
-    },
-    {
-        year: '2019 - 2022',
-        title: 'Software Engineering',
-        company: 'SMK Negeri 1 Jenangan Ponorogo',
-        description: 'High School Diploma. Focused on programming, web development, databases, and software lifecycle.',
-        skills: ['Web Development', 'Databases', 'Leadership', 'Teamwork']
-    }
-];
-
-export function AboutPageClient({ aboutContent }: AboutPageClientProps) {
+export function AboutPageClient({ aboutContent, experience, education }: AboutPageClientProps) {
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
 
@@ -191,48 +170,66 @@ export function AboutPageClient({ aboutContent }: AboutPageClientProps) {
             </section>
 
             {/* 3. Narrative Bio */}
-            <section className="py-24 md:py-32">
-                <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 md:gap-32">
-                    <div>
-                        <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-6">The Story</h2>
-                        <h3 className="text-4xl md:text-5xl font-bold leading-tight mb-8">
-                            Design and Building <span className="underline decoration-4 decoration-zinc-200 dark:decoration-zinc-700 underline-offset-4">web application</span> powered by <span className="underline decoration-4 decoration-zinc-200 dark:decoration-zinc-700 underline-offset-4">modern frontend</span> & <span className="underline decoration-4 decoration-zinc-200 dark:decoration-zinc-700 underline-offset-4">reliable backend API&apos;s</span>.
-                        </h3>
-                    </div>
-                    <div className="space-y-8 text-lg text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
-                        {(storyContent ?? '').split('\n\n').map((paragraph, index) => (
-                            <p key={index}>{paragraph}</p>
-                        ))}
-
-                        {tags.length > 0 && (
-                            <div className="pt-4 flex flex-wrap items-center gap-4">
-                                {tags.map((tag) => (
-                                    <Badge
-                                        key={tag}
-                                        variant="outline"
-                                        className="px-4 py-2 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 rounded-full"
-                                    >
-                                        {tag}
-                                    </Badge>
-                                ))}
+            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col md:flex-row gap-16">
+                        <div className="md:w-1/3">
+                            <div className="sticky top-32">
+                                <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
+                                    Background
+                                </span>
+                                <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">The Story</h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
+                                    Design and building web applications powered by modern frontend & reliable backend APIs.
+                                </p>
                             </div>
-                        )}
+                        </div>
+
+                        <div className="md:w-2/3">
+                            <div className="bg-zinc-50 dark:bg-zinc-900 p-8 md:p-10 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                                <div className="space-y-6 text-lg text-justify text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                                    {(storyContent ?? '').split('\n\n').map((paragraph, index) => (
+                                        <p key={index}>{paragraph}</p>
+                                    ))}
+                                </div>
+
+                                {tags.length > 0 && (
+                                    <div className="pt-8 mt-8 border-t border-zinc-200 dark:border-zinc-700 flex flex-wrap items-center gap-3">
+                                        {tags.map((tag) => (
+                                            <Badge
+                                                key={tag}
+                                                variant="secondary"
+                                                className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-0 font-medium rounded-full"
+                                            >
+                                                {tag}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
+
             {/* 4. Experience Timeline */}
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
+            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col md:flex-row gap-16">
                         <div className="md:w-1/3">
-                            <h2 className="text-5xl font-bold mb-6">Journey</h2>
-                            <p className="text-zinc-500 dark:text-zinc-400 max-w-sm">
-                                A timeline of my professional career and the key milestones that shaped my expertise.
-                            </p>
-                            <a href="#" className="inline-flex items-center gap-2 mt-8 text-zinc-900 dark:text-zinc-100 font-bold hover:underline underline-offset-4">
-                                Download Resume <ArrowDownRight className="w-4 h-4" />
-                            </a>
+                            <div className="sticky top-32">
+                                <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
+                                    Work & Projects
+                                </span>
+                                <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Experience</h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
+                                    Projects and work experience that shaped my expertise.
+                                </p>
+                                <a href="#" className="inline-flex items-center gap-2 mt-8 text-zinc-900 dark:text-zinc-100 font-bold hover:underline underline-offset-4">
+                                    Download Resume <ArrowDownRight className="w-4 h-4" />
+                                </a>
+                            </div>
                         </div>
 
                         <div className="md:w-2/3 space-y-0">
@@ -243,19 +240,19 @@ export function AboutPageClient({ aboutContent }: AboutPageClientProps) {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
-                                    className="relative pl-8 md:pl-0 border-l md:border-l-0 border-zinc-200 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
+                                    className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-200 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
                                 >
-                                    <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-100 dark:bg-zinc-800 md:left-[25%]" />
-                                    <div className="hidden md:block absolute left-0 top-2.5 w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-600 outline outline-4 outline-white dark:outline-zinc-900 md:left-[25%] md:-translate-x-[50%]" />
-                                    <div className="md:hidden absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-600 outline outline-4 outline-zinc-50 dark:outline-zinc-900" />
+                                    <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[25%]" />
+                                    <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950 md:left-[25%] md:-translate-x-[50%]" />
+                                    <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950" />
 
                                     <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
-                                        <span className="inline-block py-1 px-2 rounded bg-zinc-100 dark:bg-zinc-800 text-xs font-bold tracking-wider text-zinc-500 dark:text-zinc-400">
+                                        <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
                                             {exp.year}
                                         </span>
                                     </div>
 
-                                    <div className="md:col-span-9">
+                                    <div className="md:col-span-9 bg-zinc-50 dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors">
                                         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{exp.title}</h3>
                                         <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4 flex items-center gap-2">
                                             <Briefcase className="w-4 h-4" />
@@ -267,7 +264,7 @@ export function AboutPageClient({ aboutContent }: AboutPageClientProps) {
 
                                         <div className="flex flex-wrap gap-2">
                                             {exp.skills.map(skill => (
-                                                <Badge key={skill} variant="secondary" className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 font-normal hover:bg-zinc-50 dark:hover:bg-zinc-700">
+                                                <Badge key={skill} variant="secondary" className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-0 font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200">
                                                     {skill}
                                                 </Badge>
                                             ))}
@@ -280,27 +277,112 @@ export function AboutPageClient({ aboutContent }: AboutPageClientProps) {
                 </div>
             </section>
 
-            {/* 5. Philosophy Grid */}
-            {philosophy && philosophy.length > 0 && (
-                <section className="py-24 container mx-auto px-6">
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {(philosophy as PhilosophyItem[]).map((item, i) => {
-                            const IconComponent = ICON_MAP[item.icon] || Database;
-                            return (
-                                <Card key={i} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-900 dark:hover:border-zinc-600 transition-colors duration-300 group cursor-default">
-                                    <CardContent className="p-8">
-                                        <IconComponent className="w-10 h-10 text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors mb-6" />
-                                        <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                                        <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                                            {item.description}
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            );
-                        })}
+            {/* 5. Education Timeline */}
+            {education && education.length > 0 && (
+                <section className="py-24 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-6">
+                        <div className="flex flex-col md:flex-row gap-16">
+                            <div className="md:w-1/3">
+                                <div className="sticky top-32">
+                                    <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
+                                        Academic
+                                    </span>
+                                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Education</h2>
+                                    <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
+                                        Academic background and certifications that built my foundation.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="md:w-2/3 space-y-0">
+                                {education.map((edu, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-300 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
+                                    >
+                                        <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-300 dark:bg-zinc-700 md:left-[25%]" />
+                                        <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900 md:left-[25%] md:-translate-x-[50%]" />
+                                        <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900" />
+
+                                        <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
+                                            <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
+                                                {edu.year}
+                                            </span>
+                                        </div>
+
+                                        <div className="md:col-span-9 bg-zinc-100 dark:bg-zinc-800 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors">
+                                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{edu.institution}</h3>
+                                            <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-3 flex items-center gap-2">
+                                                <GraduationCap className="w-4 h-4" />
+                                                {edu.degree} - {edu.field}
+                                            </p>
+                                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-base">
+                                                {edu.description}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
             )}
+
+
+            {/* 6. Philosophy Grid */}
+            {philosophy && philosophy.length > 0 && (
+                <section className="py-24 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-6">
+                        <div className="flex flex-col md:flex-row gap-16">
+                            <div className="md:w-1/3">
+                                <div className="sticky top-32">
+                                    <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
+                                        Principles
+                                    </span>
+                                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Philosophy</h2>
+                                    <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
+                                        Core principles that guide my approach to software development and problem-solving.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="md:w-2/3">
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {(philosophy as PhilosophyItem[]).map((item, i) => {
+                                        const IconComponent = ICON_MAP[item.icon] || Database;
+                                        return (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: i * 0.1 }}
+                                            >
+                                                <Card className="bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors duration-300 group cursor-default h-full">
+                                                    <CardContent className="p-6">
+                                                        <div className="h-12 w-12 rounded-xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-5">
+                                                            <IconComponent className="w-6 h-6 text-white dark:text-zinc-900" />
+                                                        </div>
+                                                        <h3 className="text-lg font-bold mb-2 text-zinc-900 dark:text-zinc-100">{item.title}</h3>
+                                                        <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                                                            {item.description}
+                                                        </p>
+                                                    </CardContent>
+                                                </Card>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
         </div>
     );
 }

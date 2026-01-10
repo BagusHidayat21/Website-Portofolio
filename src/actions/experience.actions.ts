@@ -8,7 +8,7 @@ export async function getExperiences(includeHidden: boolean = false) {
         const where = includeHidden ? {} : { isVisible: true };
         return await prisma.experience.findMany({
             where,
-            orderBy: { startDate: 'desc' }
+            orderBy: { order: 'asc' }
         })
     } catch (error) {
         console.error("Error fetching experiences:", error)

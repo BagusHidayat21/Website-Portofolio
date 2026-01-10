@@ -70,11 +70,11 @@ model TechStack {
 
 model Experience {
   id          Int      @id @default(autoincrement())
-  company     String
-  position    String
-  startDate   DateTime
-  endDate     DateTime? // Null means "Present"
+  title       String   // e.g. "Laravel Developer (HealMe)"
+  company     String   // e.g. "Wintex IID 2024"
+  year        String   // e.g. "2024" or "2022 - PRESENT"
   description String   @db.Text
+  skills      String[] // e.g. ["Laravel 10", "System Security"]
   location    String?
   
   isVisible   Boolean  @default(true)
@@ -102,4 +102,17 @@ model AboutContent {
   philosophy      Json?
   
   updatedAt       DateTime @updatedAt
+}
+
+model Education {
+  id          Int      @id @default(autoincrement())
+  institution String   // e.g. "Universitas Negeri Malang"
+  degree      String   // e.g. "Bachelor of Science (S1)"
+  field       String   // e.g. "Informatics Engineering Education"
+  year        String   // e.g. "2022 - Present" or "2019 - 2022"
+  description String   @db.Text
+  location    String?
+  
+  isVisible   Boolean  @default(true)
+  order       Int      @default(0)
 }

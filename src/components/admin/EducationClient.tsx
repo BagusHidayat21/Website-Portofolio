@@ -15,77 +15,61 @@ import {
     SheetFooter,
     SheetClose
 } from '@/components/ui/sheet';
-import { createExperience, updateExperience, deleteExperience } from '@/actions/experience.actions';
-import { Plus, Edit, Trash2, Check, X, Calendar, MapPin, Briefcase } from 'lucide-react';
+import { createEducation, updateEducation, deleteEducation } from '@/actions/education.actions';
+import { Plus, Edit, Trash2, Check, X, Calendar, MapPin, GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Interface matching the updated Experience model
-interface Experience {
+interface Education {
     id: number;
-    title: string;
-    company: string;
+    institution: string;
+    degree: string;
+    field: string;
     year: string;
     description: string;
-    skills: string[];
     location: string | null;
     isVisible: boolean;
     order: number;
 }
 
-interface ExperienceClientProps {
-    initialData: Experience[];
+interface EducationClientProps {
+    initialData: Education[];
 }
 
-export function ExperienceClient({ initialData }: ExperienceClientProps) {
+export function EducationClient({ initialData }: EducationClientProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<Experience | null>(null);
+    const [editingItem, setEditingItem] = useState<Education | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [skills, setSkills] = useState<string[]>([]);
-    const [skillInput, setSkillInput] = useState('');
     const router = useRouter();
 
     const openCreate = () => {
         setEditingItem(null);
-        setSkills([]);
         setIsOpen(true);
     };
 
-    const openEdit = (item: Experience) => {
+    const openEdit = (item: Education) => {
         setEditingItem(item);
-        setSkills(item.skills || []);
         setIsOpen(true);
-    };
-
-    const addSkill = () => {
-        if (skillInput.trim() && !skills.includes(skillInput.trim())) {
-            setSkills([...skills, skillInput.trim()]);
-            setSkillInput('');
-        }
-    };
-
-    const removeSkill = (skill: string) => {
-        setSkills(skills.filter(s => s !== skill));
     };
 
     async function handleSubmit(formData: FormData) {
         setIsLoading(true);
 
         const data = {
-            title: formData.get('title') as string,
-            company: formData.get('company') as string,
+            institution: formData.get('institution') as string,
+            degree: formData.get('degree') as string,
+            field: formData.get('field') as string,
             year: formData.get('year') as string,
             description: formData.get('description') as string,
-            skills: skills,
             location: formData.get('location') as string || null,
             isVisible: formData.get('isVisible') === 'on',
             order: parseInt(formData.get('order') as string) || 0,
         };
 
         if (editingItem) {
-            await updateExperience(editingItem.id, data);
+            await updateEducation(editingItem.id, data);
         } else {
-            await createExperience(data);
+            await createEducation(data);
         }
 
         setIsLoading(false);
@@ -94,8 +78,8 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
     }
 
     async function handleDelete(id: number) {
-        if (!confirm('Are you sure you want to delete this experience?')) return;
-        await deleteExperience(id);
+        if (!confirm('Are you sure you want to delete this education entry?')) return;
+        await deleteEducation(id);
         router.refresh();
     }
 
@@ -104,15 +88,15 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
-                        Experience
+                        Education
                     </h1>
                     <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-                        Manage your work history and education
+                        Manage your educational background
                     </p>
                 </div>
                 <Button onClick={openCreate} className="gap-2">
                     <Plus className="w-4 h-4" />
-                    Add Experience
+                    Add Education
                 </Button>
             </div>
 
@@ -121,20 +105,20 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
                     <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
                         {initialData.length === 0 && (
                             <div className="p-12 text-center text-zinc-500">
-                                No experience found. Add one to get started.
+                                No education entries found. Add one to get started.
                             </div>
                         )}
                         {initialData.map((item) => (
                             <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors gap-4">
                                 <div className="flex items-start gap-4">
                                     <div className="h-10 w-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 shrink-0">
-                                        <Briefcase className="w-5 h-5" />
+                                        <GraduationCap className="w-5 h-5" />
                                     </div>
                                     <div className="space-y-1">
                                         <div className="flex flex-wrap items-center gap-2">
-                                            <h4 className="font-bold text-lg text-zinc-900 dark:text-zinc-100">{item.title}</h4>
-                                            <Badge variant="secondary" className="font-normal">{item.company}</Badge>
+                                            <h4 className="font-bold text-lg text-zinc-900 dark:text-zinc-100">{item.institution}</h4>
                                         </div>
+                                        <p className="text-zinc-600 dark:text-zinc-300 font-medium">{item.degree} - {item.field}</p>
 
                                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500">
                                             <span className="flex items-center gap-1">
@@ -148,21 +132,6 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
                                                 </span>
                                             )}
                                         </div>
-
-                                        {item.skills && item.skills.length > 0 && (
-                                            <div className="flex flex-wrap gap-1 mt-2">
-                                                {item.skills.slice(0, 4).map(skill => (
-                                                    <Badge key={skill} variant="outline" className="text-xs">
-                                                        {skill}
-                                                    </Badge>
-                                                ))}
-                                                {item.skills.length > 4 && (
-                                                    <Badge variant="outline" className="text-xs">
-                                                        +{item.skills.length - 4}
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                        )}
 
                                         <div className="flex items-center gap-3 mt-1 text-xs text-zinc-400">
                                             <span className="flex items-center gap-1">
@@ -191,26 +160,31 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetContent className="overflow-y-auto">
                     <SheetHeader>
-                        <SheetTitle>{editingItem ? 'Edit Experience' : 'Add Experience'}</SheetTitle>
+                        <SheetTitle>{editingItem ? 'Edit Education' : 'Add Education'}</SheetTitle>
                         <SheetDescription>
-                            {editingItem ? 'Update the details of your experience.' : 'Add a new work or education entry.'}
+                            {editingItem ? 'Update educational details.' : 'Add a new educational entry.'}
                         </SheetDescription>
                     </SheetHeader>
 
                     <form action={handleSubmit} className="space-y-6 mt-6">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Title / Role *</Label>
-                            <Input id="title" name="title" defaultValue={editingItem?.title} required placeholder="e.g. Laravel Developer (HealMe)" />
+                            <Label htmlFor="institution">Institution *</Label>
+                            <Input id="institution" name="institution" defaultValue={editingItem?.institution} required placeholder="e.g. Universitas Negeri Malang" />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="company">Company / Institution *</Label>
-                            <Input id="company" name="company" defaultValue={editingItem?.company} required placeholder="e.g. Universitas Negeri Malang" />
+                            <Label htmlFor="degree">Degree *</Label>
+                            <Input id="degree" name="degree" defaultValue={editingItem?.degree} required placeholder="e.g. Bachelor of Science (S1)" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="field">Field of Study *</Label>
+                            <Input id="field" name="field" defaultValue={editingItem?.field} required placeholder="e.g. Informatics Engineering Education" />
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="year">Year / Period *</Label>
-                            <Input id="year" name="year" defaultValue={editingItem?.year} required placeholder="e.g. 2024 or 2022 - PRESENT" />
+                            <Input id="year" name="year" defaultValue={editingItem?.year} required placeholder="e.g. 2022 - Present or 2019 - 2022" />
                         </div>
 
                         <div className="space-y-2">
@@ -226,43 +200,8 @@ export function ExperienceClient({ initialData }: ExperienceClientProps) {
                                 defaultValue={editingItem?.description}
                                 required
                                 className="min-h-[120px]"
-                                placeholder="Describe your responsibilities and achievements..."
+                                placeholder="Describe your studies, achievements, and activities..."
                             />
-                        </div>
-
-                        {/* Skills Section */}
-                        <div className="space-y-2">
-                            <Label>Skills</Label>
-                            <div className="flex gap-2">
-                                <Input
-                                    value={skillInput}
-                                    onChange={(e) => setSkillInput(e.target.value)}
-                                    placeholder="Add a skill..."
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault();
-                                            addSkill();
-                                        }
-                                    }}
-                                />
-                                <Button type="button" variant="outline" onClick={addSkill}>
-                                    Add
-                                </Button>
-                            </div>
-                            {skills.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                    {skills.map(skill => (
-                                        <Badge
-                                            key={skill}
-                                            variant="secondary"
-                                            className="cursor-pointer hover:bg-red-100 dark:hover:bg-red-900"
-                                            onClick={() => removeSkill(skill)}
-                                        >
-                                            {skill} <X className="w-3 h-3 ml-1" />
-                                        </Badge>
-                                    ))}
-                                </div>
-                            )}
                         </div>
 
                         <div className="space-y-2">

@@ -6,12 +6,24 @@ import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
-import { Experience, Profile } from '@prisma/client';
+
+// Interface matching the updated Experience model
+interface ExperienceItem {
+    id: number;
+    title: string;
+    company: string;
+    year: string;
+    description: string;
+    skills: string[];
+    location: string | null;
+    isVisible: boolean;
+    order: number;
+}
 
 interface AboutClientProps {
     bio: string;
     resumeUrl?: string | null;
-    experiences: Experience[]; // Assuming we use Experience model for both work and education or just work
+    experiences: ExperienceItem[];
 }
 
 export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
@@ -102,18 +114,30 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                                         <div className="absolute -left-[39px] top-1 h-5 w-5 rounded-full border-4 border-white dark:border-zinc-950 bg-zinc-300 dark:bg-zinc-700 group-hover:bg-zinc-900 dark:group-hover:bg-zinc-100 transition-colors" />
 
                                         <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all hover:shadow-sm">
-                                            <div className="flex flex-wrapjustify-between items-start gap-4 mb-2">
+                                            <div className="flex flex-wrap justify-between items-start gap-4 mb-2">
                                                 <div>
-                                                    <h4 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{item.position}</h4>
+                                                    <h4 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{item.title}</h4>
                                                     <p className="text-zinc-500 dark:text-zinc-400 font-medium">{item.company}</p>
                                                 </div>
                                                 <Badge variant="outline" className="font-mono text-xs border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-zinc-500">
-                                                    {new Date(item.startDate).getFullYear()} - {item.endDate ? new Date(item.endDate).getFullYear() : 'Present'}
+                                                    {item.year}
                                                 </Badge>
                                             </div>
                                             <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-4">
                                                 {item.description}
                                             </p>
+
+                                            {/* Skills */}
+                                            {item.skills && item.skills.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mb-4">
+                                                    {item.skills.map(skill => (
+                                                        <Badge key={skill} variant="secondary" className="text-xs bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                                                            {skill}
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            )}
+
                                             {item.location && (
                                                 <div className="flex items-center gap-4 text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
                                                     <span className="flex items-center gap-1">

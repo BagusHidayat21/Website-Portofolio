@@ -18,18 +18,22 @@ interface PhilosophyItem {
     icon: string;
 }
 
+interface AboutFormData {
+    id?: number;
+    heroTitle: string;
+    heroSubtitle: string;
+    heroDescription: string;
+    storyTitle?: string | null;
+    storyContent?: string | null;
+    mainImage?: string | null;
+    secondaryImage?: string | null;
+    tags?: string[];
+    philosophy?: PhilosophyItem[] | unknown | null;
+    updatedAt?: Date;
+}
+
 interface AboutFormProps {
-    initialData: {
-        heroTitle: string;
-        heroSubtitle: string;
-        heroDescription: string;
-        storyTitle: string | null;
-        storyContent: string | null;
-        mainImage: string | null;
-        secondaryImage: string | null;
-        tags: string[];
-        philosophy?: PhilosophyItem[] | null;
-    } | null;
+    initialData: AboutFormData | null;
 }
 
 // Preset tag options the user can choose from

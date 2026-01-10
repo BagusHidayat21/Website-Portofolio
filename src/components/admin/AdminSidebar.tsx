@@ -13,7 +13,8 @@ import {
     Home,
     LogOut,
     Settings,
-    FileText
+    FileText,
+    GraduationCap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +33,7 @@ const menuItems = [
             { href: '/admin/about', label: 'About', icon: FileText },
             { href: '/admin/projects', label: 'Projects', icon: FolderGit2 },
             { href: '/admin/experience', label: 'Experience', icon: Briefcase },
+            { href: '/admin/education', label: 'Education', icon: GraduationCap },
             { href: '/admin/tech', label: 'Tech Stack', icon: Layers },
         ]
     }
