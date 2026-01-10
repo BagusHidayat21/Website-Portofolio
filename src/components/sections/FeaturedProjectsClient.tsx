@@ -1,7 +1,7 @@
 'use client';
 
 // Dynamic, Hover-Rich Projects Grid
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,12 +11,6 @@ import { Project } from '@prisma/client';
 
 export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
     const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start end', 'end start']
-    });
-
-    const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
     return (
         <section id="projects" ref={containerRef} className="py-32 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
@@ -79,16 +73,16 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-sm">
                                             {project.liveUrl && (
                                                 <Button size="icon" className="h-14 w-14 rounded-full bg-white text-zinc-900 hover:bg-zinc-200 border-none shadow-xl hover:scale-110 transition-all">
-                                                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                                                    <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                                                         <ExternalLink className="w-6 h-6" />
-                                                    </a>
+                                                    </Link>
                                                 </Button>
                                             )}
                                             {project.githubUrl && (
                                                 <Button size="icon" variant="outline" className="h-14 w-14 rounded-full border-2 border-white text-white hover:bg-white hover:text-zinc-900 shadow-xl hover:scale-110 transition-all">
-                                                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                                    <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                                                         <Github className="w-6 h-6" />
-                                                    </a>
+                                                    </Link>
                                                 </Button>
                                             )}
                                         </div>

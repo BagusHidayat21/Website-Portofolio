@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 export default async function AdminDashboard() {
     const profile = await getProfile();
     const projects = await getProjects();
-    
+
     const featuredProjects = projects.filter(p => p.isFeatured);
     const visibleProjects = projects.filter(p => p.isVisible);
 
@@ -19,7 +19,7 @@ export default async function AdminDashboard() {
                     Dashboard
                 </h1>
                 <p className="text-zinc-500 dark:text-zinc-400">
-                    Welcome back! Here's an overview of your portfolio.
+                    Welcome back! Here&apos;s an overview of your portfolio.
                 </p>
             </div>
 
@@ -141,7 +141,7 @@ export default async function AdminDashboard() {
                                 </div>
                             </div>
                         ))}
-                        
+
                         {projects.length === 0 && (
                             <div className="text-center py-12 text-zinc-500 dark:text-zinc-400">
                                 <FolderGit2 className="h-12 w-12 mx-auto mb-4 opacity-50" />

@@ -36,11 +36,14 @@ export default async function AdminProjectsPage() {
                             {/* Image/Thumbnail */}
                             <div className="relative aspect-video bg-zinc-100 dark:bg-zinc-800 rounded-lg mb-4 overflow-hidden">
                                 {project.images && project.images[0] ? (
-                                    <img
-                                        src={project.images[0]}
-                                        alt={project.title || ''}
-                                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                                    />
+                                    <>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={project.images[0]}
+                                            alt={project.title || ''}
+                                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    </>
                                 ) : (
                                     <div className="flex items-center justify-center h-full">
                                         <Github className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
@@ -106,16 +109,16 @@ export default async function AdminProjectsPage() {
                                     </Button>
                                     {project.liveUrl && (
                                         <Button asChild variant="outline" size="sm">
-                                            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                                            <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                                                 <ExternalLink className="w-3 h-3" />
-                                            </a>
+                                            </Link>
                                         </Button>
                                     )}
                                     {project.githubUrl && (
                                         <Button asChild variant="outline" size="sm">
-                                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                            <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                                                 <Github className="w-3 h-3" />
-                                            </a>
+                                            </Link>
                                         </Button>
                                     )}
                                 </div>

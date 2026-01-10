@@ -3,7 +3,7 @@ import prisma from '../src/lib/prisma';
 async function seedAboutContent() {
     console.log('Checking for existing AboutContent...');
 
-    // @ts-ignore
+
     const existing = await prisma.aboutContent.findFirst();
 
     if (existing) {
@@ -13,7 +13,7 @@ async function seedAboutContent() {
 
     console.log('Seeding AboutContent...');
 
-    // @ts-ignore
+
     await prisma.aboutContent.create({
         data: {
             heroTitle: 'ENGINEERING',
@@ -54,7 +54,7 @@ Lately, my primary focus has shifted toward data engineering and machine learnin
 async function seedExperience() {
     console.log('Checking for existing Experience...');
 
-    // @ts-ignore
+
     const existingCount = await prisma.experience.count();
 
     if (existingCount > 0) {
@@ -107,7 +107,7 @@ async function seedExperience() {
         }
     ];
 
-    // @ts-ignore
+
     await prisma.experience.createMany({
         data: experienceData
     });
@@ -118,7 +118,7 @@ async function seedExperience() {
 async function seedEducation() {
     console.log('Checking for existing Education...');
 
-    // @ts-ignore
+
     const existingCount = await prisma.education.count();
 
     if (existingCount > 0) {
@@ -147,7 +147,7 @@ async function seedEducation() {
         }
     ];
 
-    // @ts-ignore
+
     await prisma.education.createMany({
         data: educationData
     });

@@ -186,10 +186,10 @@ export function HeroClient({
                             </Link>
                         </Button>
                         <Button size="lg" variant="outline" className="h-14 px-8 text-base rounded-full border-2 border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-transparent dark:hover:bg-transparent transition-all">
-                            <a href={`mailto:${email}`} className="flex items-center gap-2">
+                            <Link href={`mailto:${email}`} className="flex items-center gap-2">
                                 Contact Me
                                 <Send className="w-4 h-4" />
-                            </a>
+                            </Link>
                         </Button>
                     </motion.div>
                 </div>
@@ -264,18 +264,18 @@ export function HeroClient({
             >
                 <div className="w-px h-20 bg-zinc-300 dark:bg-zinc-700 mx-auto" />
                 {githubUrl && (
-                    <a href={githubUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
+                    <Link href={githubUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
                         <Github className="w-5 h-5" />
-                    </a>
+                    </Link>
                 )}
                 {linkedinUrl && (
-                    <a href={linkedinUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
+                    <Link href={linkedinUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
                         <Linkedin className="w-5 h-5" />
-                    </a>
+                    </Link>
                 )}
-                <a href={`mailto:${email}`} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
+                <Link href={`mailto:${email}`} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
                     <Mail className="w-5 h-5" />
-                </a>
+                </Link>
             </motion.div>
 
             {/* Scroll Indicator */}

@@ -91,16 +91,16 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-4">
                         <ThemeToggle />
                         <Button asChild variant="outline" size="sm" className="hidden lg:flex gap-2 rounded-full border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
-                            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                            <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
                                 <FileText className="h-4 w-4" />
                                 Resume
-                            </a>
+                            </Link>
                         </Button>
                         <Button asChild size="sm" className="gap-2 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-lg shadow-zinc-900/20 dark:shadow-zinc-100/20">
-                            <a href="mailto:bagus.hidayat.id@gmail.com">
+                            <Link href="mailto:bagus.hidayat.id@gmail.com">
                                 Hire Me
                                 <ArrowUpRight className="h-4 w-4" />
-                            </a>
+                            </Link>
                         </Button>
                     </div>
 
@@ -157,28 +157,28 @@ export function Navbar() {
 
                             <div className="grid grid-cols-2 gap-4 mb-8">
                                 <Button asChild variant="outline" size="lg" className="w-full gap-2 rounded-xl border-zinc-200 dark:border-zinc-700 dark:hover:bg-zinc-800 h-14">
-                                    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                                    <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
                                         <FileText className="h-5 w-5" />
                                         Resume
-                                    </a>
+                                    </Link>
                                 </Button>
                                 <Button asChild size="lg" className="w-full gap-2 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 h-14 hover:bg-zinc-800 dark:hover:bg-zinc-200">
-                                    <a href="mailto:bagus.hidayat.id@gmail.com">
+                                    <Link href="mailto:bagus.hidayat.id@gmail.com">
                                         Hire Me
                                         <ArrowUpRight className="h-5 w-5" />
-                                    </a>
+                                    </Link>
                                 </Button>
                             </div>
 
                             <div className="flex gap-6">
                                 {socialLinks.map((social) => (
-                                    <a
+                                    <Link
                                         key={social.label}
                                         href={social.href}
                                         className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-medium text-sm uppercase tracking-widest"
                                     >
                                         {social.label}
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         </motion.div>

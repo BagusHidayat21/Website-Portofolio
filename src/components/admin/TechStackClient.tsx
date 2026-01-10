@@ -12,18 +12,16 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
     SheetFooter,
     SheetClose
 } from '@/components/ui/sheet';
 // Table imports removed
 import { createTech, updateTech, deleteTech } from '@/actions/tech.actions';
-import { Plus, Edit, Trash2, GripVertical, Check, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Check, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
-// Fallback for Table if not exists
-const TableComponent = ({ children }: { children: React.ReactNode }) => <div className="w-full overflow-auto"><table className="w-full caption-bottom text-sm">{children}</table></div>;
+
 
 interface TechStackClientProps {
     initialData: TechStack[];
@@ -103,7 +101,10 @@ export function TechStackClient({ initialData }: TechStackClientProps) {
                                 <div className="flex items-center gap-4">
                                     <div className="h-10 w-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-500">
                                         {item.icon ? (
-                                            <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
+                                            <>
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img src={item.icon} alt="" className="w-6 h-6 object-contain" />
+                                            </>
                                         ) : (
                                             item.name.substring(0, 2).toUpperCase()
                                         )}

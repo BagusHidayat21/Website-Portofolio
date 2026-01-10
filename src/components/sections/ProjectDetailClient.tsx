@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Github } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
@@ -73,18 +74,18 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                     <div className="flex items-center gap-3">
                         {project.githubUrl && (
                             <Button asChild variant="outline" className="rounded-full border-zinc-200 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white">
-                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                                     <Github className="w-4 h-4 mr-2" />
                                     Source Code
-                                </a>
+                                </Link>
                             </Button>
                         )}
                         {project.liveUrl && (
                             <Button asChild className="rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200">
-                                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                                     Visit Live Site
                                     <ArrowUpRight className="w-4 h-4 ml-2" />
-                                </a>
+                                </Link>
                             </Button>
                         )}
                     </div>
@@ -140,6 +141,7 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                     viewport={{ once: true }}
                                     className="rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-2xl dark:shadow-zinc-950/50"
                                 >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={project.images[0]} alt="Project Highlight" className="w-full h-auto" />
                                 </motion.div>
                             )}
@@ -173,6 +175,7 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                             transition={{ delay: i * 0.2 }}
                                             className="rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800"
                                         >
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={img} alt={`Screenshot ${i + 2}`} className="w-full h-full object-cover" />
                                         </motion.div>
                                     ))}

@@ -1,18 +1,19 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowDownRight, Briefcase, Globe, Database, BrainCircuit, Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap } from 'lucide-react';
+import { ArrowRight, Briefcase, Globe, Database, BrainCircuit, Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface PhilosophyItem {
+export interface PhilosophyItem {
     title: string;
     description: string;
     icon: string;
 }
 
-interface ExperienceItem {
+export interface ExperienceItem {
     id: number;
     title: string;
     company: string;
@@ -24,7 +25,7 @@ interface ExperienceItem {
     order: number;
 }
 
-interface EducationItem {
+export interface EducationItem {
     id: number;
     institution: string;
     degree: string;
@@ -36,7 +37,7 @@ interface EducationItem {
     order: number;
 }
 
-interface AboutContentData {
+export interface AboutContentData {
     heroTitle: string;
     heroSubtitle: string;
     heroDescription: string;
@@ -70,7 +71,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 export function AboutPageClient({ aboutContent, experience, education }: AboutPageClientProps) {
     const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({ target: containerRef });
+
 
     // If no content, show loading state
     if (!aboutContent) {
@@ -129,6 +130,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                             transition={{ duration: 0.8 }}
                             className="md:col-span-8 h-[400px] md:h-[600px] relative group overflow-hidden bg-zinc-100 dark:bg-zinc-900"
                         >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={mainImage ?? undefined}
                                 alt="Workspace"
@@ -146,6 +148,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 transition={{ delay: 0.2 }}
                                 className="h-[250px] md:h-[280px] relative group overflow-hidden bg-zinc-100 dark:bg-zinc-900"
                             >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={secondaryImage ?? undefined}
                                     alt="Setup"
@@ -214,7 +217,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
 
             {/* 4. Experience Timeline */}
-            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col md:flex-row gap-16">
                         <div className="md:w-1/3">
@@ -226,9 +229,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
                                     Projects and work experience that shaped my expertise.
                                 </p>
-                                <a href="#" className="inline-flex items-center gap-2 mt-8 text-zinc-900 dark:text-zinc-100 font-bold hover:underline underline-offset-4">
-                                    Download Resume <ArrowDownRight className="w-4 h-4" />
-                                </a>
+                                <Link href="#" className="group inline-flex items-center gap-2 mt-8 text-zinc-900 dark:text-zinc-100 font-bold hover:underline underline-offset-4">
+                                    Download Resume <ArrowRight className="w-5 h-5 md:w-6 md:h-6 rotate-45 group-hover:rotate-0 transition-transform flex-shrink-0 ml-2" />
+                                </Link>
                             </div>
                         </div>
 
@@ -243,8 +246,8 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                     className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-200 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
                                 >
                                     <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[25%]" />
-                                    <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950 md:left-[25%] md:-translate-x-[50%]" />
-                                    <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950" />
+                                    <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900 md:left-[25%] md:-translate-x-[50%]" />
+                                    <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900" />
 
                                     <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
                                         <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
@@ -252,7 +255,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                         </span>
                                     </div>
 
-                                    <div className="md:col-span-9 bg-zinc-50 dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors">
+                                    <div className="md:col-span-9 bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors">
                                         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{exp.title}</h3>
                                         <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4 flex items-center gap-2">
                                             <Briefcase className="w-4 h-4" />
@@ -279,7 +282,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
             {/* 5. Education Timeline */}
             {education && education.length > 0 && (
-                <section className="py-24 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+                <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                     <div className="container mx-auto px-6">
                         <div className="flex flex-col md:flex-row gap-16">
                             <div className="md:w-1/3">
@@ -304,9 +307,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                         transition={{ delay: i * 0.1 }}
                                         className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-300 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
                                     >
-                                        <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-300 dark:bg-zinc-700 md:left-[25%]" />
-                                        <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900 md:left-[25%] md:-translate-x-[50%]" />
-                                        <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900" />
+                                        <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[25%]" />
+                                        <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950 md:left-[25%] md:-translate-x-[50%]" />
+                                        <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950" />
 
                                         <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
                                             <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
@@ -335,7 +338,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
             {/* 6. Philosophy Grid */}
             {philosophy && philosophy.length > 0 && (
-                <section className="py-24 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+                <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
                     <div className="container mx-auto px-6">
                         <div className="flex flex-col md:flex-row gap-16">
                             <div className="md:w-1/3">
@@ -367,7 +370,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                                         <div className="h-12 w-12 rounded-xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-5">
                                                             <IconComponent className="w-6 h-6 text-white dark:text-zinc-900" />
                                                         </div>
-                                                        <h3 className="text-lg font-bold mb-2 text-zinc-900 dark:text-zinc-100">{item.title}</h3>
+                                                        <h3 className="text-lg font-bold mb-2 text-zinc-900 dark:text-zinc-100 mt-2">{item.title}</h3>
                                                         <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
                                                             {item.description}
                                                         </p>

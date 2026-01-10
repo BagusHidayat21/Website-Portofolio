@@ -29,7 +29,7 @@ function detectCategory(project: Project): string {
     // Default fallback heuristics
     if (allTechs.some(t => ['flutter', 'dart', 'kotlin', 'swift', 'react native', 'expo'].includes(t))) return 'mobile';
     if (allTechs.some(t => ['ai', 'ml', 'openai', 'pytorch', 'tensorflow', 'scikit', 'pandas', 'fastapi'].includes(t))) return 'ai';
-    if (allTechs.some(t => ['node', 'express', 'nest', 'go', 'rust', 'docker', 'kubernetes'].includes(t)) && !allTechs.some(t => ['react', 'vue', 'next.js', 'frontend'])) return 'backend';
+    if (allTechs.some(t => ['node', 'express', 'nest', 'go', 'rust', 'docker', 'kubernetes'].includes(t)) && !allTechs.some(t => ['react', 'vue', 'next.js', 'frontend'].includes(t))) return 'backend';
 
     return 'web';
 }
@@ -195,7 +195,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                                 <Search className="w-6 h-6 text-zinc-400" />
                             </div>
                             <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">No projects found</h3>
-                            <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-6">We couldn't find any projects matching your search.</p>
+                            <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-6">We couldn&apos;t find any projects matching your search.</p>
                             <Button
                                 variant="outline"
                                 onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}

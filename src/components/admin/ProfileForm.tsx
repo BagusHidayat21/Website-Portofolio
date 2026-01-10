@@ -102,6 +102,7 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                             />
                             {initialData.avatarUrl && (
                                 <div className="w-11 h-11 rounded-lg overflow-hidden border-2 border-zinc-200 dark:border-zinc-800">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={initialData.avatarUrl}
                                         alt="Avatar preview"

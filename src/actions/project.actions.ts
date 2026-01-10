@@ -1,7 +1,6 @@
 'use server'
 
 import prisma from "@/lib/prisma"
-import { Project } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
 export async function getProjects(includeHidden: boolean = false) {
@@ -51,7 +50,22 @@ export async function getProjectById(id: number) {
     }
 }
 
-export async function createProject(data: any) {
+interface ProjectInput {
+    title: string;
+    slug: string;
+    description: string;
+    content?: string;
+    liveUrl?: string;
+    githubUrl?: string;
+    images?: string[];
+    techStack?: string[];
+    tags?: string[];
+    isFeatured?: boolean;
+    isVisible?: boolean;
+    order?: number;
+}
+
+export async function createProject(data: ProjectInput) {
     try {
         await prisma.project.create({ data })
         revalidatePath("/projects")
@@ -64,7 +78,7 @@ export async function createProject(data: any) {
     }
 }
 
-export async function updateProject(id: number, data: any) {
+export async function updateProject(id: number, data: ProjectInput) {
     try {
         await prisma.project.update({
             where: { id },

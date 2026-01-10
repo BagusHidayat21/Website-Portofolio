@@ -53,24 +53,24 @@ export function FooterClient({ profile }: FooterClientProps) {
                             <h4 className="text-sm font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">Connect</h4>
                             <nav className="flex flex-col gap-3">
                                 {profile.linkedinUrl && (
-                                    <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
+                                    <Link href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
                                         <Linkedin className="w-4 h-4" />
                                         LinkedIn
                                         <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </a>
+                                    </Link>
                                 )}
                                 {profile.githubUrl && (
-                                    <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
+                                    <Link href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
                                         <Github className="w-4 h-4" />
                                         GitHub
                                         <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </a>
+                                    </Link>
                                 )}
-                                <a href={`mailto:${profile.email}`} className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
+                                <Link href={`mailto:${profile.email}`} className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
                                     <Mail className="w-4 h-4" />
                                     Email
                                     <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </a>
+                                </Link>
                             </nav>
                         </div>
 

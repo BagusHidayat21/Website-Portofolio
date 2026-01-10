@@ -23,7 +23,7 @@ interface AboutContentData {
 
 export async function getAboutContent() {
     try {
-        // @ts-ignore - Prisma client may need regeneration
+
         const aboutContent = await prisma.aboutContent.findFirst()
         return aboutContent
     } catch (error) {
@@ -34,11 +34,11 @@ export async function getAboutContent() {
 
 export async function updateAboutContent(data: AboutContentData) {
     try {
-        // @ts-ignore - Prisma client may need regeneration
+
         const firstAboutContent = await prisma.aboutContent.findFirst()
 
         if (!firstAboutContent) {
-            // @ts-ignore - Prisma client may need regeneration
+
             await prisma.aboutContent.create({
                 data: {
                     heroTitle: data.heroTitle || "ENGINEERING",
@@ -49,13 +49,17 @@ export async function updateAboutContent(data: AboutContentData) {
                     mainImage: data.mainImage,
                     secondaryImage: data.secondaryImage,
                     tags: data.tags || [],
+                    philosophy: (data.philosophy as any) || [], // eslint-disable-line @typescript-eslint/no-explicit-any
                 }
             })
         } else {
-            // @ts-ignore - Prisma client may need regeneration
+
             await prisma.aboutContent.update({
                 where: { id: firstAboutContent.id },
-                data
+                data: {
+                    ...data,
+                    philosophy: data.philosophy ? (data.philosophy as any) : undefined // eslint-disable-line @typescript-eslint/no-explicit-any
+                }
             })
         }
 
@@ -71,7 +75,7 @@ export async function updateAboutContent(data: AboutContentData) {
 
 export async function getExperience() {
     try {
-        // @ts-ignore - Prisma client may need regeneration
+
         const experience = await prisma.experience.findMany({
             where: { isVisible: true },
             orderBy: { order: 'asc' }

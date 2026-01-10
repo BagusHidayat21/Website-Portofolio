@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { updateAboutContent } from '@/actions/about.actions';
-import { Save, Type, FileText, Image, Tags, X, Lightbulb, Plus, Trash2 } from 'lucide-react';
+import { Save, Type, FileText, Image as ImageIcon, Tags, X, Lightbulb, Plus, Trash2 } from 'lucide-react';
 
 interface PhilosophyItem {
     title: string;
@@ -394,7 +394,7 @@ export function AboutForm({ initialData }: AboutFormProps) {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                        <Image className="h-5 w-5" />
+                        <ImageIcon className="h-5 w-5" />
                         Images
                     </CardTitle>
                     <CardDescription>Image URLs for the About page photo grid</CardDescription>

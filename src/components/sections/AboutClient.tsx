@@ -2,10 +2,11 @@
 
 // Minimalist About Section with Timeline
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Link from 'next/link';
 import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
+import { Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
 
 // Interface matching the updated Experience model
 interface ExperienceItem {
@@ -33,7 +34,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
         offset: ['start end', 'end start']
     });
 
-    const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
     const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
 
     return (
@@ -69,17 +69,17 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                             <div className="flex flex-col sm:flex-row gap-4">
                                 {resumeUrl && (
                                     <Button className="rounded-full h-12 px-6 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-lg shadow-zinc-900/20">
-                                        <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                                        <Link href={resumeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                                             <Download className="w-4 h-4" />
                                             Download Resume
-                                        </a>
+                                        </Link>
                                     </Button>
                                 )}
                                 <Button variant="outline" className="rounded-full h-12 px-6 border-zinc-200 dark:border-zinc-800">
-                                    <a href="#contact" className="flex items-center gap-2">
-                                        Let's Talk
+                                    <Link href="#contact" className="flex items-center gap-2">
+                                        Let&apos;s Talk
                                         <ArrowUpRight className="w-4 h-4" />
-                                    </a>
+                                    </Link>
                                 </Button>
                             </div>
                         </motion.div>

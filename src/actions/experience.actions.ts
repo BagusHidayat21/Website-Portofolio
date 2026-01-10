@@ -16,7 +16,18 @@ export async function getExperiences(includeHidden: boolean = false) {
     }
 }
 
-export async function createExperience(data: any) {
+interface ExperienceInput {
+    title: string;
+    company: string;
+    location?: string | null;
+    description: string;
+    year: string;
+    skills: string[];
+    isVisible?: boolean;
+    order?: number;
+}
+
+export async function createExperience(data: ExperienceInput) {
     try {
         await prisma.experience.create({ data })
         revalidatePath("/admin/experience")
@@ -28,7 +39,7 @@ export async function createExperience(data: any) {
     }
 }
 
-export async function updateExperience(id: number, data: any) {
+export async function updateExperience(id: number, data: ExperienceInput) {
     try {
         await prisma.experience.update({
             where: { id },

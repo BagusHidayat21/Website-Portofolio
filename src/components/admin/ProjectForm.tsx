@@ -15,7 +15,6 @@ import {
     FileText,
     Link as LinkIcon,
     Image as ImageIcon,
-    Tag,
     Code,
     Eye,
     EyeOff,

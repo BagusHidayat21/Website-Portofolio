@@ -28,7 +28,16 @@ export async function getMarqueeTech() {
     }
 }
 
-export async function createTech(data: any) {
+interface TechStackInput {
+    name: string;
+    category: string;
+    icon?: string;
+    isVisible?: boolean;
+    inMarquee?: boolean;
+    order?: number;
+}
+
+export async function createTech(data: TechStackInput) {
     try {
         await prisma.techStack.create({ data })
         revalidatePath("/admin/tech")
@@ -40,7 +49,7 @@ export async function createTech(data: any) {
     }
 }
 
-export async function updateTech(id: number, data: any) {
+export async function updateTech(id: number, data: TechStackInput) {
     try {
         await prisma.techStack.update({
             where: { id },

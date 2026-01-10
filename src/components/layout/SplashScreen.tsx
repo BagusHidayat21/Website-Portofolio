@@ -11,8 +11,9 @@ export function SplashScreen() {
         const hasShownSplash = sessionStorage.getItem('splashShown');
 
         if (hasShownSplash) {
-            setIsLoading(false);
-            return;
+            // Avoid synchronous state update during effect
+            const t = setTimeout(() => setIsLoading(false), 0);
+            return () => clearTimeout(t);
         }
 
         // Show splash for 2 seconds on first visit

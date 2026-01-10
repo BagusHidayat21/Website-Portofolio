@@ -29,7 +29,7 @@ export async function updateProfile(data: Partial<Profile>) {
                     email: data.email || "admin@example.com",
                     location: data.location || "Earth",
                     ...data
-                } as any // simple cast for quick MVP
+                } as any // eslint-disable-line @typescript-eslint/no-explicit-any
             })
         } else {
             await prisma.profile.update({
