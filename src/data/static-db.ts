@@ -96,15 +96,15 @@ export const profileData: Profile = {
     bio: 'Bridging the gap between academic theory and real-world application. I engineer robust digital solutions with a focus on data-driven intelligence and seamless user experiences.',
     avatarUrl: 'https://github.com/BagusHidayat21.png',
     resumeUrl: '#',
-    email: 'bagushidayat@example.com', // Placeholder
-    location: 'Indonesia',
+    email: 'bagus.hidayat.id@gmail.com', // Placeholder
+    location: 'Malang, Indonesia',
     yearsCoding: 4,
     projectsCount: 15,
     isAvailableForWork: true,
     socials: [
         { platform: 'GitHub', url: 'https://github.com/BagusHidayat21', icon: 'Github' },
-        { platform: 'LinkedIn', url: '#', icon: 'Linkedin' },
-        { platform: 'Instagram', url: '#', icon: 'Instagram' },
+        { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/bagushidayat-id/', icon: 'Linkedin' },
+        { platform: 'Instagram', url: 'https://www.instagram.com/hid.bgs/', icon: 'Instagram' },
     ]
 };
 
