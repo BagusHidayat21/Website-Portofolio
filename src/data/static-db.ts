@@ -1,6 +1,3 @@
-
-
-
 // --- Interfaces ---
 
 export interface SocialLink {
