@@ -1,9 +1,9 @@
 
-import { getTechStack } from "@/actions/tech.actions";
+import { techStackData } from "@/data/static-db";
 import { TechStackClient } from "./TechStackClient";
 
-export async function TechStackSection() {
-    const techStack = await getTechStack();
+export function TechStackSection() {
+    const techStack = techStackData;
 
     if (!techStack || techStack.length === 0) {
         return null;

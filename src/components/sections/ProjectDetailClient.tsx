@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Project } from '@prisma/client';
+import { Project } from '@/data/static-db';
 import ReactMarkdown from 'react-markdown';
 
 export function ProjectDetailClient({ project }: { project: Project }) {

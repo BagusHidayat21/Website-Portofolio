@@ -1,14 +1,13 @@
 
-import { getProfile } from "@/actions/profile.actions";
-import { getMarqueeTech } from "@/actions/tech.actions";
+import { profileData, techStackData } from "@/data/static-db";
 import { HeroClient } from "./HeroClient";
 
-export async function Hero() {
-    const profile = await getProfile();
-    const marqueeTech = await getMarqueeTech();
+export function Hero() {
+    const profile = profileData;
+    const marqueeTech = techStackData.filter((tech) => tech.inMarquee);
 
     if (!profile) {
-        return null; // Or skeleton / error state
+        return null;
     }
 
     return (
@@ -19,8 +18,8 @@ export async function Hero() {
             avatarUrl={profile.avatarUrl}
             yearsCoding={profile.yearsCoding}
             projectsCount={profile.projectsCount}
-            githubUrl={profile.githubUrl}
-            linkedinUrl={profile.linkedinUrl}
+            githubUrl={profile.socials.find(s => s.platform === 'GitHub')?.url || profile.avatarUrl.replace('.png', '')} // Fallback or logic to get GitHub URL
+            linkedinUrl={profile.socials.find(s => s.platform === 'LinkedIn')?.url}
             email={profile.email}
             location={profile.location}
             marqueeTech={marqueeTech}

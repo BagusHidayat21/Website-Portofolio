@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { useRef } from 'react';
-import { TechStack } from '@prisma/client';
+import { TechStack } from '@/data/static-db';
 
 interface HeroClientProps {
     name: string;

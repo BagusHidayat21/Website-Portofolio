@@ -1,9 +1,11 @@
 
-import { getFeaturedProjects } from "@/actions/project.actions";
+import { projectsData } from "@/data/static-db";
 import { FeaturedProjectsClient } from "./FeaturedProjectsClient";
 
-export async function FeaturedProjects() {
-    const projects = await getFeaturedProjects();
+export function FeaturedProjects() {
+    const projects = projectsData
+        .filter(p => p.isFeatured && p.isVisible)
+        .sort((a, b) => a.order - b.order);
 
     if (!projects || projects.length === 0) {
         return null;

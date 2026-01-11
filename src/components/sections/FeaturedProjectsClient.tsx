@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useRef } from 'react';
-import { Project } from '@prisma/client';
+import { Project } from '@/data/static-db';
 
 export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
     const containerRef = useRef(null);

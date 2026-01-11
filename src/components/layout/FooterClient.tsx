@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
-import { Profile } from '@prisma/client';
+import { Profile } from '@/data/static-db';
 
 interface FooterClientProps {
     profile: Profile;
@@ -52,15 +52,15 @@ export function FooterClient({ profile }: FooterClientProps) {
                         <div className="space-y-4">
                             <h4 className="text-sm font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">Connect</h4>
                             <nav className="flex flex-col gap-3">
-                                {profile.linkedinUrl && (
-                                    <Link href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
+                                {profile.socials.find(s => s.platform === 'LinkedIn') && (
+                                    <Link href={profile.socials.find(s => s.platform === 'LinkedIn')?.url || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
                                         <Linkedin className="w-4 h-4" />
                                         LinkedIn
                                         <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
                                 )}
-                                {profile.githubUrl && (
-                                    <Link href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
+                                {profile.socials.find(s => s.platform === 'GitHub') && (
+                                    <Link href={profile.socials.find(s => s.platform === 'GitHub')?.url || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors group">
                                         <Github className="w-4 h-4" />
                                         GitHub
                                         <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />

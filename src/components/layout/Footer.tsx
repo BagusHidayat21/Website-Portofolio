@@ -1,9 +1,9 @@
 
-import { getProfile } from "@/actions/profile.actions";
+import { profileData } from "@/data/static-db";
 import { FooterClient } from "./FooterClient";
 
-export async function Footer() {
-    const profile = await getProfile();
+export function Footer() {
+    const profile = profileData;
 
     if (!profile) {
         return null;

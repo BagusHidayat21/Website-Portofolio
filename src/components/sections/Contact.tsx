@@ -1,8 +1,8 @@
-import { getProfile } from "@/actions/profile.actions";
+import { profileData } from "@/data/static-db";
 import { ContactClient } from "./ContactClient";
 
-export async function Contact() {
-    const profile = await getProfile();
+export function Contact() {
+    const profile = profileData;
 
     if (!profile) {
         return null;
@@ -12,8 +12,8 @@ export async function Contact() {
         <ContactClient
             email={profile.email}
             socialLinks={{
-                github: profile.githubUrl ?? undefined,
-                linkedin: profile.linkedinUrl ?? undefined,
+                github: profile.socials.find(s => s.platform === 'GitHub')?.url,
+                linkedin: profile.socials.find(s => s.platform === 'LinkedIn')?.url,
             }}
         />
     );

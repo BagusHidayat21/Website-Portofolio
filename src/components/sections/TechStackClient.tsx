@@ -4,7 +4,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { TechStack } from '@prisma/client';
+import { TechStack } from '@/data/static-db';
 
 interface TechStackClientProps {
     techStack: TechStack[];

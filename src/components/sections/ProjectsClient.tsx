@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Project } from '@prisma/client';
+import { Project } from '@/data/static-db';
 
 // Simplified categories
 const categories = [

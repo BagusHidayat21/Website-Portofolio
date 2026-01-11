@@ -1,7 +1,7 @@
-import { getProjects } from "@/actions/project.actions";
+import { projectsData } from "@/data/static-db";
 import { ProjectsClient } from "@/components/sections/ProjectsClient";
 
-export default async function ProjectsPage() {
-    const projects = await getProjects();
+export default function ProjectsPage() {
+    const projects = projectsData.filter((p) => p.isVisible).sort((a, b) => a.order - b.order);
     return <ProjectsClient projects={projects} />;
 }
