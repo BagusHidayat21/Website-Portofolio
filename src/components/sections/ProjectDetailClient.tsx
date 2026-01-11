@@ -148,7 +148,7 @@ export function ProjectDetailClient({ project }: { project: Project }) {
 
                             {/* Markdown Content */}
                             {project.content ? (
-                                <div className="prose prose-zinc dark:prose-invert max-w-none">
+                                <div className="prose prose-zinc dark:text-zinc-100 max-w-none">
                                     <ReactMarkdown>{project.content}</ReactMarkdown>
                                 </div>
                             ) : (
@@ -165,20 +165,32 @@ export function ProjectDetailClient({ project }: { project: Project }) {
 
                             {/* Secondary Images Grid */}
                             {project.images && project.images.length > 1 && (
-                                <div className="grid md:grid-cols-2 gap-6 pt-8 border-t border-zinc-100 dark:border-zinc-800">
-                                    {project.images.slice(1).map((img, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, y: 40 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: i * 0.2 }}
-                                            className="rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800"
-                                        >
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={img} alt={`Screenshot ${i + 2}`} className="w-full h-full object-cover" />
-                                        </motion.div>
-                                    ))}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12 border-t border-zinc-100 dark:border-zinc-800">
+                                    {project.images.slice(1).map((img, i) => {
+                                        const gallery = project.images.slice(1);
+                                        const isLast = i === gallery.length - 1;
+                                        const isOdd = gallery.length % 2 !== 0;
+                                        const spanClass = (isOdd && isLast) ? "md:col-span-2" : "";
+
+                                        return (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: i * 0.1 }}
+                                                className={`relative aspect-video rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 group border border-zinc-100 dark:border-zinc-800 ${spanClass}`}
+                                            >
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={img}
+                                                    alt={`Screenshot ${i + 2}`}
+                                                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                                                />
+                                                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                                            </motion.div>
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>

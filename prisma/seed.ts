@@ -25,8 +25,7 @@ async function seedAboutContent() {
 Currently, I am an undergraduate student at Universitas Negeri Malang, focusing on developing web and application-based systems such as HealMe (a mental health platform) and Carfy (a car rental system). Through these projects, I became increasingly interested in how data can be processed, analyzed, and transformed into meaningful insights.
 
 Lately, my primary focus has shifted toward data engineering and machine learning, particularly how data-driven models can be integrated into modern web and mobile applications. I enjoy exploring how APIs, databases, and machine learning pipelines can work together to support smarter and more adaptive digital systems.`,
-            mainImage: 'https://picsum.photos/seed/workspace/1200/800',
-            secondaryImage: 'https://picsum.photos/seed/setup/600/600',
+            images: ['https://picsum.photos/seed/workspace/1200/800', 'https://picsum.photos/seed/setup/600/600'],
             tags: ['Data & Machine Learning', 'Web & Application Development'],
             philosophy: [
                 {

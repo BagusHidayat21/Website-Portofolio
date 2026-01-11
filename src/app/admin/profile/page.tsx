@@ -1,19 +1,29 @@
-
 import { getProfile } from "@/actions/profile.actions";
 import { ProfileForm } from "@/components/admin/ProfileForm";
+import { AdminPageShell } from "@/components/admin/AdminPageShell";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export default async function AdminProfilePage() {
     const profile = await getProfile();
 
-    if (!profile) return <div>No profile found. Seed DB first.</div>;
+    if (!profile) {
+        return (
+            <AdminPageShell>
+                <AdminPageHeader title="Profile" description="Manage your profile information" />
+                <div className="p-12 text-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+                    <p className="text-zinc-500">No profile found. Please seed the database first.</p>
+                </div>
+            </AdminPageShell>
+        );
+    }
 
     return (
-        <div>
-            <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 mb-2">Edit Profile</h1>
-            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
-                Manage the content displayed on your profile page
-            </p>
+        <AdminPageShell>
+            <AdminPageHeader
+                title="Profile"
+                description="Manage the content displayed on your homepage and public profile."
+            />
             <ProfileForm initialData={profile} />
-        </div>
+        </AdminPageShell>
     );
 }

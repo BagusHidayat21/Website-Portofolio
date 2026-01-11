@@ -134,6 +134,19 @@ export function HeroClient({
                         </motion.div>
                     )}
 
+                    {/* Greeting / Name */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        className="mb-4 flex items-center gap-3"
+                    >
+                        <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100" />
+                        <span className="text-lg md:text-xl font-medium text-zinc-600 dark:text-zinc-400">
+                            Hi, I&apos;m <span className="text-zinc-900 dark:text-zinc-100 font-bold">{name || "Bagus Hidayat"}</span>
+                        </span>
+                    </motion.div>
+
                     {/* Bold Headline */}
                     <div className="relative mb-8">
                         <motion.h1
@@ -208,7 +221,7 @@ export function HeroClient({
                             <Avatar className="w-full h-full rounded-none">
                                 <AvatarImage src={avatarUrl || ''} alt={name} className="object-cover" />
                                 <AvatarFallback className="text-9xl font-black bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 rounded-none w-full h-full flex items-center justify-center">
-                                    {name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                    Hi, I&apos;m {name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                                 </AvatarFallback>
                             </Avatar>
 

@@ -39,7 +39,7 @@ export default async function EditProjectPage(props: EditProjectPageProps) {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold tracking-tight mb-8">Edit Project: {project.title}</h1>
+            <h1 className="text-3xl font-bold tracking-tight mb-8 dark:text-zinc-50">Edit Project: {project.title}</h1>
             <ProjectForm project={project} />
         </div>
     );

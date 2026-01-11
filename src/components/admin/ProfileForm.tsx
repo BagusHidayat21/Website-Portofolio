@@ -156,10 +156,10 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
             <form action={handleSubmit} className="space-y-6">
                 <input type="hidden" name="avatarUrl" value={previewUrl || ''} />
                 {/* Personal Info */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <User className="h-5 w-5" />
+                <Card className="border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+                    <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/50">
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <User className="h-4 w-4" />
                             Personal Information
                         </CardTitle>
                         <CardDescription>Update your personal details and bio</CardDescription>
@@ -276,10 +276,10 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                 </Card>
 
                 {/* Availability Status */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <div className={`w-3 h-3 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+                <Card className="border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+                    <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/50">
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <div className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-emerald-500' : 'bg-zinc-400'}`} />
                             Work Availability
                         </CardTitle>
                         <CardDescription>Set your current availability status</CardDescription>
@@ -309,10 +309,10 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                 </Card>
 
                 {/* Contact Info */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Mail className="h-5 w-5" />
+                <Card className="border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+                    <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/50">
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <Mail className="h-4 w-4" />
                             Contact Information
                         </CardTitle>
                         <CardDescription>How people can reach you</CardDescription>
@@ -352,10 +352,10 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                 </Card>
 
                 {/* Stats */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <LinkIcon className="h-5 w-5" />
+                <Card className="border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+                    <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/50">
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <LinkIcon className="h-4 w-4" />
                             Statistics
                         </CardTitle>
                         <CardDescription>Your professional milestones</CardDescription>
@@ -391,10 +391,10 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
                 </Card>
 
                 {/* Social Links */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Github className="h-5 w-5" />
+                <Card className="border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+                    <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/50">
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <Github className="h-4 w-4" />
                             Social Links
                         </CardTitle>
                         <CardDescription>Connect your social profiles</CardDescription>
