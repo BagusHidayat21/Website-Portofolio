@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Project } from '@prisma/client';
 import { createProject, updateProject } from '@/actions/project.actions';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import {
     Save,
@@ -234,9 +235,10 @@ export function ProjectForm({ project }: { project?: Project | null }) {
 
         setIsLoading(false);
         if (result.success) {
+            toast.success(isEditing ? 'Project updated successfully!' : 'Project created successfully!');
             router.push('/admin/projects');
         } else {
-            alert('Error saving project: ' + JSON.stringify(result.error));
+            toast.error('Error saving project: ' + JSON.stringify(result.error));
         }
     }
 

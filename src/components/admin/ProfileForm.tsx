@@ -11,7 +11,7 @@ import { Profile } from '@prisma/client';
 import { Save, User, Mail, MapPin, Link as LinkIcon, Github, Linkedin, Camera, Upload, X, Check } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '@/lib/cropImage';
-
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 export function ProfileForm({ initialData }: { initialData: Profile }) {
@@ -45,12 +45,12 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
         if (result?.success) {
             router.refresh();
             setCroppedFile(null); // Reset after save
-            alert('Profile updated successfully!');
+            toast.success('Profile updated successfully!');
         } else {
             console.error('Profile update error:', result?.error);
             // Try to extract a meaningful error message
             const errorMessage = result?.error instanceof Error ? result.error.message : 'Unknown error occurred';
-            alert(`Failed to update profile: ${errorMessage}`);
+            toast.error(`Failed to update profile: ${errorMessage}`);
         }
     }
 
@@ -88,7 +88,7 @@ export function ProfileForm({ initialData }: { initialData: Profile }) {
             }
         } catch (e) {
             console.error(e);
-            alert('Something went wrong cropping the image');
+            toast.error('Something went wrong cropping the image');
         }
     };
 

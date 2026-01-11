@@ -14,6 +14,7 @@ import { updateAboutContent } from '@/actions/about.actions';
 import { Save, Type, FileText, Image as ImageIcon, Tags, X, Lightbulb, Plus, Trash2, Check } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '@/lib/cropImage';
+import { toast } from 'sonner';
 
 interface PhilosophyItem {
     title: string;
@@ -183,7 +184,7 @@ export function AboutForm({ initialData }: AboutFormProps) {
             }
         } catch (e) {
             console.error(e);
-            alert('Something went wrong cropping the image');
+            toast.error('Something went wrong cropping the image');
         }
     };
 
@@ -234,11 +235,11 @@ export function AboutForm({ initialData }: AboutFormProps) {
             // However, local state 'gallery' might persist if we don't sync.
             // Since router.refresh() triggers a re-render with new initialData, we rely on key or effect to sync?
             // Actually, we should probably force a full re-initialization or just alert and let Next.js handle it.
-            alert('About page updated successfully!');
+            toast.success('About page updated successfully!');
         } else {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const errorMessage = (result.error as any)?.message || 'Unknown error occurred';
-            alert(`Failed to update about page: ${errorMessage}`);
+            toast.error(`Failed to update about page: ${errorMessage}`);
         }
     }
 
