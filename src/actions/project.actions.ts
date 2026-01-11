@@ -154,7 +154,7 @@ export async function updateProject(formData: FormData) {
 
         // Cleanup: Delete removed images
         const oldImages = project.images
-        const imagesToDelete = oldImages.filter(img => !finalImages.includes(img))
+        const imagesToDelete = oldImages.filter((img: string) => !finalImages.includes(img))
 
         for (const img of imagesToDelete) {
             await deleteFile(img)
