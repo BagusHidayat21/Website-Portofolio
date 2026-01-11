@@ -2,28 +2,12 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { uploadFile, deleteFile } from "@/lib/storage"
 
-interface PhilosophyItem {
-    title: string;
-    description: string;
-    icon: string;
-}
 
-interface AboutContentData {
-    heroTitle?: string;
-    heroSubtitle?: string;
-    heroDescription?: string;
-    storyTitle?: string;
-    storyContent?: string;
-    mainImage?: string;
-    secondaryImage?: string;
-    tags?: string[];
-    philosophy?: PhilosophyItem[];
-}
 
 export async function getAboutContent() {
     try {
-
         const aboutContent = await prisma.aboutContent.findFirst()
         return aboutContent
     } catch (error) {
@@ -32,34 +16,66 @@ export async function getAboutContent() {
     }
 }
 
-export async function updateAboutContent(data: AboutContentData) {
+export async function updateAboutContent(formData: FormData) {
     try {
-
         const firstAboutContent = await prisma.aboutContent.findFirst()
 
-        if (!firstAboutContent) {
+        const heroTitle = formData.get('heroTitle') as string
+        const heroSubtitle = formData.get('heroSubtitle') as string
+        const heroDescription = formData.get('heroDescription') as string
+        const storyTitle = formData.get('storyTitle') as string
+        const storyContent = formData.get('storyContent') as string
 
+        // Tags and Philosophy are passed as JSON strings because FormData only supports string/File
+        const tags = JSON.parse(formData.get('tags') as string || '[]')
+        const philosophy = JSON.parse(formData.get('philosophy') as string || '[]')
+
+        const existingImages = JSON.parse(formData.get('existingImages') as string || '[]') as string[]
+        const newHelperImages = formData.getAll('newImages') as File[]
+
+        // Upload new images
+        const uploadedImageUrls: string[] = []
+        for (const file of newHelperImages) {
+            if (file.size > 0 && file.name !== 'undefined') {
+                const url = await uploadFile(file, 'about')
+                uploadedImageUrls.push(url)
+            }
+        }
+
+        // Final Images List
+        const finalImages = [...existingImages, ...uploadedImageUrls]
+
+        // Handle deletion of removed images
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if ((firstAboutContent as any)?.images) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const oldImages = (firstAboutContent as any).images as string[]
+            const imagesToDelete = oldImages.filter((img: string) => !finalImages.includes(img))
+
+            for (const img of imagesToDelete) {
+                await deleteFile(img)
+            }
+        }
+
+        const dataToSave = {
+            heroTitle: heroTitle || "ENGINEERING",
+            heroSubtitle: heroSubtitle || "EXCELLENCE",
+            heroDescription: heroDescription || "Default description",
+            storyTitle: storyTitle,
+            storyContent: storyContent,
+            images: finalImages,
+            tags: tags,
+            philosophy: philosophy,
+        }
+
+        if (!firstAboutContent) {
             await prisma.aboutContent.create({
-                data: {
-                    heroTitle: data.heroTitle || "ENGINEERING",
-                    heroSubtitle: data.heroSubtitle || "EXCELLENCE",
-                    heroDescription: data.heroDescription || "Default description",
-                    storyTitle: data.storyTitle,
-                    storyContent: data.storyContent,
-                    mainImage: data.mainImage,
-                    secondaryImage: data.secondaryImage,
-                    tags: data.tags || [],
-                    philosophy: (data.philosophy as any) || [], // eslint-disable-line @typescript-eslint/no-explicit-any
-                }
+                data: dataToSave
             })
         } else {
-
             await prisma.aboutContent.update({
                 where: { id: firstAboutContent.id },
-                data: {
-                    ...data,
-                    philosophy: data.philosophy ? (data.philosophy as any) : undefined // eslint-disable-line @typescript-eslint/no-explicit-any
-                }
+                data: dataToSave
             })
         }
 
@@ -75,7 +91,6 @@ export async function updateAboutContent(data: AboutContentData) {
 
 export async function getExperience() {
     try {
-
         const experience = await prisma.experience.findMany({
             where: { isVisible: true },
             orderBy: { order: 'asc' }

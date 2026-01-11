@@ -43,8 +43,7 @@ export interface AboutContentData {
     heroDescription: string;
     storyTitle: string | null;
     storyContent: string | null;
-    mainImage: string | null;
-    secondaryImage: string | null;
+    images: string[];
     tags: string[];
     philosophy?: PhilosophyItem[] | null;
 }
@@ -82,7 +81,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
         );
     }
 
-    const { heroTitle, heroSubtitle, heroDescription, storyContent, mainImage, secondaryImage, tags, philosophy } = aboutContent;
+    const { heroTitle, heroSubtitle, heroDescription, storyContent, images, tags, philosophy } = aboutContent;
+    const mainImage = images?.[0];
+    const secondaryImage = images?.[1];
 
     return (
         <div ref={containerRef} className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
@@ -215,8 +216,54 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
+            {/* 3.5. Gallery Section */}
+            {images && images.length > 2 && (
+                <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-6">
+                        <div className="mb-12">
+                            <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
+                                Gallery
+                            </span>
+                            <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100">
+                                Life in Pictures
+                            </h2>
+                        </div>
 
-            {/* 4. Experience Timeline */}
+                        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+                            {images.slice(2).map((img, index) => {
+                                const gallery = images.slice(2);
+                                const remainder = gallery.length % 3;
+                                const isLastRow = index >= gallery.length - remainder;
+                                let spanClass = "md:col-span-2"; // Default 1/3 (2 cols out of 6)
+
+                                if (isLastRow) {
+                                    if (remainder === 1) spanClass = "md:col-span-4 md:col-start-2"; // Centered 2/3 width
+                                    if (remainder === 2) spanClass = "md:col-span-3"; // Half width
+                                }
+
+                                return (
+                                    <motion.div
+                                        key={`gallery-${index}`}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className={`relative rounded-2xl overflow-hidden group w-full ${spanClass}`}
+                                    >
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={img}
+                                            alt={`Gallery ${index + 3}`}
+                                            className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </section>
+            )}
             <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col md:flex-row gap-16">

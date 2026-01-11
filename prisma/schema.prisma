@@ -92,8 +92,7 @@ model AboutContent {
   storyContent    String?  @db.Text
   
   // Images
-  mainImage       String?
-  secondaryImage  String?
+  images          String[]
   
   // Tags for Story Section
   tags            String[]
