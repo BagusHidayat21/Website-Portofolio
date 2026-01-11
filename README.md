@@ -1,90 +1,96 @@
-# Bagus Hidayat <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="30">
-## 💻 Backend Developer | API Specialist
+# Bagus Hidayat Portfolio Website
 
-<p align="center">
-  <img src="https://media.giphy.com/media/f3iwJFOVOwuy7K6FFw/giphy.gif" alt="Developer Banner" width="600"/>
-</p>
+![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white)
 
-## 👨‍💻 About Me
-Hello world! I'm **Bagus Hidayat**, a passionate backend developer crafting robust and scalable APIs that power modern web applications. I transform complex business requirements into elegant, efficient server-side solutions that stand the test of time.
+## ✨ Introduction
 
-<img align="right" src="https://media.giphy.com/media/hS42TuYYnANLFR9IRQ/giphy.gif" width="300">
+Welcome to **Bagus Hidayat's Portfolio Website**, a cutting-edge digital showcase designed to highlight professional achievements, technical expertise, and creative projects. Built with the latest web technologies, this portfolio embodies performance, accessibility, and modern aesthetics.
+
+This project demonstrates a commitment to high-quality code, responsive design, and seamless user experiences, serving as a central hub for my professional identity.
+
+## 🚀 Features
+
+- **⚡ High Performance**: Powered by Next.js 16 (App Router) for blazingly fast page loads and SEO optimization.
+- **🎨 Modern Design**: Sleek, responsive interface crafted with Tailwind CSS 4, featuring a clean aesthetic and attention to detail.
+- **🌗 Dark/Light Mode**: Fully integrated theme switching support for a personalized viewing experience, respecting system preferences.
+- **📱 Fully Responsive**: Optimized for all devices, from large desktop screens to mobile phones, ensuring a consistent experience everywhere.
+- **✨ Smooth Animations**: Enhanced interactivity with generic animations and smooth scrolling navigation.
+- **🖼️ Image Optimization**: Smart image preloading and optimization using Next.js Image component for instant visual feedback.
 
 ## 🛠️ Tech Stack
 
-### 🖥️ Client Side
-<p align="left">
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="React" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg" alt="Next.js" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="40" height="40"/>
-</p>
+This project is built upon a robust foundation of modern technologies:
 
-### ⚙️ Server Side
-<p align="left">
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg" alt="Node.js" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="Express.js" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="PHP" width="40" height="40"/>
-  <img src="https://cdn.worldvectorlogo.com/logos/laravel-2.svg" alt="Laravel" width="40" height="40"/>
-</p>
+| Category | Technology | Description |
+|----------|------------|-------------|
+| **Core** | [Next.js 16](https://nextjs.org/) | The React Framework for the Web (App Router) |
+| **UI Library** | [React 19](https://react.dev/) | The library for web and native user interfaces |
+| **Styling** | [Tailwind CSS 4](https://tailwindcss.com/) | A utility-first CSS framework for rapid UI development |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) | Typed JavaScript at any scale |
+| **Icons** | [Lucide React](https://lucide.dev/) | Beautiful & consistent open-source icons |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) | Production-ready animation library for React |
 
-### 🗄️ Database
-<p align="left">
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="MySQL" width="60" height="60"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="PostgreSQL" width="60" height="60"/>
-</p>
+## 📂 Project Structure
 
-### 🧰 Development Tools
-<p align="left">
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" alt="Git" width="40" height="40"/>
-  <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="Postman" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/npm/npm-original-wordmark.svg" alt="npm" width="40" height="40"/>
-</p>
+```bash
+src/
+├── app/              # Next.js App Router pages and layout
+├── components/       # Reusable UI components (Hero, About, TechStack, etc.)
+├── context/          # React Context providers (ThemeContext)
+├── types/            # TypeScript type definitions
+└── globals.css       # Global styles and Tailwind directives
+```
 
-## 🚀 My Approach to Development
+## 🏁 Getting Started
 
-<p align="center">
-  <img src="https://media.giphy.com/media/aNqEFrYVnsS52/giphy.gif" alt="Coding Process" width="400"/>
-</p>
+Follow these steps to set up the project locally on your machine.
 
-I'm guided by these core principles:
-- ✨ Clean, self-documenting code that speaks for itself
-- 🏗️ Architectural patterns that scale with your business
-- 🧪 Comprehensive testing strategies that catch issues early
-- 📝 Documentation that teammates actually want to read
-- 🔄 Continuous improvement through learning and adaptation
+### Prerequisites
 
-## 📊 GitHub Stats
+- Node.js (v18 or higher recommended)
+- npm or yarn
 
-<p align="center">
-<img src="https://github-readme-stats.vercel.app/api?username=bagushidayat&show_icons=true&theme=tokyonight" alt="GitHub Stats" />
-</p>
+### Installation
 
-<p align="center">
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=bagushidayat&theme=tokyonight" alt="GitHub Streak" />
-</p>
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/BagusHidayat21/Showcase-Project.git
+    cd Website-Portofolio-V1
+    ```
 
-## 🌐 Connect With Me
+2.  **Install dependencies**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-<p align="center">
-  <a href="mailto:bagus.hidayat.id@gmail.com">
-    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
-  </a>
-  <a href="www.linkedin.com/in/bagus-hidayat-154898290">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-  </a>
-  <a href="https://github.com/BagusHidayat21">
-    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-</p>
+3.  **Run the development server**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+
+4.  **Open your browser**
+    Navigate to [http://localhost:3000](http://localhost:3000) to view the application.
+
+## 🔧 Customization
+
+You can easily customize this portfolio by editing the components in the `src/components` directory.
+- **Navigation**: Update links in `src/components/Topbar.tsx`.
+- **Content**: Edit sections like `Hero.tsx`, `About.tsx`, and `Project.tsx` to reflect your own information.
+- **Theme**: Modify `src/app/globals.css` or Tailwind config for color scheme adjustments.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
 <p align="center">
-  <img src="https://media.giphy.com/media/RbDKaczqWovIugyJmW/giphy.gif" width="400"/>
+  Built with ❤️ by <strong>Bagus Hidayat</strong>
 </p>
-
-> "Programming isn't about what you know; it's about what you can figure out." - Chris Pine
----
-
-⭐️ From [bagushidayat](https://github.com/BagusHidayat21)
