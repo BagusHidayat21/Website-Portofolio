@@ -14,32 +14,32 @@ async function seedAboutContent() {
 
     await prisma.aboutContent.create({
         data: {
-            heroTitle: 'ENGINEERING',
-            heroSubtitle: 'EXCELLENCE.',
-            heroDescription: 'I am a student at Universitas Negeri Malang, majoring in Informatics Engineering Education. I bridge academic theory with real-world application to build robust digital solutions.',
+            heroTitle: 'BEYOND',
+            heroSubtitle: 'CODE.',
+            heroDescription: 'Bridging the gap between academic theory and real-world application. I engineer robust digital solutions with a focus on data-driven intelligence and seamless user experiences.',
             storyTitle: 'The Story',
-            storyContent: `My journey began at SMK Negeri 1 Jenangan Ponorogo, where I majored in Software Engineering. Early on, I developed a strong interest in building practical systems from school projects to real-world applications that emphasize structured data handling and clear system logic.
+            storyContent: `My journey isn't just about writing code—it's about crafting solutions. It began with a strong foundation in Software Engineering at SMK Negeri 1 Jenangan and has evolved into advanced academic pursuits at Universitas Negeri Malang. I've always been driven by the "why" behind the technology.
 
-Currently, I am an undergraduate student at Universitas Negeri Malang, focusing on developing web and application-based systems such as HealMe (a mental health platform) and Carfy (a car rental system). Through these projects, I became increasingly interested in how data can be processed, analyzed, and transformed into meaningful insights.
+From architecting the "HealMe" mental health platform to optimizing logistics for "Website Mobil", I treat every project as an opportunity to push technical boundaries. My work emphasizes not just functionality, but scalability, security, and user-centric design.
 
-Lately, my primary focus has shifted toward data engineering and machine learning, particularly how data-driven models can be integrated into modern web and mobile applications. I enjoy exploring how APIs, databases, and machine learning pipelines can work together to support smarter and more adaptive digital systems.`,
+Recently, my focus has pivoted toward the intersection of Data Engineering and Machine Learning. I believe the next generation of applications won't just process input; they will understand it. I'm currently exploring how to integrate intelligent data pipelines into modern web architectures to build smarter, more adaptive systems.`,
             images: ['https://picsum.photos/seed/workspace/1200/800', 'https://picsum.photos/seed/setup/600/600'],
-            tags: ['Data & Machine Learning', 'Web & Application Development'],
+            tags: ['Data & Machine Learning', 'Full Stack Engineering', 'System Architecture'],
             philosophy: [
                 {
-                    title: 'Data Centric',
-                    description: 'I believe applications are more than just interfaces; they are engines for structured data.',
+                    title: 'Precision First',
+                    description: 'In code and design, every detail matters. I prioritize clean, maintainable architecture that stands the test of time.',
                     icon: 'Database'
                 },
                 {
-                    title: 'Intelligent Systems',
-                    description: 'Moving beyond static logic, I integrate Machine Learning pipelines to create adaptive applications.',
+                    title: 'Adaptive Intelligence',
+                    description: 'Building systems that learn and evolve. Integrating ML pipelines to create smarter, responsive applications.',
                     icon: 'BrainCircuit'
                 },
                 {
-                    title: 'Robust Infrastructure',
-                    description: 'Reliability is key. I architect resilient backend APIs and databases as the solid foundation.',
-                    icon: 'Server'
+                    title: 'User-Centric Core',
+                    description: 'Technology serves people. I build interfaces that are intuitive, accessible, and delight the user at every interaction.',
+                    icon: 'Start'
                 }
             ]
         }
@@ -61,45 +61,89 @@ async function seedExperience() {
     console.log('Seeding Experience...');
 
     const experienceData = [
+        // Work Experience (Current & Recent)
         {
-            title: 'Informatics Engineering Education',
-            company: 'Universitas Negeri Malang',
-            year: '2022 - PRESENT',
-            description: 'Bachelor of Science (S1). Combining technical expertise in software development, computer systems, and networking with pedagogical knowledge for vocational education.',
-            skills: ['Software Engineering', 'Pedagogy', 'Network Systems', 'Educational Tech'],
+            title: 'Industrial Trainer',
+            company: 'PT Universal Big Data',
+            year: '2025 - PRESENT',
+            description: 'Teaching industrial-grade software development to vocational high school (SMK) students. Delivering curriculum on modern web technologies and industry best practices.',
+            skills: ['Teaching', 'Mentoring', 'Curriculum Development', 'Full Stack Development'],
             order: 1
         },
         {
-            title: 'Laravel Developer (HealMe)',
-            company: 'Wintex IID 2024',
-            year: '2024',
-            description: 'Developed a mental health consultation platform using Laravel 10. Implemented secure user authentication, appointment scheduling, mood tracking, and anonymous support forums.',
-            skills: ['Laravel 10', 'System Security', 'Full Stack Development', 'Healthcare Tech'],
+            title: 'Software Developer & Trainer (Intern)',
+            company: 'PT Universal Big Data',
+            year: 'Jun - Oct 2025',
+            description: 'Developed internal software solutions and assisted in training programs. Gained hands-on experience in enterprise software development lifecycles and team collaboration.',
+            skills: ['Software Development', 'Training Assistance', 'Team Collaboration', 'Agile'],
             order: 2
         },
+        // Awards & Publications (2024)
         {
-            title: 'Web Developer (Cahaya Dunia)',
-            company: 'Ngadimulyo Village Govt',
+            title: 'International Innovation Award',
+            company: 'Wintex IID 2024',
             year: '2024',
-            description: 'Developed a digital library management system including features for book cataloging, member management, and borrowing/returning processes.',
-            skills: ['Web Development', 'Library Management', 'Admin Dashboard', 'Training'],
+            description: 'Awarded Silver Medal for "HealMe" - a comprehensive mental health platform. Recognized for innovation in healthcare technology at the World Invention and Technology Expo.',
+            skills: ['Product Innovation', 'System Architecture', 'HealthTech', 'Public Speaking'],
             order: 3
+        },
+        {
+            title: 'Conference Paper (Scopus)',
+            company: 'State University of Malang',
+            year: '2024',
+            description: 'Co-authored "Comparison of Tesseract OCR, Easy OCR, and Transformer OCR on Handwritten Image". Research analyzing the performance of various OCR technologies on handwritten datasets.',
+            skills: ['Computer Vision', 'OCR', 'Python', 'Machine Learning'],
+            order: 4
+        },
+        // Work Experience (2024 - 2021)
+        {
+            title: 'Full Stack Developer (HealMe)',
+            company: 'Wintex IID 2024',
+            year: '2024',
+            description: 'Sole developer for a comprehensive mental health platform. Architected the entire system using Laravel 10 for the international innovation competition.',
+            skills: ['Laravel 10', 'System Architecture', 'Full Stack Development', 'Database Design'],
+            order: 5
+        },
+        {
+            title: 'Full Stack Developer (KKN)',
+            company: 'Ngadimulyo Village Government',
+            year: '2024',
+            description: 'Community Service Program (KKN). Led the digital transformation of the village library. Developed "Cahaya Dunia", a complete library management system as part of university community service.',
+            skills: ['Web Development', 'Digital Transformation', 'Community Service', 'System Administration'],
+            order: 6
         },
         {
             title: 'API Developer (J-TAG)',
             company: 'SMK Negeri 1 Jenangan',
             year: '2023',
-            description: 'Developed a RESTful API for an RFID-based attendance system. Focused on real-time data processing and seamless integration.',
-            skills: ['RESTful API', 'Real-time Data', 'RFID Integration', 'Backend Engineering'],
-            order: 4
+            description: 'Engineered the core REST API for J-TAG, an enterprise-grade RFID attendance system. Optimized real-time data handling between hardware scanners and the database.',
+            skills: ['REST API Design', 'IoT Integration', 'Real-time Processing', 'Backend Optimization'],
+            order: 7
+        },
+        {
+            title: 'Web Developer Intern',
+            company: 'Dinas Kominfo Ponorogo',
+            year: '2021',
+            description: 'Vocational High School Internship. Developed and maintained government websites using WordPress. Assisted in managing digital content and ensuring website accessibility.',
+            skills: ['WordPress', 'Web Maintenance', 'Content Management', 'Public Sector IT'],
+            order: 8
+        },
+        // Education
+        {
+            title: 'Informatics Engineering Education',
+            company: 'Universitas Negeri Malang',
+            year: '2022 - PRESENT',
+            description: 'Bachelor of Science (S1). Maintaining a 3.86 GPA. Active in research groups focusing on Educational Technology and Artificial Intelligence.',
+            skills: ['Software Engineering', 'Data Science', 'Pedagogy', 'Algorithm Design'],
+            order: 9
         },
         {
             title: 'Software Engineering',
             company: 'SMK Negeri 1 Jenangan Ponorogo',
             year: '2019 - 2022',
-            description: 'High School Diploma. Focused on programming, web development, databases, and software lifecycle.',
-            skills: ['Web Development', 'Databases', 'Leadership', 'Teamwork'],
-            order: 5
+            description: 'Vocational High School. Graduated with honors. Specialized in backend development, database management, and network infrastructure.',
+            skills: ['PHP Native', 'CodeIgniter', 'MySQL', 'Networking'],
+            order: 10
         }
     ];
 

@@ -66,7 +66,9 @@ export function Navbar() {
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">
                         {navLinks.map((link) => {
-                            const isActive = pathname === link.href;
+                            const isActive = link.href === '/'
+                                ? pathname === '/'
+                                : pathname?.startsWith(link.href);
                             return (
                                 <Link
                                     key={link.href}
@@ -128,23 +130,29 @@ export function Navbar() {
                         className="fixed inset-0 bg-white dark:bg-zinc-900 z-[99] flex flex-col pt-32 px-6 pb-12 overflow-y-auto"
                     >
                         <div className="flex flex-col gap-6">
-                            {navLinks.map((link, i) => (
-                                <motion.div
-                                    key={link.href}
-                                    initial={{ opacity: 0, y: 40 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
-                                >
-                                    <Link
-                                        href={link.href}
-                                        onClick={() => setIsOpen(false)}
-                                        className={`text-5xl font-black tracking-tighter ${pathname === link.href ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-300 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-100'
-                                            } transition-colors`}
+                            {navLinks.map((link, i) => {
+                                const isActive = link.href === '/'
+                                    ? pathname === '/'
+                                    : pathname?.startsWith(link.href);
+
+                                return (
+                                    <motion.div
+                                        key={link.href}
+                                        initial={{ opacity: 0, y: 40 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
                                     >
-                                        {link.label}
-                                    </Link>
-                                </motion.div>
-                            ))}
+                                        <Link
+                                            href={link.href}
+                                            onClick={() => setIsOpen(false)}
+                                            className={`text-5xl font-black tracking-tighter ${isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-300 dark:text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-100'
+                                                } transition-colors`}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </motion.div>
+                                )
+                            })}
                         </div>
 
                         <motion.div
