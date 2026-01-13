@@ -92,7 +92,7 @@ export interface TechStack {
 
 export const profileData: Profile = {
     name: 'Bagus Hidayat',
-    tagline: 'Full Stack Developer & Data Enthusiast',
+    tagline: 'Full Stack Web Developer',
     bio: 'Bridging the gap between academic theory and real-world application. I engineer robust digital solutions with a focus on data-driven intelligence and seamless user experiences.',
     avatarUrl: 'https://github.com/BagusHidayat21.png',
     resumeUrl: '#',
