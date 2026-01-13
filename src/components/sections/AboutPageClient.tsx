@@ -88,7 +88,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
     return (
         <div ref={containerRef} className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
             {/* 1. Hero / Introduction */}
-            <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 relative overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+            <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 relative overflow-hidden bg-zinc-50 dark:bg-zinc-900">
                 {/* Background Grid */}
                 <div className="absolute inset-0 z-0 opacity-[0.06] dark:hidden"
                     style={{
@@ -123,7 +123,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
             {/* 2. The Photo Grid */}
             <section className="py-12 border-y border-zinc-100 dark:border-zinc-800 overflow-hidden">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -175,7 +175,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
             {/* 3. Narrative Bio */}
             <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                     <div className="flex flex-col md:flex-row gap-16">
                         <div className="md:w-1/3">
                             <div className="sticky top-32">
@@ -219,7 +219,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
             {/* 3.5. Gallery Section */}
             {images && images.length > 2 && (
                 <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6">
+                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                         <div className="mb-12">
                             <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
                                 Gallery
@@ -265,7 +265,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </section>
             )}
             <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                     <div className="flex flex-col md:flex-row gap-16">
                         <div className="md:w-1/3">
                             <div className="sticky top-32">
@@ -330,7 +330,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
             {/* 5. Education Timeline */}
             {education && education.length > 0 && (
                 <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6">
+                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                         <div className="flex flex-col md:flex-row gap-16">
                             <div className="md:w-1/3">
                                 <div className="sticky top-32">
@@ -386,7 +386,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
             {/* 6. Philosophy Grid */}
             {philosophy && philosophy.length > 0 && (
                 <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6">
+                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                         <div className="flex flex-col md:flex-row gap-16">
                             <div className="md:w-1/3">
                                 <div className="sticky top-32">

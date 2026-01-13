@@ -23,7 +23,7 @@ export function TechStackClient({ techStack }: TechStackClientProps) {
 
     return (
         <section ref={containerRef} className="py-24 bg-zinc-50 dark:bg-zinc-900 overflow-hidden">
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}

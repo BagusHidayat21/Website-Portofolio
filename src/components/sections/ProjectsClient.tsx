@@ -129,7 +129,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
         <div className="min-h-screen bg-white dark:bg-zinc-950">
             {/* Header Section */}
             <section className="pt-32 pb-16 border-b border-zinc-100 dark:border-zinc-900">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -147,7 +147,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
 
             {/* Controls Section */}
             <section className="py-8 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-900 z-30">
-                <div className="container mx-auto px-6 flex flex-col md:flex-row gap-6 items-center justify-between">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 flex flex-col md:flex-row gap-6 items-center justify-between">
                     {/* Category Tabs */}
                     <div className="flex overflow-x-auto pb-2 md:pb-0 gap-2 w-full md:w-auto no-scrollbar mask-gradient-right">
                         {categories.map(cat => (
@@ -180,7 +180,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
 
             {/* Grid Section */}
             <section className="py-16">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 pb-24">
                         <AnimatePresence mode="popLayout">
                             {filteredProjects.map((project, index) => (

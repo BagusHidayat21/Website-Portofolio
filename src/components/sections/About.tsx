@@ -13,7 +13,7 @@ export function About() {
 
     return (
         <section ref={containerRef} className="relative py-24 md:py-32 bg-white dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800">
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
 
                     {/* Left: Heading & Label */}
@@ -45,7 +45,7 @@ export function About() {
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="space-y-6"
-                        >   
+                        >
                             {/* Refactored biographical content focusing on web development, machine learning, and data science */}
                             <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                                 I&apos;m an undergraduate student at <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Universitas Negeri Malang</strong>, specializing in Full Stack Web Development. I focus on building robust, scalable applications with a seamless user experience.
