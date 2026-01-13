@@ -99,11 +99,22 @@ export default function RootLayout({
               "@type": "Person",
               "name": "Bagus Hidayat",
               "url": "https://bagus-hidayat.my.id",
+              "image": "https://bagus-hidayat.my.id/avatars/profile.png",
+              "description": "Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies.",
               "jobTitle": "Full-Stack Web Developer",
               "alumniOf": {
                 "@type": "CollegeOrUniversity",
                 "name": "Universitas Negeri Malang"
               },
+              "knowsAbout": [
+                "Next.js",
+                "React",
+                "Laravel",
+                "Machine Learning",
+                "Data Engineering",
+                "TypeScript",
+                "PostgreSQL"
+              ],
               "sameAs": [
                 "https://github.com/BagusHidayat21",
                 "https://www.linkedin.com/in/bagushidayat-id/"

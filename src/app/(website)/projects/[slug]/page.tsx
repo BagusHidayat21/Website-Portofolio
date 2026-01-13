@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { projectsData } from "@/data/static-db";
 import { ProjectDetailClient } from "@/components/sections/ProjectDetailClient";
 import { notFound } from "next/navigation";
@@ -10,6 +11,29 @@ export async function generateStaticParams() {
     return projectsData.filter(p => p.isVisible).map((project) => ({
         slug: project.slug,
     }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { slug } = await params;
+    const decodedSlug = decodeURIComponent(slug);
+    const project = projectsData.find(p => p.slug === slug || p.slug === decodedSlug);
+
+    if (!project) {
+        return {
+            title: "Project Not Found",
+        };
+    }
+
+    return {
+        title: project.title,
+        description: project.description || `${project.title} - A project by Bagus Hidayat built with ${project.techStack?.slice(0, 3).join(", ") || "modern technologies"}.`,
+        openGraph: {
+            title: `${project.title} | Bagus Hidayat`,
+            description: project.description || `${project.title} - A project by Bagus Hidayat.`,
+            url: `https://bagus-hidayat.my.id/projects/${project.slug}`,
+            images: project.thumbnail ? [{ url: project.thumbnail }] : undefined,
+        },
+    };
 }
 
 export default async function ProjectDetailPage({ params }: PageProps) {
