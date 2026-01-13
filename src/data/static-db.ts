@@ -94,7 +94,7 @@ export const profileData: Profile = {
     name: 'Bagus Hidayat',
     tagline: 'Full Stack Web Developer',
     bio: 'Bridging the gap between academic theory and real-world application. I engineer robust digital solutions with a focus on data-driven intelligence and seamless user experiences.',
-    avatarUrl: 'https://github.com/BagusHidayat21.png',
+    avatarUrl: '/avatars/profile.png',
     resumeUrl: '#',
     email: 'bagus.hidayat.id@gmail.com', // Placeholder
     location: 'Malang, Indonesia',
