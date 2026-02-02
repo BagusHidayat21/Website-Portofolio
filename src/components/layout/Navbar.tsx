@@ -92,7 +92,7 @@ export function Navbar() {
                     {/* Desktop Actions */}
                     <div className="hidden md:flex items-center gap-4">
                         <ThemeToggle />
-                        <Button asChild variant="outline" size="sm" className="hidden lg:flex gap-2 rounded-full border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                        <Button asChild variant="outline" size="sm" className="hidden md:flex gap-2 rounded-full border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
                             <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
                                 <FileText className="h-4 w-4" />
                                 Resume
