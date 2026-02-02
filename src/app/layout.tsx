@@ -10,7 +10,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bagus-hidayat.my.id'),
+  metadataBase: new URL('https://www.bagus-hidayat.my.id'),
+  alternates: {
+    canonical: '/',
+  },
   title: {
     default: "Bagus Hidayat | Full-Stack Web Developer",
     template: "Bagus Hidayat | %s"
@@ -32,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://bagus-hidayat.my.id",
+    url: "https://www.bagus-hidayat.my.id",
     title: "Bagus Hidayat | Full-Stack Web Developer",
     description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
     siteName: "Bagus Hidayat Portfolio",
@@ -100,8 +103,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               "name": "Bagus Hidayat",
-              "url": "https://bagus-hidayat.my.id",
-              "image": "https://bagus-hidayat.my.id/avatars/profile.png",
+              "url": "https://www.bagus-hidayat.my.id",
+              "image": "https://www.bagus-hidayat.my.id/avatars/profile.png",
               "description": "Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies.",
               "jobTitle": "Full-Stack Web Developer",
               "alumniOf": {
