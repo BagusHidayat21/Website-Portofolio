@@ -2,6 +2,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AnimatedBackground } from "@/components/ui/animated-background";
 import { SplashScreen } from "@/components/layout/SplashScreen";
+import { BackToTop } from "@/components/layout/BackToTop";
 
 export default function WebsiteLayout({
     children,
@@ -9,12 +10,12 @@ export default function WebsiteLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <>
-            <SplashScreen />
+        <SplashScreen>
             <AnimatedBackground />
             <Navbar />
             <main className="relative z-10">{children}</main>
             <Footer />
-        </>
+            <BackToTop />
+        </SplashScreen>
     );
 }
