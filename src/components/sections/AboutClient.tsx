@@ -42,7 +42,7 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
             <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-zinc-50 dark:from-zinc-900 to-transparent opacity-50 pointer-events-none" />
 
             <motion.div
-                className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 relative z-10"
+                className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10"
                 style={{ opacity }}
             >
                 <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
@@ -56,7 +56,7 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                             transition={{ duration: 0.6 }}
                         >
                             <h2 className="text-sm font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase mb-4">About Me</h2>
-                            <h3 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-8 tracking-tight">
+                            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-8 tracking-tight">
                                 Engineering the future with code and AI.
                             </h3>
 

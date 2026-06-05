@@ -199,7 +199,7 @@ export function HeroClient({
             {/* Main Content - Medium Parallax Speed */}
             <motion.div
                 style={{ y: contentY, opacity: contentOpacity }}
-                className="container mx-auto px-6 xl:px-24 2xl:px-6 relative z-10 grid lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-16 2xl:gap-20 items-center"
+                className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center"
             >
                 {/* Main Typography Content - Left Side */}
                 <div className="lg:col-span-8 flex flex-col justify-center">
@@ -231,7 +231,7 @@ export function HeroClient({
                         className="mb-3 lg:mb-4 flex items-center gap-3"
                     >
                         <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100" />
-                        <span className="text-lg sm:text-lg md:text-xl lg:text-lg xl:text-lg 2xl:text-2xl font-medium text-zinc-600 dark:text-zinc-400">
+                        <span className="text-base sm:text-lg 2xl:text-2xl font-medium text-zinc-600 dark:text-zinc-400">
                             Hi, I&apos;m <span className="text-zinc-900 dark:text-zinc-100 font-bold">{name || "Bagus Hidayat"}</span>
                         </span>
                     </motion.div>
@@ -242,7 +242,7 @@ export function HeroClient({
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="text-4xl sm:text-6xl md:text-6xl lg:text-5xl xl:text-5xl 2xl:text-7xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-[0.95] md:leading-[0.9]"
+                            className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-[0.95]"
                         >
                             {/* Split tagline for effect */}
                             {tagline.split(' ').slice(0, 2).join(' ').toUpperCase()}
@@ -274,7 +274,7 @@ export function HeroClient({
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="text-lg sm:text-xl md:text-2xl lg:text-lg xl:text-lg 2xl:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl font-medium leading-relaxed mb-8 lg:mb-10"
+                        className="text-base sm:text-lg md:text-xl 2xl:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl font-medium leading-relaxed mb-8 lg:mb-10"
                     >
                         {bio}
                     </motion.p>
@@ -286,16 +286,16 @@ export function HeroClient({
                         transition={{ duration: 0.5, delay: 0.6 }}
                         className="flex flex-wrap items-center gap-4 lg:gap-5"
                     >
-                        <Button size="lg" className="h-12 lg:h-12 xl:h-12 2xl:h-16 px-6 lg:px-6 xl:px-6 2xl:px-10 text-sm lg:text-sm xl:text-sm 2xl:text-lg rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 transition-all shadow-xl shadow-zinc-900/10 dark:shadow-zinc-950/50">
+                        <Button size="lg" className="h-12 px-6 text-sm rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 transition-all shadow-xl shadow-zinc-900/10 dark:shadow-zinc-950/50">
                             <Link href="/projects" className="flex items-center gap-2">
                                 View Work
-                                <ArrowRight className="w-4 h-4 xl:w-4 xl:h-4 2xl:w-5 2xl:h-5" />
+                                <ArrowRight className="w-4 h-4" />
                             </Link>
                         </Button>
-                        <Button size="lg" variant="outline" className="h-12 lg:h-12 xl:h-12 2xl:h-16 px-6 lg:px-6 xl:px-6 2xl:px-10 text-sm lg:text-sm xl:text-sm 2xl:text-lg rounded-full border-2 border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-transparent dark:hover:bg-transparent transition-all">
+                        <Button size="lg" variant="outline" className="h-12 px-6 text-sm rounded-full border-2 border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-transparent dark:hover:bg-transparent transition-all">
                             <Link href={`mailto:${email}`} className="flex items-center gap-2">
                                 Contact
-                                <Send className="w-4 h-4 xl:w-4 xl:h-4 2xl:w-5 2xl:h-5" />
+                                <Send className="w-4 h-4" />
                             </Link>
                         </Button>
                     </motion.div>
@@ -380,11 +380,11 @@ export function HeroClient({
                             transition={{ delay: 0.8 }}
                             className="text-center xl:text-center"
                         >
-                            <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-5xl 2xl:text-7xl font-black stroke-text tracking-tighter dark:text-transparent"
+                            <h3 className="text-5xl sm:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tighter"
                                 style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
                                 {yearsCoding.toString().padStart(2, '0')}
                             </h3>
-                            <p className="text-[10px] md:text-xs lg:text-[10px] xl:text-[10px] 2xl:text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1 xl:mt-3">YEARS CODING</p>
+                            <p className="text-[10px] sm:text-xs font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">YEARS CODING</p>
                         </motion.div>
                         <motion.div
                             initial={{ opacity: 0, x: 50 }}
@@ -392,11 +392,11 @@ export function HeroClient({
                             transition={{ delay: 1.0 }}
                             className="text-center xl:text-center"
                         >
-                            <h3 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-5xl 2xl:text-7xl font-black stroke-text tracking-tighter dark:text-transparent"
+                            <h3 className="text-5xl sm:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tighter"
                                 style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
                                 {projectsCount}+
                             </h3>
-                            <p className="text-[10px] md:text-xs lg:text-[10px] xl:text-[10px] 2xl:text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1 xl:mt-3">PROJECTS</p>
+                            <p className="text-[10px] sm:text-xs font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">PROJECTS</p>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -408,21 +408,21 @@ export function HeroClient({
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
                 style={{ y: socialY, opacity: socialOpacity }}
-                className="hidden lg:flex flex-col gap-6 absolute left-10 xl:left-5 2xl:left-10 bottom-32 z-20"
+                className="hidden lg:flex flex-col gap-6 absolute left-6 xl:left-10 bottom-32 z-20"
             >
                 <div className="w-px h-20 bg-zinc-300 dark:bg-zinc-700 mx-auto" />
                 {githubUrl && (
                     <Link href={githubUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                        <Github className="w-6 h-6 xl:w-5 xl:h-5 2xl:w-8 2xl:h-8" />
+                        <Github className="w-5 h-5" />
                     </Link>
                 )}
                 {linkedinUrl && (
                     <Link href={linkedinUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                        <Linkedin className="w-6 h-6 xl:w-5 xl:h-5 2xl:w-8 2xl:h-8" />
+                        <Linkedin className="w-5 h-5" />
                     </Link>
                 )}
                 <Link href={`mailto:${email}`} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                    <Mail className="w-6 h-6 xl:w-5 xl:h-5 2xl:w-8 2xl:h-8" />
+                    <Mail className="w-5 h-5" />
                 </Link>
             </motion.div>
 

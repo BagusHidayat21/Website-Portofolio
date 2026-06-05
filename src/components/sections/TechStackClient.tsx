@@ -23,7 +23,7 @@ export function TechStackClient({ techStack }: TechStackClientProps) {
 
     return (
         <section ref={containerRef} className="py-24 bg-zinc-50 dark:bg-zinc-900 overflow-hidden">
-            <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
+            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -31,7 +31,7 @@ export function TechStackClient({ techStack }: TechStackClientProps) {
                     className="mb-16 text-center"
                 >
                     <h2 className="text-sm font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase mb-4">Core Technologies</h2>
-                    <h3 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
                         My Technical Arsenal
                     </h3>
                 </motion.div>

@@ -34,15 +34,15 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
 
     return (
         <section ref={containerRef} className="relative py-24 md:py-32 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-700 overflow-hidden">
-            <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 relative z-10">
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10">
+                <div className="flex flex-col md:flex-row gap-12 md:gap-16 lg:gap-24 items-start">
 
                     {/* Left: Heading & Context */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.6 }}
-                        className="lg:w-1/2"
+                        className="md:w-1/2"
                     >
                         <div className="flex items-center gap-2 mb-6">
                             <span className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800">
@@ -51,7 +51,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                             <span className="text-sm font-bold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">Say Hello</span>
                         </div>
 
-                        <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-6 leading-tight">
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-6 leading-tight">
                             Have an idea? <br />
                             <span className="text-zinc-400 dark:text-zinc-500">Let&apos;s build it.</span>
                         </h2>
@@ -85,7 +85,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         initial={{ opacity: 0, x: 20 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="lg:w-1/2 w-full"
+                        className="md:w-1/2 w-full"
                     >
                         <Card className="bg-zinc-900 dark:bg-zinc-800 text-white dark:text-zinc-100 border-0 overflow-hidden relative flex flex-col justify-between p-6 md:p-8 shadow-2xl dark:shadow-zinc-900/50">
                             {/* Texture */}

@@ -1,171 +1,264 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowRight, Briefcase, Globe, Database, BrainCircuit, Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+    ArrowUpRight, Briefcase, Globe, Database, BrainCircuit,
+    Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap, Download
+} from 'lucide-react';
 
-export interface PhilosophyItem {
-    title: string;
-    description: string;
-    icon: string;
-}
-
+export interface PhilosophyItem { title: string; description: string; icon: string; }
 export interface ExperienceItem {
-    id: number;
-    title: string;
-    company: string;
-    year: string;
-    description: string;
-    skills: string[];
-    location?: string | null;
-    isVisible: boolean;
-    order: number;
+    id: number; title: string; company: string; year: string;
+    description: string; skills: string[]; location?: string | null;
+    isVisible: boolean; order: number;
 }
-
 export interface EducationItem {
-    id: number;
-    institution: string;
-    degree: string;
-    field: string;
-    year: string;
-    description: string;
-    location?: string | null;
-    isVisible: boolean;
-    order: number;
+    id: number; institution: string; degree: string; field: string;
+    year: string; description: string; location?: string | null;
+    isVisible: boolean; order: number;
 }
-
 export interface AboutContentData {
-    heroTitle: string;
-    heroSubtitle: string;
-    heroDescription: string;
-    storyTitle: string | null;
-    storyContent: string | null;
-    images: string[];
-    tags: string[];
-    philosophy?: PhilosophyItem[] | null;
+    heroTitle: string; heroSubtitle: string; heroDescription: string;
+    storyTitle: string | null; storyContent: string | null;
+    images: string[]; tags: string[]; philosophy?: PhilosophyItem[] | null;
 }
-
 interface AboutPageClientProps {
     aboutContent: AboutContentData | null;
     experience: ExperienceItem[];
     education: EducationItem[];
 }
 
-// Icon mapping for dynamic philosophy cards
 const ICON_MAP: Record<string, LucideIcon> = {
-    Database,
-    BrainCircuit,
-    Server,
-    Code,
-    Globe,
-    Layers,
-    Cpu,
-    Shield,
-    Zap,
-    Target,
+    Database, BrainCircuit, Server, Code, Globe, Layers, Cpu, Shield, Zap, Target,
 };
 
+const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
+
+function FloatingParticle({ size, initialX, initialY, scrollY, speed = 1, delay = 0 }: {
+    size: number; initialX: string; initialY: string;
+    scrollY: MotionValue<number>; speed?: number; delay?: number;
+}) {
+    const y = useTransform(scrollY, [0, 1], [0, 200 * speed]);
+    const smoothY = useSpring(y, springConfig);
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 0.4, scale: 1 }}
+            transition={{ duration: 1.5, delay }}
+            style={{ y: smoothY, left: initialX, top: initialY, width: size, height: size }}
+            className="absolute rounded-full bg-gradient-to-br from-zinc-400/30 to-zinc-600/20 dark:from-zinc-500/20 dark:to-zinc-300/10 blur-sm pointer-events-none"
+        />
+    );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center gap-3 mb-4"
+        >
+            <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100 flex-shrink-0" />
+            <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">{children}</span>
+        </motion.div>
+    );
+}
+
 export function AboutPageClient({ aboutContent, experience, education }: AboutPageClientProps) {
-    const containerRef = useRef(null);
+    const heroRef = useRef(null);
 
+    const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
 
-    // If no content, show loading state
-    if (!aboutContent) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950">
-                <p className="text-zinc-500">Loading...</p>
-            </div>
-        );
-    }
+    const bgY      = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), springConfig);
+    const bgScale  = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.1]), springConfig);
+    const bgOpac   = useSpring(useTransform(scrollYProgress, [0, 0.5], [0.06, 0.02]), springConfig);
+    const contentY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
+    const contentO = useSpring(useTransform(scrollYProgress, [0.6, 1], [1, 0]), springConfig);
+    const orbLY    = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
+    const orbRY    = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
+    const statsY   = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), springConfig);
+    const decorY   = useSpring(useTransform(scrollYProgress, [0, 1], [0, 150]), springConfig);
+    const decorR   = useSpring(useTransform(scrollYProgress, [0, 1], [-12, 20]), springConfig);
+
+    if (!aboutContent) return null;
 
     const { heroTitle, heroSubtitle, heroDescription, storyContent, images, tags, philosophy } = aboutContent;
-    const mainImage = images?.[0];
+    const mainImage      = images?.[0];
     const secondaryImage = images?.[1];
+    const visibleExp     = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
+    const visibleEdu     = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
-            {/* 1. Hero / Introduction */}
-            <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 relative overflow-hidden bg-zinc-50 dark:bg-zinc-900">
-                {/* Background Grid */}
-                <div className="absolute inset-0 z-0 opacity-[0.06] dark:hidden"
-                    style={{
-                        backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }}
-                />
-                <div className="absolute inset-0 z-0 hidden dark:block opacity-[0.06]"
-                    style={{
-                        backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }}
-                />
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
 
-                <div className="container mx-auto relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                        className="max-w-4xl"
-                    >
-                        <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.9] mb-8">
-                            {heroTitle} <br />
-                            <span className="text-zinc-400 dark:text-zinc-600">{heroSubtitle}</span>
-                        </h1>
-                        <p className="text-xl md:text-2xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-2xl">
-                            {heroDescription}
-                        </p>
-                    </motion.div>
+            {/* ── 1. Hero ── */}
+            <section
+                ref={heroRef}
+                className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20"
+            >
+                {/* Particles */}
+                <div className="hidden lg:block">
+                    <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
+                    <FloatingParticle size={80}  initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
+                    <FloatingParticle size={60}  initialX="75%" initialY="60%" scrollY={scrollYProgress} speed={1.2} delay={0.6} />
+                    <FloatingParticle size={100} initialX="5%"  initialY="70%" scrollY={scrollYProgress} speed={0.6} delay={0.3} />
+                    <FloatingParticle size={40}  initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
                 </div>
+
+                {/* Grid bg */}
+                <motion.div className="absolute inset-0 z-0 dark:hidden pointer-events-none"
+                    style={{ y: bgY, scale: bgScale, opacity: bgOpac,
+                        backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+                        backgroundSize: '40px 40px' }} />
+                <motion.div className="absolute inset-0 z-0 hidden dark:block pointer-events-none"
+                    style={{ y: bgY, scale: bgScale, opacity: bgOpac,
+                        backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
+                        backgroundSize: '40px 40px' }} />
+
+                {/* Orbs */}
+                <motion.div className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none" style={{ y: orbLY }} />
+                <motion.div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-tl from-zinc-300/30 to-transparent dark:from-zinc-600/15 rounded-full blur-3xl pointer-events-none" style={{ y: orbRY }} />
+
+                <motion.div
+                    style={{ y: contentY, opacity: contentO }}
+                    className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center"
+                >
+                    {/* Left — Text */}
+                    <div className="md:col-span-8 flex flex-col justify-center">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="mb-3 lg:mb-4 flex items-center gap-3"
+                        >
+                            <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100" />
+                            <span className="text-lg font-medium text-zinc-600 dark:text-zinc-400">
+                                Who I <span className="text-zinc-900 dark:text-zinc-100 font-bold">Am</span>
+                            </span>
+                        </motion.div>
+
+                        <div className="relative mb-6 lg:mb-8">
+                            <motion.h1
+                                initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                                className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-[0.95]"
+                            >
+                                {heroTitle.toUpperCase()}
+                                <br />
+                                <span className="text-zinc-900 dark:text-zinc-400">{heroSubtitle.toUpperCase()}</span>
+                            </motion.h1>
+
+                            {/* Decorative */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                                style={{ y: decorY, rotate: decorR }}
+                                className="absolute -top-6 right-0 sm:-top-8 sm:right-4 lg:-top-12 lg:right-8 block"
+                            >
+                                <Code className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 text-zinc-900 dark:text-zinc-100" />
+                                <div className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] sm:text-xs px-2 py-1 rounded absolute top-8 right-0 sm:top-10 sm:left-6 sm:right-auto whitespace-nowrap">
+                                    GPA 3.86
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                            className="text-base sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl font-medium leading-relaxed"
+                        >
+                            {heroDescription}
+                        </motion.p>
+                    </div>
+
+                    {/* Right — Stats */}
+                    <div className="md:col-span-4 flex flex-col items-start md:items-end gap-8">
+                        <motion.div
+                            style={{ y: statsY }}
+                            initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="text-center lg:text-right"
+                        >
+                            <h2
+                                className="text-7xl sm:text-8xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-tighter leading-none"
+                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}
+                            >
+                                04
+                            </h2>
+                            <p className="text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase mt-1">
+                                Years Coding
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            style={{ y: statsY }}
+                            initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.9 }}
+                            className="flex flex-row md:flex-col gap-6 md:items-end"
+                        >
+                            {[
+                                { value: '15+', label: 'Projects' },
+                                { value: '3.86', label: 'GPA' },
+                                { value: '8+', label: 'Experience' },
+                            ].map(stat => (
+                                <div key={stat.label} className="text-center lg:text-right">
+                                    <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100">{stat.value}</span>
+                                    <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">{stat.label}</p>
+                                </div>
+                            ))}
+                        </motion.div>
+                    </div>
+                </motion.div>
             </section>
 
-            {/* 2. The Photo Grid */}
-            <section className="py-12 border-y border-zinc-100 dark:border-zinc-800 overflow-hidden">
-                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {/* ── 2. Photo Grid ── */}
+            <section className="py-16 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8 }}
-                            className="md:col-span-8 h-[400px] md:h-[600px] relative group overflow-hidden bg-zinc-100 dark:bg-zinc-900"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7 }}
+                            className="md:col-span-8 h-[320px] md:h-[520px] relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800"
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={mainImage ?? undefined}
-                                alt="Workspace"
-                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
-                            />
-                            <div className="absolute top-6 left-6 bg-white/90 dark:bg-zinc-900/90 backdrop-blur px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">
+                            {mainImage && (
+                                <img src={mainImage} alt="Workspace"
+                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                            )}
+                            <div className="absolute top-5 left-5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">
                                 My Workspace
                             </div>
                         </motion.div>
 
-                        <div className="md:col-span-4 flex flex-col gap-6">
+                        <div className="md:col-span-4 flex flex-col gap-4 md:gap-5">
                             <motion.div
-                                initial={{ opacity: 0, x: 20 }}
+                                initial={{ opacity: 0, x: 16 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="h-[250px] md:h-[280px] relative group overflow-hidden bg-zinc-100 dark:bg-zinc-900"
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.15 }}
+                                className="flex-1 relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 min-h-[200px]"
                             >
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={secondaryImage ?? undefined}
-                                    alt="Setup"
-                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
-                                />
+                                {secondaryImage && (
+                                    <img src={secondaryImage} alt="Setup"
+                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                                )}
                             </motion.div>
+
                             <motion.div
-                                initial={{ opacity: 0, x: 20 }}
+                                initial={{ opacity: 0, x: 16 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="h-[200px] md:h-[300px] bg-zinc-900 dark:bg-zinc-800 p-6 md:p-8 flex flex-col justify-between text-white"
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3 }}
+                                className="rounded-2xl bg-zinc-900 dark:bg-zinc-800 p-6 md:p-7 flex flex-col justify-between min-h-[160px]"
                             >
-                                <Globe className="w-6 h-6 md:w-8 md:h-8" />
+                                <Globe className="w-6 h-6 text-zinc-400" />
                                 <div>
-                                    <h3 className="text-2xl md:text-3xl font-bold mb-1">Malang</h3>
-                                    <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm uppercase tracking-wider">Universitas Negeri Malang</p>
+                                    <h3 className="text-2xl font-black tracking-tight text-white mb-0.5">Malang</h3>
+                                    <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Universitas Negeri Malang</p>
                                 </div>
                             </motion.div>
                         </div>
@@ -173,152 +266,115 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
-            {/* 3. Narrative Bio */}
-            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                    <div className="flex flex-col md:flex-row gap-16">
-                        <div className="md:w-1/3">
-                            <div className="sticky top-32">
-                                <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
-                                    Background
-                                </span>
-                                <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">The Story</h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
+            {/* ── 3. Story ── */}
+            <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                    <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                        {/* Sticky label */}
+                        <div className="md:col-span-4">
+                            <div className="md:sticky md:top-32">
+                                <SectionLabel>Background</SectionLabel>
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
+                                    The<br />Story.
+                                </h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
                                     Design and building web applications powered by modern frontend & reliable backend APIs.
                                 </p>
                             </div>
                         </div>
 
-                        <div className="md:w-2/3">
-                            <div className="bg-zinc-50 dark:bg-zinc-900 p-8 md:p-10 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                                <div className="space-y-6 text-lg text-justify text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                                    {(storyContent ?? '').split('\n\n').map((paragraph, index) => (
-                                        <p key={index}>{paragraph}</p>
-                                    ))}
-                                </div>
+                        {/* Content */}
+                        <div className="md:col-span-8">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6 }}
+                                className="space-y-5 text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed"
+                            >
+                                {(storyContent ?? '').split('\n\n').map((paragraph, i) => (
+                                    <p key={i}>{paragraph}</p>
+                                ))}
+                            </motion.div>
 
-                                {tags.length > 0 && (
-                                    <div className="pt-8 mt-8 border-t border-zinc-200 dark:border-zinc-700 flex flex-wrap items-center gap-3">
-                                        {tags.map((tag) => (
-                                            <Badge
-                                                key={tag}
-                                                variant="secondary"
-                                                className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-0 font-medium rounded-full"
-                                            >
-                                                {tag}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                            {tags.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.3 }}
+                                    className="flex flex-wrap gap-2 mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800"
+                                >
+                                    {tags.map(tag => (
+                                        <span key={tag} className="px-4 py-1.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-semibold">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </motion.div>
+                            )}
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 3.5. Gallery Section */}
-            {images && images.length > 2 && (
-                <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                        <div className="mb-12">
-                            <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
-                                Gallery
-                            </span>
-                            <h2 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100">
-                                Life in Pictures
-                            </h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-                            {images.slice(2).map((img, index) => {
-                                const gallery = images.slice(2);
-                                const remainder = gallery.length % 3;
-                                const isLastRow = index >= gallery.length - remainder;
-                                let spanClass = "md:col-span-2"; // Default 1/3 (2 cols out of 6)
-
-                                if (isLastRow) {
-                                    if (remainder === 1) spanClass = "md:col-span-4 md:col-start-2"; // Centered 2/3 width
-                                    if (remainder === 2) spanClass = "md:col-span-3"; // Half width
-                                }
-
-                                return (
-                                    <motion.div
-                                        key={`gallery-${index}`}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: index * 0.1 }}
-                                        className={`relative rounded-2xl overflow-hidden group w-full ${spanClass}`}
-                                    >
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={img}
-                                            alt={`Gallery ${index + 3}`}
-                                            className="w-full h-auto block grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
-                                        />
-                                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-            )}
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                    <div className="flex flex-col md:flex-row gap-16">
-                        <div className="md:w-1/3">
-                            <div className="sticky top-32">
-                                <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
-                                    Work & Projects
-                                </span>
-                                <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Experience</h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
-                                    Projects and work experience that shaped my expertise.
+            {/* ── 4. Experience ── */}
+            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                    <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                        <div className="md:col-span-4">
+                            <div className="md:sticky md:top-32">
+                                <SectionLabel>Work & Projects</SectionLabel>
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
+                                    Experience
+                                </h2>
+                                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm mb-8">
+                                    Projects and roles that shaped my expertise.
                                 </p>
-                                <Link href="#" className="group inline-flex items-center gap-2 mt-8 text-zinc-900 dark:text-zinc-100 font-bold hover:underline underline-offset-4">
-                                    Download Resume <ArrowRight className="w-5 h-5 md:w-6 md:h-6 rotate-45 group-hover:rotate-0 transition-transform flex-shrink-0 ml-2" />
+                                <Link
+                                    href="#"
+                                    className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4"
+                                >
+                                    <Download className="w-4 h-4" />
+                                    Download Resume
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="md:w-2/3 space-y-0">
-                            {experience.map((exp, i) => (
+                        <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+                            {visibleExp.map((exp, i) => (
                                 <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 20 }}
+                                    key={exp.id}
+                                    initial={{ opacity: 0, y: 16 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: i * 0.1 }}
-                                    className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-200 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
+                                    transition={{ delay: i * 0.07 }}
+                                    className="py-8 first:pt-0 last:pb-0 group"
                                 >
-                                    <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[25%]" />
-                                    <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900 md:left-[25%] md:-translate-x-[50%]" />
-                                    <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-zinc-50 dark:outline-zinc-900" />
-
-                                    <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
-                                        <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
+                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                                        <div>
+                                            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                                {exp.title}
+                                            </h3>
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                                                <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
+                                                {exp.company}
+                                            </p>
+                                        </div>
+                                        <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
                                             {exp.year}
                                         </span>
                                     </div>
 
-                                    <div className="md:col-span-9 bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors">
-                                        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{exp.title}</h3>
-                                        <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4 flex items-center gap-2">
-                                            <Briefcase className="w-4 h-4" />
-                                            {exp.company}
-                                        </p>
-                                        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 text-base">
-                                            {exp.description}
-                                        </p>
+                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                                        {exp.description}
+                                    </p>
 
-                                        <div className="flex flex-wrap gap-2">
-                                            {exp.skills.map(skill => (
-                                                <Badge key={skill} variant="secondary" className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-0 font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200">
-                                                    {skill}
-                                                </Badge>
-                                            ))}
-                                        </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {exp.skills.map(skill => (
+                                            <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
+                                                {skill}
+                                            </span>
+                                        ))}
                                     </div>
                                 </motion.div>
                             ))}
@@ -327,53 +383,50 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
-            {/* 5. Education Timeline */}
-            {education && education.length > 0 && (
-                <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                        <div className="flex flex-col md:flex-row gap-16">
-                            <div className="md:w-1/3">
-                                <div className="sticky top-32">
-                                    <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
-                                        Academic
-                                    </span>
-                                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Education</h2>
-                                    <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
-                                        Academic background and certifications that built my foundation.
+            {/* ── 5. Education ── */}
+            {visibleEdu.length > 0 && (
+                <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                            <div className="md:col-span-4">
+                                <div className="md:sticky md:top-32">
+                                    <SectionLabel>Academic</SectionLabel>
+                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
+                                        Education
+                                    </h2>
+                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                                        Academic background that built my foundation.
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="md:w-2/3 space-y-0">
-                                {education.map((edu, i) => (
+                            <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+                                {visibleEdu.map((edu, i) => (
                                     <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, y: 20 }}
+                                        key={edu.id}
+                                        initial={{ opacity: 0, y: 16 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: i * 0.1 }}
-                                        className="relative pl-8 md:pl-0 border-l-2 md:border-l-0 border-zinc-300 dark:border-zinc-700 md:grid md:grid-cols-12 md:gap-8 pb-12 md:pb-16 last:pb-0"
+                                        className="py-8 first:pt-0 last:pb-0"
                                     >
-                                        <div className="hidden md:block absolute left-0 top-2 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[25%]" />
-                                        <div className="hidden md:block absolute left-0 top-2 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950 md:left-[25%] md:-translate-x-[50%]" />
-                                        <div className="md:hidden absolute left-[-7px] top-1 w-3 h-3 rounded-full bg-zinc-900 dark:bg-zinc-100 outline outline-4 outline-white dark:outline-zinc-950" />
-
-                                        <div className="md:col-span-3 mb-2 md:mb-0 md:text-right md:pr-8">
-                                            <span className="inline-block py-1.5 px-3 rounded-full bg-zinc-900 dark:bg-zinc-100 text-xs font-bold tracking-wider text-white dark:text-zinc-900">
+                                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                                            <div>
+                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                                    {edu.institution}
+                                                </h3>
+                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                                                    <GraduationCap className="w-3.5 h-3.5 flex-shrink-0" />
+                                                    {edu.degree} · {edu.field}
+                                                </p>
+                                            </div>
+                                            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
                                                 {edu.year}
                                             </span>
                                         </div>
-
-                                        <div className="md:col-span-9 bg-zinc-100 dark:bg-zinc-800 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors">
-                                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{edu.institution}</h3>
-                                            <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-3 flex items-center gap-2">
-                                                <GraduationCap className="w-4 h-4" />
-                                                {edu.degree} - {edu.field}
-                                            </p>
-                                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-base">
-                                                {edu.description}
-                                            </p>
-                                        </div>
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                                            {edu.description}
+                                        </p>
                                     </motion.div>
                                 ))}
                             </div>
@@ -382,47 +435,45 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </section>
             )}
 
-
-            {/* 6. Philosophy Grid */}
+            {/* ── 6. Philosophy ── */}
             {philosophy && philosophy.length > 0 && (
-                <section className="py-24 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
-                        <div className="flex flex-col md:flex-row gap-16">
-                            <div className="md:w-1/3">
-                                <div className="sticky top-32">
-                                    <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full mb-4">
-                                        Principles
-                                    </span>
-                                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-zinc-900 dark:text-zinc-100">Philosophy</h2>
-                                    <p className="text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
-                                        Core principles that guide my approach to software development and problem-solving.
+                <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                            <div className="md:col-span-4">
+                                <div className="md:sticky md:top-32">
+                                    <SectionLabel>Principles</SectionLabel>
+                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
+                                        Philosophy
+                                    </h2>
+                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                                        Core principles that guide my approach to software and problem-solving.
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="md:w-2/3">
-                                <div className="grid md:grid-cols-2 gap-6">
+                            <div className="md:col-span-8">
+                                <div className="grid sm:grid-cols-2 gap-4">
                                     {(philosophy as PhilosophyItem[]).map((item, i) => {
-                                        const IconComponent = ICON_MAP[item.icon] || Database;
+                                        const Icon = ICON_MAP[item.icon] || Database;
                                         return (
                                             <motion.div
                                                 key={i}
-                                                initial={{ opacity: 0, y: 20 }}
+                                                initial={{ opacity: 0, y: 16 }}
                                                 whileInView={{ opacity: 1, y: 0 }}
                                                 viewport={{ once: true }}
-                                                transition={{ delay: i * 0.1 }}
+                                                transition={{ delay: i * 0.08 }}
+                                                className="group p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-300"
                                             >
-                                                <Card className="bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors duration-300 group cursor-default h-full">
-                                                    <CardContent className="p-6">
-                                                        <div className="h-12 w-12 rounded-xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-5">
-                                                            <IconComponent className="w-6 h-6 text-white dark:text-zinc-900" />
-                                                        </div>
-                                                        <h3 className="text-lg font-bold mb-2 text-zinc-900 dark:text-zinc-100 mt-2">{item.title}</h3>
-                                                        <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                                                            {item.description}
-                                                        </p>
-                                                    </CardContent>
-                                                </Card>
+                                                <div className="w-10 h-10 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-4">
+                                                    <Icon className="w-5 h-5 text-white dark:text-zinc-900" />
+                                                </div>
+                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                                                    {item.title}
+                                                </h3>
+                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                                                    {item.description}
+                                                </p>
                                             </motion.div>
                                         );
                                     })}
@@ -433,6 +484,32 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </section>
             )}
 
+            {/* ── 7. CTA ── */}
+            <section className="py-24 bg-zinc-900 dark:bg-zinc-900">
+                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8"
+                    >
+                        <div>
+                            <p className="text-zinc-400 text-xs font-bold tracking-[0.25em] uppercase mb-4">Let&apos;s Work Together</p>
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white leading-[0.95]">
+                                Have a project<br />
+                                <span className="text-zinc-400">in mind?</span>
+                            </h2>
+                        </div>
+                        <Link
+                            href="mailto:bagus.hidayat.id@gmail.com"
+                            className="group inline-flex items-center gap-3 px-6 py-3 bg-white text-zinc-900 rounded-full font-bold text-sm hover:bg-zinc-100 transition-colors"
+                        >
+                            Get in touch
+                            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </Link>
+                    </motion.div>
+                </div>
+            </section>
         </div>
     );
 }

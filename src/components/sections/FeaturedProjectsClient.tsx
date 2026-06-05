@@ -14,7 +14,7 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
 
     return (
         <section id="projects" ref={containerRef} className="py-24 md:py-32 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-700">
-            <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
+            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
                     <motion.div
@@ -24,7 +24,7 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
                         transition={{ duration: 0.6 }}
                     >
                         <h2 className="text-sm font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase mb-4">Selected Works</h2>
-                        <h3 className="text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 max-w-xl leading-tight">
+                        <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 max-w-xl leading-tight">
                             Digital products crafted with precision.
                         </h3>
                     </motion.div>
@@ -72,14 +72,15 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
                                         {/* Overlay Actions */}
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-sm">
                                             {project.liveUrl && (
-                                                <Button size="icon" className="h-14 w-14 rounded-full bg-white text-zinc-900 hover:bg-zinc-200 border-none shadow-xl hover:scale-110 transition-all">
+                                                <Button size="icon" className="h-14 w-14 rounded-full bg-white text-zinc-900 hover:bg-zinc-200 border-none shadow-xl hover:scale-110 transition-all" asChild>
                                                     <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                                                         <ExternalLink className="w-6 h-6" />
                                                     </Link>
                                                 </Button>
                                             )}
                                             {project.githubUrl && (
-                                                <Button size="icon" variant="outline" className="h-14 w-14 rounded-full border-2 border-white text-white hover:bg-white hover:text-zinc-900 shadow-xl hover:scale-110 transition-all">
+                                                // Renders transparent GitHub button with white border to avoid invisible icon in light mode
+                                                <Button size="icon" variant="ghost" className="h-14 w-14 rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-zinc-900 shadow-xl hover:scale-110 transition-all" asChild>
                                                     <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                                                         <Github className="w-6 h-6" />
                                                     </Link>
