@@ -153,7 +153,7 @@ export function HeroClient({
     const orbRightY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
 
     return (
-        <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-900 pt-24 pb-32 lg:py-20">
+        <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20">
             {/* Floating Particles for Depth - Desktop Only */}
             <div className="hidden lg:block">
                 <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />

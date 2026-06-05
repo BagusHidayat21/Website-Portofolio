@@ -13,7 +13,7 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
     const containerRef = useRef(null);
 
     return (
-        <section id="projects" ref={containerRef} className="py-32 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section id="projects" ref={containerRef} className="py-24 md:py-32 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-700">
             <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">

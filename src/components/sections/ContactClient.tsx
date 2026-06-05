@@ -33,7 +33,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
     ];
 
     return (
-        <section ref={containerRef} className="relative py-24 md:py-32 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800 overflow-hidden">
+        <section ref={containerRef} className="relative py-24 md:py-32 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-700 overflow-hidden">
             <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6 relative z-10">
                 <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
 
