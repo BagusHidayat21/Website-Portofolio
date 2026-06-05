@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import { Sparkles } from 'lucide-react';
 
 interface ChatMessageProps {
     content: string;
@@ -14,8 +15,13 @@ export function ChatMessage({ content, isBot, isTyping }: ChatMessageProps) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-3`}
+            className={`flex items-end gap-2 ${isBot ? 'justify-start' : 'justify-end'} mb-4`}
         >
+            {isBot && (
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-1">
+                    <Sparkles className="w-4 h-4 text-white dark:text-zinc-900" />
+                </div>
+            )}
             <div
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${isBot
                         ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-tl-sm'
@@ -29,7 +35,7 @@ export function ChatMessage({ content, isBot, isTyping }: ChatMessageProps) {
                         <span className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce [animation-delay:300ms]" />
                     </div>
                 ) : isBot ? (
-                    <div className="prose prose-sm dark:prose-invert prose-p:my-1 prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100 max-w-none">
+                    <div className="prose prose-sm dark:prose-invert prose-p:my-1 prose-strong:text-zinc-900 dark:prose-strong:text-zinc-100 max-w-none whitespace-pre-wrap">
                         <ReactMarkdown
                             components={{
                                 a: ({ href, children }) => (

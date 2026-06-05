@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Chatbot } from "@/components/chat/Chatbot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -86,7 +85,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${inter.variable} font-sans relative`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -94,7 +93,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Chatbot />
         </ThemeProvider>
         <script
           type="application/ld+json"

@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { AnimatedBackground } from "@/components/ui/animated-background";
 import { SplashScreen } from "@/components/layout/SplashScreen";
 import { BackToTop } from "@/components/layout/BackToTop";
+import { Chatbot } from "@/components/chat/Chatbot";
 
 export default function WebsiteLayout({
     children,
@@ -16,6 +17,7 @@ export default function WebsiteLayout({
             <main className="relative z-10">{children}</main>
             <Footer />
             <BackToTop />
+            <Chatbot />
         </SplashScreen>
     );
 }

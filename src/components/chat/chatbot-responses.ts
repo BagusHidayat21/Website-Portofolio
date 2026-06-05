@@ -31,21 +31,8 @@ const responses: ChatResponse[] = [
 
             let response = "Here are my technical skills:\n\n";
             Object.entries(grouped).forEach(([category, techs]) => {
-                response += `**${category}:** ${techs.join(', ')}\n`;
+                response += `• **${category}:** ${techs.join(', ')}\n`;
             });
-            return response;
-        }
-    },
-    // Projects
-    {
-        patterns: ['project', 'portfolio', 'work', 'built', 'proyek', 'karya'],
-        getResponse: () => {
-            const featured = projectsData.filter(p => p.isFeatured).slice(0, 3);
-            let response = "Here are some of my featured projects:\n\n";
-            featured.forEach(p => {
-                response += `**${p.title}** - ${p.description.slice(0, 100)}...\n`;
-            });
-            response += `\nVisit [/projects](/projects) to see all ${projectsData.length} projects!`;
             return response;
         }
     },
@@ -53,12 +40,31 @@ const responses: ChatResponse[] = [
     {
         patterns: ['experience', 'job', 'career', 'work history', 'pengalaman', 'kerja'],
         getResponse: () => {
-            const topExp = experienceData.slice(0, 3);
-            let response = "Here's a snapshot of my experience:\n\n";
-            topExp.forEach(e => {
-                response += `**${e.title}** at ${e.company} (${e.year})\n`;
+            // Filter for more professional/work-related roles first
+            const workExp = experienceData.filter(e => 
+                !e.title.includes('Award') && 
+                !e.title.includes('Paper') &&
+                !e.title.includes('Education')
+            ).slice(0, 4);
+            
+            let response = "Here's a snapshot of my professional experience:\n\n";
+            workExp.forEach(e => {
+                response += `• **${e.title}** at ${e.company} (${e.year})\n`;
             });
-            response += `\nCheck out [/about](/about) for the full timeline!`;
+            response += `\nCheck out [/about](/about) for the full career timeline!`;
+            return response;
+        }
+    },
+    // Projects
+    {
+        patterns: ['project', 'portfolio', 'built', 'proyek', 'karya'],
+        getResponse: () => {
+            const featured = projectsData.filter(p => p.isFeatured).slice(0, 3);
+            let response = "Here are some of my featured projects:\n\n";
+            featured.forEach(p => {
+                response += `• **${p.title}** - ${p.description.slice(0, 100)}...\n`;
+            });
+            response += `\nVisit [/projects](/projects) to see all ${projectsData.length} projects!`;
             return response;
         }
     },
@@ -106,7 +112,12 @@ const responses: ChatResponse[] = [
 ];
 
 // Fallback response
-const fallbackResponse = `I'm not sure I understand that. Here are some things you can ask me about:\n\n• **About me** - Who is Bagus?\n• **Skills** - What technologies do I use?\n• **Projects** - What have I built?\n• **Experience** - Where have I worked?\n• **Contact** - How to reach me?`;
+const fallbackResponse = `I'm not sure I understand that. Here are some things you can ask me about:
+• **About me** - Who is Bagus?
+• **Skills** - What technologies do I use?
+• **Projects** - What have I built?
+• **Experience** - Where have I worked?
+• **Contact** - How to reach me?`;
 
 // Pattern matching function
 export function getChatResponse(message: string): string {
