@@ -91,6 +91,11 @@
 
 /* Premium utility classes */
 @layer utilities {
+  /* Section container - consistent max-width and horizontal padding */
+  .section-container {
+    @apply mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16;
+  }
+
   /* Elegant text gradient - monochrome */
   .text-gradient {
     @apply bg-gradient-to-r from-zinc-900 via-zinc-600 to-zinc-900 bg-clip-text text-transparent;
