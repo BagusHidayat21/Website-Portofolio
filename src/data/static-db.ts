@@ -1,4 +1,3 @@
-// --- Interfaces ---
 
 export interface SocialLink {
     platform: string;
@@ -88,7 +87,6 @@ export interface TechStack {
     order: number;
 }
 
-// --- Data ---
 
 export const profileData: Profile = {
     name: 'Bagus Hidayat',

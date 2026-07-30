@@ -30,7 +30,6 @@ export interface ProjectWithRepo {
     githubDescription?: string | null;
     lastUpdated?: string;
     language?: string | null;
-    // Enhanced fields for Case Studies
     role?: string;
     timeline?: string;
     year?: string;
