@@ -1,28 +1,37 @@
 'use client';
 
-// Global Page Transition Template
-// Adds smooth fade-up animation to every route change
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Template({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const prevPathname = useRef(pathname);
+    const [overlay, setOverlay] = useState(false);
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        if (prevPathname.current !== pathname) {
+            prevPathname.current = pathname;
+            setVisible(false);
+            const t = requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setVisible(true);
+                });
+            });
+            return () => cancelAnimationFrame(t);
+        }
+    }, [pathname]);
 
     return (
-        <AnimatePresence mode="wait">
-            <motion.div
-                className="relative"
-                key={pathname}
-                initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-                transition={{
-                    duration: 0.6,
-                    ease: [0.22, 1, 0.36, 1]
-                }}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
+        <div
+            className="relative transform-gpu"
+            style={{
+                opacity: visible ? 1 : 0,
+                transition: visible ? 'opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
+                willChange: 'opacity',
+            }}
+        >
+            {children}
+        </div>
     );
 }
