@@ -33,7 +33,6 @@ export function SplashScreen({ children }: SplashScreenProps) {
 
     return (
         <>
-            {/* Splash Overlay */}
             <AnimatePresence mode="wait">
                 {!isSplashComplete && (
                     <motion.div
@@ -42,7 +41,6 @@ export function SplashScreen({ children }: SplashScreenProps) {
                         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                         className="fixed inset-0 z-[100] flex items-center justify-center bg-white dark:bg-zinc-950"
                     >
-                        {/* Background Grid */}
                         <div
                             className="absolute inset-0 opacity-[0.03]"
                             style={{
@@ -112,7 +110,6 @@ export function SplashScreen({ children }: SplashScreenProps) {
                 )}
             </AnimatePresence>
 
-            {/* Main Content */}
             <AnimatePresence>
                 {isSplashComplete && (
                     <motion.div

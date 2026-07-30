@@ -4,7 +4,6 @@ import { projectsData } from '@/data/static-db';
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://www.bagus-hidayat.my.id';
 
-    // Static pages
     const staticPages: MetadataRoute.Sitemap = [
         {
             url: baseUrl,
@@ -26,7 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
     ];
 
-    // Dynamic project pages
     const projectPages: MetadataRoute.Sitemap = projectsData
         .filter(p => p.isVisible)
         .map((project) => ({

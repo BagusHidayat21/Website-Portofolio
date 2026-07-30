@@ -19,7 +19,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
 
     return (
         <div ref={containerRef} className="min-h-screen bg-white dark:bg-zinc-950 pb-20">
-            {/* 1. Immersive Hero */}
             <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white">
                 <motion.div
                     style={{ opacity: heroOpacity, scale: heroScale }}
@@ -44,7 +43,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                     </div>
                 </motion.div>
 
-                {/* Background Grid - Minimalist */}
                 <div className="absolute inset-0 z-0 opacity-[0.03] dark:hidden"
                     style={{
                         backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
@@ -59,7 +57,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                 />
             </section>
 
-            {/* 2. Project Meta & Links */}
             <section className="bg-white dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800 sticky top-0 z-30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl">
                 <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
                     <Button
@@ -92,13 +89,10 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                 </div>
             </section>
 
-            {/* 3. Detailed Info Grid */}
             <section className="py-24">
                 <div className="container mx-auto px-6">
                     <div className="grid lg:grid-cols-12 gap-16">
-                        {/* Sidebar */}
                         <div className="lg:col-span-4 space-y-12">
-                            {/* Tags / Categories */}
                             <div>
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">Categories</h3>
                                 <div className="flex flex-wrap gap-2">
@@ -110,7 +104,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                 </div>
                             </div>
 
-                            {/* Tech Stack */}
                             <div>
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">Tech Stack</h3>
                                 <div className="flex flex-wrap gap-2">
@@ -130,10 +123,8 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                             </div>
                         </div>
 
-                        {/* Main Content */}
                         <div className="lg:col-span-8 space-y-16">
 
-                            {/* Main Image */}
                             {project.images && project.images[0] && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 40 }}
@@ -141,12 +132,10 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                     viewport={{ once: true }}
                                     className="rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-2xl dark:shadow-zinc-950/50"
                                 >
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={project.images[0]} alt="Project Highlight" className="w-full h-auto" />
                                 </motion.div>
                             )}
 
-                            {/* Markdown Content */}
                             {project.content ? (
                                 <div className="prose prose-zinc dark:text-zinc-100 max-w-none">
                                     <ReactMarkdown>{project.content}</ReactMarkdown>
@@ -163,7 +152,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                 </div>
                             )}
 
-                            {/* Secondary Images Grid */}
                             {project.images && project.images.length > 1 && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12 border-t border-zinc-100 dark:border-zinc-800">
                                     {project.images.slice(1).map((img, i) => {
@@ -181,7 +169,6 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                                 transition={{ delay: i * 0.1 }}
                                                 className={`relative aspect-video rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 group border border-zinc-100 dark:border-zinc-800 ${spanClass}`}
                                             >
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                                 <img
                                                     src={img}
                                                     alt={`Screenshot ${i + 2}`}

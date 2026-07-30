@@ -1,6 +1,5 @@
 'use client';
 
-// Categorized Tech Stack with Grid Layout
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +13,6 @@ export function TechStackClient({ techStack }: TechStackClientProps) {
     const containerRef = useRef(null);
     const isInView = useInView(containerRef, { once: true, margin: '-100px' });
 
-    // Group tech by category
     const categories = Array.from(new Set(techStack.map(t => t.category)));
     const groupedTech = categories.reduce((acc, category) => {
         acc[category] = techStack.filter(t => t.category === category);

@@ -198,7 +198,7 @@
   @apply bg-zinc-400;
 }
 
-/* View Transitions API circular wave theme reveal */
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;

@@ -1,6 +1,5 @@
 'use client';
 
-// Minimalist About Section - Bold & Clean
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,6 @@ export function About() {
             <div className="container mx-auto px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-6">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
 
-                    {/* Left: Heading & Label */}
                     <div className="lg:w-1/3 py-2">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -38,7 +36,6 @@ export function About() {
                         </motion.h2>
                     </div>
 
-                    {/* Right: Content */}
                     <div className="lg:w-2/3">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -46,7 +43,6 @@ export function About() {
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="space-y-6"
                         >
-                            {/* Refactored biographical content focusing on web development, machine learning, and data science */}
                             <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
                                 I&apos;m an undergraduate student at <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Universitas Negeri Malang</strong>, specializing in Full Stack Web Development. I focus on building robust, scalable applications with a seamless user experience.
                             </p>

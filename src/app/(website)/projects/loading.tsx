@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 export default function ProjectsLoading() {
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950">
-            {/* Header Skeleton */}
             <section className="pt-32 pb-16 border-b border-zinc-100 dark:border-zinc-900">
                 <div className="container mx-auto px-6">
                     <motion.div
@@ -19,7 +18,6 @@ export default function ProjectsLoading() {
                 </div>
             </section>
 
-            {/* Grid Skeleton */}
             <section className="py-16">
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

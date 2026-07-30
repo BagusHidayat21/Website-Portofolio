@@ -56,7 +56,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             className="group"
         >
             <Link href={`/projects/${project.slug}`} className="block">
-                {/* Image */}
                 <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800/60 mb-4">
                     {imageUrl ? (
                         <img
@@ -70,7 +69,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                         </div>
                     )}
 
-                    {/* Hover overlay */}
                     <div className="absolute inset-0 bg-zinc-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
                         <div className="flex gap-2">
                             {project.githubUrl && (
@@ -96,7 +94,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     </div>
                 </div>
 
-                {/* Text */}
                 <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                         <p className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1">
@@ -111,7 +108,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     </div>
                 </div>
 
-                {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 mt-3">
                     {(project.tags || []).slice(0, 3).map((tag: string) => (
                         <span
@@ -169,12 +165,10 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
 
-            {/* ── Hero ── */}
             <section
                 ref={heroRef}
                 className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20"
             >
-                {/* Floating Particles */}
                 <div className="hidden lg:block">
                     <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
                     <FloatingParticle size={80}  initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
@@ -183,7 +177,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                     <FloatingParticle size={40}  initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
                 </div>
 
-                {/* Grid background */}
                 <motion.div
                     className="absolute inset-0 z-0 dark:hidden pointer-events-none"
                     style={{ y: bgY, scale: bgScale, opacity: bgOpacity,
@@ -197,7 +190,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                         backgroundSize: '40px 40px' }}
                 />
 
-                {/* Gradient orbs */}
                 <motion.div
                     className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none"
                     style={{ y: orbLeftY }}
@@ -207,14 +199,11 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                     style={{ y: orbRightY }}
                 />
 
-                {/* Main content */}
                 <motion.div
                     style={{ y: contentY, opacity: contentOpacity }}
                     className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center"
                 >
-                    {/* Left — Typography */}
                     <div className="md:col-span-8 flex flex-col justify-center">
-                        {/* Line + label */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -227,7 +216,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                             </span>
                         </motion.div>
 
-                        {/* Headline */}
                         <div className="relative mb-6 lg:mb-8">
                             <motion.h1
                                 initial={{ opacity: 0, y: 40 }}
@@ -240,7 +228,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                                 <span className="text-zinc-900 dark:text-zinc-400">& PROJECTS.</span>
                             </motion.h1>
 
-                            {/* Decorative element */}
                             <motion.div
                                 initial={{ opacity: 0, scale: 0 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -255,7 +242,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                             </motion.div>
                         </div>
 
-                        {/* Description */}
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -266,9 +252,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                         </motion.p>
                     </div>
 
-                    {/* Right — Stats */}
                     <div className="md:col-span-4 flex flex-col items-start md:items-end gap-6">
-                        {/* Big outline number */}
                         <motion.div
                             style={{ y: statsY }}
                             initial={{ opacity: 0, x: 30 }}
@@ -287,7 +271,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                             </p>
                         </motion.div>
 
-                        {/* Category breakdown */}
                         <motion.div
                             style={{ y: statsY }}
                             initial={{ opacity: 0, x: 30 }}
@@ -306,10 +289,8 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                 </motion.div>
             </section>
 
-            {/* ── Filter + Search ── */}
             <section className="sticky top-0 z-30 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 py-3 flex flex-col sm:flex-row items-center gap-3 justify-between">
-                    {/* Category tabs */}
                     <div className="flex gap-1 overflow-x-auto no-scrollbar w-full sm:w-auto">
                         {categories.map(cat => {
                             const count = cat.id === 'all'
@@ -335,7 +316,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                         })}
                     </div>
 
-                    {/* Search */}
                     <div className="relative w-full sm:w-56 flex-shrink-0">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
                         <input
@@ -349,7 +329,6 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
                 </div>
             </section>
 
-            {/* ── Grid ── */}
             <section className="py-14 pb-32">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <AnimatePresence mode="wait">

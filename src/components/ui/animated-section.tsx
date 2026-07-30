@@ -1,6 +1,5 @@
 'use client';
 
-// Wrapper component for scroll-triggered animations
 import { motion, useInView } from 'framer-motion';
 import { useRef, ReactNode } from 'react';
 import { fadeUp, staggerContainer } from '@/lib/animations';
@@ -37,7 +36,6 @@ export function AnimatedSection({
     );
 }
 
-// Animated div for individual elements within sections
 interface AnimatedDivProps {
     children: ReactNode;
     className?: string;

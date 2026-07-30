@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 export default function AboutLoading() {
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950">
-            {/* Hero Skeleton */}
             <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 bg-zinc-50 dark:bg-zinc-900">
                 <div className="container mx-auto">
                     <motion.div
@@ -20,7 +19,6 @@ export default function AboutLoading() {
                 </div>
             </section>
 
-            {/* Photo Grid Skeleton */}
             <section className="py-12 border-y border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -33,7 +31,6 @@ export default function AboutLoading() {
                 </div>
             </section>
 
-            {/* Story Skeleton */}
             <section className="py-24 md:py-32">
                 <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 md:gap-32">
                     <div className="space-y-4">

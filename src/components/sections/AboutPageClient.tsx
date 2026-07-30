@@ -95,12 +95,10 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
 
-            {/* ── 1. Hero ── */}
             <section
                 ref={heroRef}
                 className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20"
             >
-                {/* Particles */}
                 <div className="hidden lg:block">
                     <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
                     <FloatingParticle size={80}  initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
@@ -109,7 +107,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                     <FloatingParticle size={40}  initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
                 </div>
 
-                {/* Grid bg */}
                 <motion.div className="absolute inset-0 z-0 dark:hidden pointer-events-none"
                     style={{ y: bgY, scale: bgScale, opacity: bgOpac,
                         backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
@@ -119,7 +116,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                         backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
                         backgroundSize: '40px 40px' }} />
 
-                {/* Orbs */}
                 <motion.div className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none" style={{ y: orbLY }} />
                 <motion.div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-tl from-zinc-300/30 to-transparent dark:from-zinc-600/15 rounded-full blur-3xl pointer-events-none" style={{ y: orbRY }} />
 
@@ -127,7 +123,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                     style={{ y: contentY, opacity: contentO }}
                     className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center"
                 >
-                    {/* Left — Text */}
                     <div className="md:col-span-8 flex flex-col justify-center">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -151,7 +146,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 <span className="text-zinc-900 dark:text-zinc-400">{heroSubtitle.toUpperCase()}</span>
                             </motion.h1>
 
-                            {/* Decorative */}
                             <motion.div
                                 initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -174,7 +168,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                         </motion.p>
                     </div>
 
-                    {/* Right — Stats */}
                     <div className="md:col-span-4 flex flex-col items-start md:items-end gap-8">
                         <motion.div
                             style={{ y: statsY }}
@@ -214,7 +207,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </motion.div>
             </section>
 
-            {/* ── 2. Photo Grid ── */}
             <section className="py-16 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
@@ -266,11 +258,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
-            {/* ── 3. Story ── */}
             <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                        {/* Sticky label */}
                         <div className="md:col-span-4">
                             <div className="md:sticky md:top-32">
                                 <SectionLabel>Background</SectionLabel>
@@ -283,7 +273,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                             </div>
                         </div>
 
-                        {/* Content */}
                         <div className="md:col-span-8">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
@@ -317,7 +306,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
-            {/* ── 4. Experience ── */}
             <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
@@ -383,7 +371,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </div>
             </section>
 
-            {/* ── 5. Education ── */}
             {visibleEdu.length > 0 && (
                 <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                     <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
@@ -435,7 +422,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </section>
             )}
 
-            {/* ── 6. Philosophy ── */}
             {philosophy && philosophy.length > 0 && (
                 <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
                     <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
@@ -484,7 +470,6 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                 </section>
             )}
 
-            {/* ── 7. CTA ── */}
             <section className="py-24 bg-zinc-900 dark:bg-zinc-900">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <motion.div

@@ -25,7 +25,6 @@ export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
-    // Delayed navigation handler allowing circular wave exit animation to complete smoothly on mobile
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         if (!isOpen) return;
         e.preventDefault();
@@ -116,7 +115,6 @@ export function Navbar() {
 
                     <div className="md:hidden flex items-center gap-2 relative z-[101]">
                         <ThemeToggle />
-                        {/* Animated hamburger icon button transitioning smoothly to X */}
                         <motion.button
                             onClick={() => setIsOpen(!isOpen)}
                             aria-label="Toggle Navigation Menu"
@@ -166,7 +164,6 @@ export function Navbar() {
                         transition={{ duration: 0.5, ease: [0.32, 0, 0.67, 0] }}
                         className="fixed inset-0 bg-zinc-50 dark:bg-zinc-950 z-[99] flex flex-col justify-between items-center px-6 pt-28 pb-10 overflow-y-auto text-zinc-900 dark:text-white transform-gpu"
                     >
-                        {/* Grid background matching Hero section pattern */}
                         <div
                             className="absolute inset-0 z-0 dark:hidden pointer-events-none opacity-[0.05]"
                             style={{
@@ -182,7 +179,6 @@ export function Navbar() {
                             }}
                         />
 
-                        {/* Centered Large Navigation Links */}
                         <div className="w-full my-auto flex flex-col items-center justify-center gap-6 sm:gap-8 relative z-10">
                             {navLinks.map((link, i) => {
                                 const isActive = link.href === '/'
@@ -227,7 +223,6 @@ export function Navbar() {
                             })}
                         </div>
 
-                        {/* Centered Actions and Social Links */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

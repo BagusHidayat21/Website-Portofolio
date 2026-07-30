@@ -29,7 +29,6 @@ export function Chatbot() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Show tooltip on page load
     useEffect(() => {
         if (!hasInteracted) {
             const timer = setTimeout(() => setShowTooltip(true), 1500);
@@ -37,7 +36,6 @@ export function Chatbot() {
         }
     }, [hasInteracted]);
 
-    // Auto-hide tooltip after 5 seconds
     useEffect(() => {
         if (showTooltip) {
             const timer = setTimeout(() => {
@@ -62,7 +60,7 @@ export function Chatbot() {
         } else {
             document.body.style.overflow = 'unset';
         }
-        
+
         if (isOpen && inputRef.current) {
             inputRef.current.focus();
         }
@@ -72,13 +70,12 @@ export function Chatbot() {
         };
     }, [isOpen]);
 
-    // Handle click outside to close on desktop
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (isOpen && window.innerWidth >= 1024) {
                 const chatWindow = document.getElementById('chat-window');
                 const chatButton = document.getElementById('chat-toggle-button');
-                if (chatWindow && !chatWindow.contains(event.target as Node) && 
+                if (chatWindow && !chatWindow.contains(event.target as Node) &&
                     chatButton && !chatButton.contains(event.target as Node)) {
                     setIsOpen(false);
                 }
@@ -108,7 +105,6 @@ export function Chatbot() {
         setInputValue('');
         setIsTyping(true);
 
-        // Simulate typing delay
         setTimeout(() => {
             const response = getChatResponse(text);
             const botMessage: Message = {
@@ -193,7 +189,6 @@ export function Chatbot() {
                         </div>
 
                         <div className="p-3 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
-                            {/* Suggestions - Always show to help user navigate */}
                             <div className="pb-3 flex flex-wrap gap-2">
                                 {quickSuggestions.map((suggestion) => (
                                     <button
@@ -281,4 +276,3 @@ function ChatTooltip({ onClose }: { onClose: () => void }) {
         </motion.div>
     );
 }
-

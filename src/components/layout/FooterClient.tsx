@@ -22,7 +22,6 @@ export function FooterClient({ profile }: FooterClientProps) {
     return (
         <footer className="relative bg-zinc-950 dark:bg-black border-t border-zinc-800 overflow-hidden">
 
-            {/* Subtle dot grid */}
             <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
@@ -31,7 +30,6 @@ export function FooterClient({ profile }: FooterClientProps) {
                 }}
             />
 
-            {/* Background "HID." ghost text */}
             <div
                 className="absolute bottom-0 right-0 font-display font-black leading-none tracking-tighter pointer-events-none select-none"
                 style={{
@@ -45,11 +43,9 @@ export function FooterClient({ profile }: FooterClientProps) {
                 HID.
             </div>
 
-            {/* ── Top divider with name ───────────────────────────── */}
             <div className="relative z-10 section-container pt-14 pb-10 border-b border-zinc-800">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
 
-                    {/* Brand */}
                     <div>
                         <h2 className="font-display text-3xl md:text-4xl font-black tracking-tighter text-white leading-none mb-2">
                             {profile.name}<span className="text-zinc-700">.</span>
@@ -59,7 +55,6 @@ export function FooterClient({ profile }: FooterClientProps) {
                         </p>
                     </div>
 
-                    {/* Social links */}
                     <div className="flex items-center gap-1">
                         {github && (
                             <Link
@@ -94,16 +89,13 @@ export function FooterClient({ profile }: FooterClientProps) {
                 </div>
             </div>
 
-            {/* ── Bottom bar ──────────────────────────────────────── */}
             <div className="relative z-10 section-container py-5">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
 
-                    {/* Copyright + location */}
                     <p className="text-zinc-700 text-xs font-mono tracking-wide">
                         © {currentYear} {profile.name} · {profile.location}
                     </p>
 
-                    {/* Nav */}
                     <nav className="flex items-center gap-5">
                         {navLinks.map(link => (
                             <Link

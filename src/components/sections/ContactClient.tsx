@@ -1,6 +1,5 @@
 'use client';
 
-// Premium Minimalist Contact Section - Refined
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Copy, Check, Mail, HandMetal, Github, Linkedin } from 'lucide-react';
@@ -37,7 +36,6 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
             <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10">
                 <div className="flex flex-col md:flex-row gap-12 md:gap-16 lg:gap-24 items-start">
 
-                    {/* Left: Heading & Context */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -60,7 +58,6 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                             I&apos;m currently available for freelance work and open to full-time opportunities. If you have a project that needs some creative touch, I&apos;d love to hear about it.
                         </p>
 
-                        {/* Socials Grid */}
                         <div className="grid grid-cols-2 gap-4 max-w-sm">
                             {socials.map((social) => (
                                 <Link
@@ -80,7 +77,6 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         </div>
                     </motion.div>
 
-                    {/* Right: Email Action Card */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -88,7 +84,6 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         className="md:w-1/2 w-full"
                     >
                         <Card className="bg-zinc-900 dark:bg-zinc-800 text-white dark:text-zinc-100 border-0 overflow-hidden relative flex flex-col justify-between p-6 md:p-8 shadow-2xl dark:shadow-zinc-900/50">
-                            {/* Texture */}
                             <div className="absolute inset-0 opacity-20 dark:opacity-10"
                                 style={{
                                     backgroundImage: `radial-gradient(circle, #333 1px, transparent 1px)`,

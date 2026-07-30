@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 export default function Loading() {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-zinc-950">
-            {/* Background Grid Pattern */}
             <div
                 className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
                 style={{
@@ -22,7 +21,6 @@ export default function Loading() {
             />
 
             <div className="relative z-10 flex flex-col items-center gap-8">
-                {/* Logo / Brand */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -33,7 +31,6 @@ export default function Loading() {
                     </h1>
                 </motion.div>
 
-                {/* Loading Bar */}
                 <div className="w-48 h-[2px] bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                     <motion.div
                         className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full"
@@ -47,7 +44,6 @@ export default function Loading() {
                     />
                 </div>
 
-                {/* Loading Text */}
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

@@ -1,6 +1,5 @@
 'use client';
 
-// Minimalist About Section with Timeline
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useRef } from 'react';
@@ -8,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Briefcase, GraduationCap, Download, ArrowUpRight } from 'lucide-react';
 
-// Interface matching the updated Experience model
 interface ExperienceItem {
     id: number;
     title: string;
@@ -38,7 +36,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
 
     return (
         <section id="about" ref={containerRef} className="py-32 bg-white dark:bg-zinc-950 relative overflow-hidden">
-            {/* Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-zinc-50 dark:from-zinc-900 to-transparent opacity-50 pointer-events-none" />
 
             <motion.div
@@ -47,7 +44,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
             >
                 <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
 
-                    {/* Left Column: Biography & Intro */}
                     <div className="lg:col-span-5">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
@@ -85,7 +81,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                         </motion.div>
                     </div>
 
-                    {/* Right Column: Experience Timeline */}
                     <div className="lg:col-span-7">
                         <motion.div
                             initial={{ opacity: 0, y: 50 }}
@@ -110,7 +105,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                                         transition={{ delay: index * 0.1 }}
                                         className="relative group"
                                     >
-                                        {/* Timeline Dot */}
                                         <div className="absolute -left-[39px] top-1 h-5 w-5 rounded-full border-4 border-white dark:border-zinc-950 bg-zinc-300 dark:bg-zinc-700 group-hover:bg-zinc-900 dark:group-hover:bg-zinc-100 transition-colors" />
 
                                         <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all hover:shadow-sm">
@@ -127,7 +121,6 @@ export function AboutClient({ bio, resumeUrl, experiences }: AboutClientProps) {
                                                 {item.description}
                                             </p>
 
-                                            {/* Skills */}
                                             {item.skills && item.skills.length > 0 && (
                                                 <div className="flex flex-wrap gap-2 mb-4">
                                                     {item.skills.map(skill => (

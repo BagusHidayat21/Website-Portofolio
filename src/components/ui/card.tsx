@@ -2,7 +2,6 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// Premium card with elegant shadow and hover effects
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
