@@ -1,7 +1,5 @@
-// Framer Motion animation variants for portfolio website
 import { Variants } from 'framer-motion';
 
-// Fade up animation - elements fade in while moving up
 export const fadeUp: Variants = {
     hidden: {
         opacity: 0,
@@ -17,7 +15,6 @@ export const fadeUp: Variants = {
     },
 };
 
-// Fade in animation - simple opacity fade
 export const fadeIn: Variants = {
     hidden: {
         opacity: 0,
@@ -31,7 +28,6 @@ export const fadeIn: Variants = {
     },
 };
 
-// Stagger container - used to stagger children animations
 export const staggerContainer: Variants = {
     hidden: {},
     visible: {
@@ -42,7 +38,6 @@ export const staggerContainer: Variants = {
     },
 };
 
-// Scale animation for cards and interactive elements
 export const scaleUp: Variants = {
     hidden: {
         opacity: 0,
@@ -58,7 +53,6 @@ export const scaleUp: Variants = {
     },
 };
 
-// Slide in from left
 export const slideInLeft: Variants = {
     hidden: {
         opacity: 0,
@@ -74,7 +68,6 @@ export const slideInLeft: Variants = {
     },
 };
 
-// Slide in from right
 export const slideInRight: Variants = {
     hidden: {
         opacity: 0,
@@ -90,14 +83,12 @@ export const slideInRight: Variants = {
     },
 };
 
-// Hover scale effect for interactive elements
 export const hoverScale = {
     whileHover: { scale: 1.02 },
     whileTap: { scale: 0.98 },
     transition: { duration: 0.2 },
 };
 
-// Hover glow effect
 export const hoverGlow = {
     whileHover: {
         boxShadow: '0 0 30px rgba(255, 255, 255, 0.1)',
@@ -105,7 +96,6 @@ export const hoverGlow = {
     transition: { duration: 0.3 },
 };
 
-// Navbar animation
 export const navItem: Variants = {
     hidden: {
         opacity: 0,
@@ -120,7 +110,6 @@ export const navItem: Variants = {
     },
 };
 
-// Text reveal animation for hero section
 export const textReveal: Variants = {
     hidden: {
         opacity: 0,
@@ -136,7 +125,6 @@ export const textReveal: Variants = {
     },
 };
 
-// Icon bounce animation
 export const iconBounce = {
     whileHover: {
         y: -3,
@@ -146,4 +134,3 @@ export const iconBounce = {
         },
     },
 };
-
