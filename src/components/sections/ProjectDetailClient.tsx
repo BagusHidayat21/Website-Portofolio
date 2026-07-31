@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, Github } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -130,9 +131,16 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                     initial={{ opacity: 0, y: 40 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    className="rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-2xl dark:shadow-zinc-950/50"
+                                    className="relative aspect-[3/2] rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-2xl dark:shadow-zinc-950/50"
                                 >
-                                    <img src={project.images[0]} alt="Project Highlight" className="w-full h-auto" />
+                                    <Image
+                                        src={project.images[0]}
+                                        alt="Project Highlight"
+                                        fill
+                                        sizes="(min-width: 1024px) 66vw, 100vw"
+                                        priority
+                                        className="object-cover"
+                                    />
                                 </motion.div>
                             )}
 
@@ -169,10 +177,12 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                                 transition={{ delay: i * 0.1 }}
                                                 className={`relative aspect-video rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 group border border-zinc-100 dark:border-zinc-800 ${spanClass}`}
                                             >
-                                                <img
+                                                <Image
                                                     src={img}
                                                     alt={`Screenshot ${i + 2}`}
-                                                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                                                    fill
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
+                                                    className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105"
                                                 />
                                                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
                                             </motion.div>

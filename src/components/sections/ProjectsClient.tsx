@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { useState, useRef } from 'react';
 import { ExternalLink, Github, ArrowUpRight, Search, FolderOpen, Layers } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Project } from '@/data/static-db';
 
@@ -58,10 +59,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <Link href={`/projects/${project.slug}`} className="block">
                 <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800/60 mb-4">
                     {imageUrl ? (
-                        <img
+                        <Image
                             src={imageUrl}
                             alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                     ) : (
                         <div className="flex items-center justify-center w-full h-full">

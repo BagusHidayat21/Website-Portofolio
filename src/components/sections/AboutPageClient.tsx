@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { useRef } from 'react';
@@ -218,8 +219,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                             className="md:col-span-8 h-[320px] md:h-[520px] relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800"
                         >
                             {mainImage && (
-                                <img src={mainImage} alt="Workspace"
-                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                                <Image src={mainImage} alt="Workspace" fill
+                                    sizes="(min-width: 768px) 66vw, 100vw"
+                                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
                             )}
                             <div className="absolute top-5 left-5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">
                                 My Workspace
@@ -235,8 +237,9 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 className="flex-1 relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 min-h-[200px]"
                             >
                                 {secondaryImage && (
-                                    <img src={secondaryImage} alt="Setup"
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                                    <Image src={secondaryImage} alt="Setup" fill
+                                        sizes="(min-width: 768px) 33vw, 100vw"
+                                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
                                 )}
                             </motion.div>
 

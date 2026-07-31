@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Project } from '@/data/static-db';
@@ -59,7 +60,13 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
                                             <span className="text-9xl font-black text-zinc-50 dark:text-zinc-800 select-none opacity-50">{index + 1}</span>
                                         </div>
                                         {project.images && project.images[0] && (
-                                            <img src={project.images[0]} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                            <Image
+                                                src={project.images[0]}
+                                                alt={project.title}
+                                                fill
+                                                sizes="(min-width: 1024px) 58vw, 100vw"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
                                         )}
 
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-sm">
