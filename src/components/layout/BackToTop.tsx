@@ -12,7 +12,7 @@ export function BackToTop() {
             setIsVisible(window.scrollY > 300);
         };
 
-        window.addEventListener('scroll', toggleVisibility);
+        window.addEventListener('scroll', toggleVisibility, { passive: true });
         return () => window.removeEventListener('scroll', toggleVisibility);
     }, []);
 

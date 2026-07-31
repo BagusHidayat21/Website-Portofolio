@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/private/',
         },
-        sitemap: 'https://www.bagus-hidayat.my.id/sitemap.xml',
+        sitemap: 'https://bagus-hidayat.my.id/sitemap.xml',
     };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useState, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SplashScreenProps {
@@ -8,33 +8,28 @@ interface SplashScreenProps {
 }
 
 export function SplashScreen({ children }: SplashScreenProps) {
-    const [isSplashComplete, setIsSplashComplete] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [showSplash, setShowSplash] = useState(false);
 
-    useEffect(() => {
-        const hasShownSplash = sessionStorage.getItem('splashShown');
-        if (hasShownSplash) {
-            setIsSplashComplete(true);
+    useLayoutEffect(() => {
+        if (!sessionStorage.getItem('splashShown')) {
+            setShowSplash(true);
         }
-        setIsInitialized(true);
     }, []);
 
     useEffect(() => {
-        if (isInitialized && !isSplashComplete) {
-            const timer = setTimeout(() => {
-                sessionStorage.setItem('splashShown', 'true');
-                setIsSplashComplete(true);
-            }, 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [isInitialized, isSplashComplete]);
-
-    if (!isInitialized) return null;
+        if (!showSplash) return;
+        const timer = setTimeout(() => {
+            sessionStorage.setItem('splashShown', 'true');
+            setShowSplash(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, [showSplash]);
 
     return (
         <>
-            <AnimatePresence mode="wait">
-                {!isSplashComplete && (
+            {children}
+            <AnimatePresence>
+                {showSplash && (
                     <motion.div
                         initial={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -106,18 +101,6 @@ export function SplashScreen({ children }: SplashScreenProps) {
                                 ))}
                             </motion.div>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {isSplashComplete && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                        {children}
                     </motion.div>
                 )}
             </AnimatePresence>

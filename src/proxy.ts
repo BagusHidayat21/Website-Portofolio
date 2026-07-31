@@ -5,8 +5,8 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     const hostname = request.headers.get('host') || '';
 
-    if (!hostname.includes('www.') && !hostname.includes('localhost') && !hostname.includes('127.0.0.1')) {
-        url.hostname = `www.${hostname}`;
+    if (hostname.startsWith('www.')) {
+        url.hostname = hostname.slice(4);
         return NextResponse.redirect(url, 301); // 301 = Permanent Redirect (SEO Friendly)
     }
 

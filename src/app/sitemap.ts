@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { projectsData } from '@/data/static-db';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://www.bagus-hidayat.my.id';
+    const baseUrl = 'https://bagus-hidayat.my.id';
 
     const staticPages: MetadataRoute.Sitemap = [
         {
