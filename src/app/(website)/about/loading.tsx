@@ -1,21 +1,13 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
 export default function AboutLoading() {
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950">
             <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 bg-zinc-50 dark:bg-zinc-900">
                 <div className="container mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="max-w-4xl space-y-6"
-                    >
+                    <div className="animate-in fade-in duration-500 max-w-4xl space-y-6">
                         <div className="h-16 md:h-24 w-80 bg-zinc-200 dark:bg-zinc-800 rounded-lg animate-pulse" />
                         <div className="h-16 md:h-24 w-64 bg-zinc-200 dark:bg-zinc-800 rounded-lg animate-pulse" />
                         <div className="h-6 w-full max-w-2xl bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse" />
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
