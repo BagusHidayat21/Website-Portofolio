@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Projects | Bagus Hidayat",
         description: "Explore web applications, mobile apps, and data engineering solutions by Bagus Hidayat.",
-        url: "https://bagus-hidayat.my.id/projects",
+        url: "https://www.bagus-hidayat.my.id/projects",
     },
 };
 

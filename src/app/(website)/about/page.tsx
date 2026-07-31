@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "About | Bagus Hidayat",
         description: "Learn about Bagus Hidayat - Full-Stack Web Developer specializing in Data Engineering and Machine Learning.",
-        url: "https://bagus-hidayat.my.id/about",
+        url: "https://www.bagus-hidayat.my.id/about",
     },
 };
 

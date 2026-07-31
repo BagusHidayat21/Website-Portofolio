@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         openGraph: {
             title: `${project.title} | Bagus Hidayat`,
             description: project.description || `${project.title} - A project by Bagus Hidayat.`,
-            url: `https://bagus-hidayat.my.id/projects/${project.slug}`,
+            url: `https://www.bagus-hidayat.my.id/projects/${project.slug}`,
             images: project.thumbnail ? [{ url: project.thumbnail }] : undefined,
         },
     };
