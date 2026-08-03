@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build *)",
+      "Read(//home/bagus-hidayat/.nvm/**)",
+      "Bash(find / -maxdepth 4 -iname \"node\" -type f)",
+      "Read(//home/bagus-hidayat/**)",
+      "Bash(curl -s -o /dev/null -w \"HOME: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Read(//tmp/**)",
+      "Bash(convert /tmp/claude-1000/-home-bagus-hidayat-Documents-Project-Website-Portofolio/fddbf6df-73f8-4359-ab90-088b082b056c/scratchpad/full.png -crop 1400x60+0+840 -resize 200% /tmp/claude-1000/-home-bagus-hidayat-Documents-Project-Website-Portofolio/fddbf6df-73f8-4359-ab90-088b082b056c/scratchpad/marquee-zoom.png)",
+      "Bash(kill -9 8617)"
+    ]
+  }
+}
