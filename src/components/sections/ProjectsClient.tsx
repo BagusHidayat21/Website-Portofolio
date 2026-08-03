@@ -2,10 +2,11 @@
 
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { useState, useRef } from 'react';
-import { ExternalLink, Github, ArrowUpRight, Search, FolderOpen, Layers } from 'lucide-react';
+import { ExternalLink, Github, ArrowUpRight, Search, FolderOpen, Layers, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Project } from '@/data/static-db';
+import { ProjectWithGithubStats } from '@/lib/github';
 
 const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
 
@@ -43,7 +44,7 @@ function detectCategory(project: Project): string {
     return 'web';
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project, index }: { project: ProjectWithGithubStats; index: number }) {
     const imageUrl = project.images?.[0] ?? null;
     const category = detectCategory(project);
 
@@ -109,6 +110,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                             {project.description}
                         </p>
                     </div>
+                    {typeof project.githubStars === 'number' && (
+                        <div className="flex items-center gap-1 text-xs font-medium text-zinc-400 dark:text-zinc-500 shrink-0 pt-4">
+                            <Star className="w-3.5 h-3.5" />
+                            {project.githubStars}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 mt-3">
@@ -131,7 +138,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     );
 }
 
-export function ProjectsClient({ projects }: { projects: Project[] }) {
+export function ProjectsClient({ projects }: { projects: ProjectWithGithubStats[] }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const heroRef = useRef(null);

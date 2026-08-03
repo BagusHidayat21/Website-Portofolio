@@ -1,15 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Github, ExternalLink } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Github, ExternalLink, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRef } from 'react';
-import { Project } from '@/data/static-db';
+import { ProjectWithGithubStats } from '@/lib/github';
 
-export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
+export function FeaturedProjectsClient({ projects }: { projects: ProjectWithGithubStats[] }) {
     const containerRef = useRef(null);
 
     return (
@@ -90,12 +90,18 @@ export function FeaturedProjectsClient({ projects }: { projects: Project[] }) {
 
                                 <div className={`lg:col-span-5 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
                                     <div className="flex flex-col h-full justify-center">
-                                        <div className="flex gap-2 flex-wrap mb-6">
+                                        <div className="flex items-center gap-2 flex-wrap mb-6">
                                             {project.techStack.slice(0, 4).map((tech, i) => (
                                                 <Badge key={i} variant="secondary" className="px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
                                                     {tech}
                                                 </Badge>
                                             ))}
+                                            {typeof project.githubStars === 'number' && (
+                                                <span className="flex items-center gap-1 text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                                                    <Star className="w-3.5 h-3.5" />
+                                                    {project.githubStars}
+                                                </span>
+                                            )}
                                         </div>
 
                                         <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">

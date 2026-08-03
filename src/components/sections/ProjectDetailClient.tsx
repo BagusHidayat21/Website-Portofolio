@@ -1,17 +1,17 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowLeft, ArrowUpRight, Github } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Github, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Project } from '@/data/static-db';
+import { ProjectWithGithubStats } from '@/lib/github';
 import ReactMarkdown from 'react-markdown';
 
-export function ProjectDetailClient({ project }: { project: Project }) {
+export function ProjectDetailClient({ project }: { project: ProjectWithGithubStats }) {
     const router = useRouter();
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
@@ -122,6 +122,25 @@ export function ProjectDetailClient({ project }: { project: Project }) {
                                     {new Date(project.updatedAt).getFullYear()}
                                 </p>
                             </div>
+
+                            {(typeof project.githubStars === 'number' || project.githubUpdatedAt) && (
+                                <div>
+                                    <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">GitHub</h3>
+                                    <div className="space-y-2">
+                                        {typeof project.githubStars === 'number' && (
+                                            <p className="flex items-center gap-1.5 text-zinc-900 dark:text-zinc-100 font-medium">
+                                                <Star className="w-4 h-4" />
+                                                {project.githubStars} stars
+                                            </p>
+                                        )}
+                                        {project.githubUpdatedAt && (
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                                Last commit {new Date(project.githubUpdatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="lg:col-span-8 space-y-16">
