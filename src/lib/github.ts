@@ -28,14 +28,17 @@ function repoNameFromUrl(githubUrl: string | null): string | null {
 
 async function fetchRepoList(useToken: boolean): Promise<Response> {
     const headers: HeadersInit = { Accept: 'application/vnd.github+json' };
-    if (useToken && process.env.GITHUB_TOKEN) {
+    const hasToken = useToken && Boolean(process.env.GITHUB_TOKEN);
+
+    if (hasToken) {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
 
-    return fetch(
-        `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`,
-        { headers, next: { revalidate: REVALIDATE_SECONDS } }
-    );
+    const url = hasToken
+        ? 'https://api.github.com/user/repos?type=all&per_page=100'
+        : `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`;
+
+    return fetch(url, { headers, next: { revalidate: REVALIDATE_SECONDS } });
 }
 
 async function fetchRepos(): Promise<Map<string, GithubApiRepo>> {
