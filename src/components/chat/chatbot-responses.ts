@@ -82,7 +82,7 @@ const responses: ChatResponse[] = [
         patterns: ['available', 'hire', 'freelance', 'open'],
         getResponse: () => profileData.isAvailableForWork
             ? `Yes! I'm currently **available for freelance work and full-time opportunities**. Send me an email at ${profileData.email} to discuss your project!`
-            : "I'm currently focused on existing commitments, but feel free to reach out for future opportunities!"
+            : "I'm currently focused on my full-time role at PT Universal Big Data, but feel free to reach out for future opportunities!"
     },
     {
         patterns: ['where', 'location', 'based', 'live', 'dimana', 'lokasi'],
