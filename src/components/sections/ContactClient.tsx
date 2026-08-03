@@ -55,7 +55,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         </h2>
 
                         <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-md">
-                            I&apos;m currently available for freelance work and open to full-time opportunities. If you have a project that needs some creative touch, I&apos;d love to hear about it.
+                            I am currently working full-time as a Software Engineer & Industrial Trainer at PT Universal Big Data. However, I am always open to discussing innovative ideas, technical collaborations, and data-driven projects.
                         </p>
 
                         <div className="grid grid-cols-2 gap-4 max-w-sm">

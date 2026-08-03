@@ -44,11 +44,11 @@ export function About() {
                             className="space-y-6"
                         >
                             <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
-                                I&apos;m an undergraduate student at <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Universitas Negeri Malang</strong>, specializing in Full Stack Web Development. I focus on building robust, scalable applications with a seamless user experience.
+                                I am a graduate of <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Universitas Negeri Malang</strong> currently working full-time at <strong className="font-semibold text-zinc-900 dark:text-zinc-100">PT Universal Big Data</strong>, specializing in Full Stack Web Development, Software Engineering, and Industrial Mentoring.
                             </p>
 
                             <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                                Currently, I am deepening my expertise in modern web architectures while expanding my horizons into <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Machine Learning</strong> and <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Data Science</strong> to create more intelligent, data-driven digital solutions.
+                                Leveraging my industrial software experience, I integrate modern web architectures with <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Machine Learning</strong> and <strong className="font-semibold text-zinc-900 dark:text-zinc-100">Data Science</strong> to engineer intelligent, scalable digital solutions.
                             </p>
 
                             <div className="pt-6">

@@ -4,7 +4,7 @@ import { AboutPageClient, AboutContentData } from "@/components/sections/AboutPa
 
 export const metadata: Metadata = {
     title: "About",
-    description: "Learn about Bagus Hidayat - Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies. Currently studying at Universitas Negeri Malang.",
+    description: "Learn about Bagus Hidayat - Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies. Graduate of Universitas Negeri Malang currently working at PT Universal Big Data.",
     openGraph: {
         title: "About | Bagus Hidayat",
         description: "Learn about Bagus Hidayat - Full-Stack Web Developer specializing in Data Engineering and Machine Learning.",

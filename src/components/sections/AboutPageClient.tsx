@@ -13,6 +13,7 @@ export interface PhilosophyItem { title: string; description: string; icon: stri
 export interface ExperienceItem {
     id: number; title: string; company: string; year: string;
     description: string; skills: string[]; location?: string | null;
+    category?: string | null;
     isVisible: boolean; order: number;
 }
 export interface EducationItem {
@@ -90,8 +91,10 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
     const { heroTitle, heroSubtitle, heroDescription, storyContent, images, tags, philosophy } = aboutContent;
     const mainImage      = images?.[0];
     const secondaryImage = images?.[1];
-    const visibleExp     = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
-    const visibleEdu     = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
+    const visibleExp         = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
+    const workExperiences    = visibleExp.filter(e => e.category === 'Work');
+    const projectExperiences = visibleExp.filter(e => e.category === 'Project' || e.category === 'Achievement');
+    const visibleEdu         = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
 
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
@@ -180,7 +183,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 className="text-7xl sm:text-8xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-tighter leading-none"
                                 style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}
                             >
-                                04
+                                {(new Date().getFullYear() - 2019).toString().padStart(2, '0')}
                             </h2>
                             <p className="text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase mt-1">
                                 Years Coding
@@ -194,9 +197,8 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                             className="flex flex-row md:flex-col gap-6 md:items-end"
                         >
                             {[
-                                { value: '15+', label: 'Projects' },
+                                { value: `${experience.length}+`, label: 'Experience' },
                                 { value: '3.86', label: 'GPA' },
-                                { value: '8+', label: 'Experience' },
                             ].map(stat => (
                                 <div key={stat.label} className="text-center lg:text-right">
                                     <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100">{stat.value}</span>
@@ -314,15 +316,17 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
                             <div className="md:sticky md:top-32">
-                                <SectionLabel>Work & Projects</SectionLabel>
+                                <SectionLabel>Career Path</SectionLabel>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                    Experience
+                                    Work Experience
                                 </h2>
                                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm mb-8">
-                                    Projects and roles that shaped my expertise.
+                                    Professional engineering roles and industrial positions.
                                 </p>
                                 <Link
-                                    href="#"
+                                    href="/resume.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4"
                                 >
                                     <Download className="w-4 h-4" />
@@ -332,7 +336,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                         </div>
 
                         <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
-                            {visibleExp.map((exp, i) => (
+                            {workExperiences.map((exp, i) => (
                                 <motion.div
                                     key={exp.id}
                                     initial={{ opacity: 0, y: 16 }}
@@ -373,6 +377,66 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                     </div>
                 </div>
             </section>
+
+            {projectExperiences.length > 0 && (
+                <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
+                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                            <div className="md:col-span-4">
+                                <div className="md:sticky md:top-32">
+                                    <SectionLabel>Key Highlights</SectionLabel>
+                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
+                                        Projects & Achievements
+                                    </h2>
+                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                                        Award-winning products, research publications, and community projects.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+                                {projectExperiences.map((exp, i) => (
+                                    <motion.div
+                                        key={exp.id}
+                                        initial={{ opacity: 0, y: 16 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.07 }}
+                                        className="py-8 first:pt-0 last:pb-0 group"
+                                    >
+                                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                                            <div>
+                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                                    {exp.title}
+                                                </h3>
+                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                                                    <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
+                                                    {exp.company}
+                                                </p>
+                                            </div>
+                                            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
+                                                {exp.year}
+                                            </span>
+                                        </div>
+
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                                            {exp.description}
+                                        </p>
+
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {exp.skills.map(skill => (
+                                                <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {visibleEdu.length > 0 && (
                 <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
@@ -445,6 +509,8 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 <div className="grid sm:grid-cols-2 gap-4">
                                     {(philosophy as PhilosophyItem[]).map((item, i) => {
                                         const Icon = ICON_MAP[item.icon] || Database;
+                                        const isOdd = philosophy.length % 2 !== 0;
+                                        const isLast = i === philosophy.length - 1;
                                         return (
                                             <motion.div
                                                 key={i}
@@ -452,7 +518,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                                 whileInView={{ opacity: 1, y: 0 }}
                                                 viewport={{ once: true }}
                                                 transition={{ delay: i * 0.08 }}
-                                                className="group p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-300"
+                                                className={`group p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-300 ${isOdd && isLast ? 'sm:col-span-2' : ''}`}
                                             >
                                                 <div className="w-10 h-10 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-4">
                                                     <Icon className="w-5 h-5 text-white dark:text-zinc-900" />

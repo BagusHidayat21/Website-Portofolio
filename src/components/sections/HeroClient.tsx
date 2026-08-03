@@ -5,7 +5,7 @@ import { ArrowRight, ArrowDownRight, Github, Linkedin, Mail, Send, MousePointer2
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { TechStack } from '@/data/static-db';
 
 interface HeroClientProps {
@@ -71,16 +71,16 @@ function FloatingParticle({
 function TechMarquee({ tech }: { tech: TechStack[] }) {
     if (tech.length === 0) return null;
 
-    const displayTech = [...tech, ...tech, ...tech, ...tech, ...tech, ...tech];
+    const displayTech = [...tech, ...tech, ...tech, ...tech];
 
     return (
         <div className="w-full overflow-hidden border-y border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-4 absolute bottom-0 left-0 z-20">
-            <div className="animate-marquee-css gap-16">
+            <div className="animate-marquee-css items-center gap-8">
                 {displayTech.map((item, i) => (
-                    <div key={i} className="flex items-center gap-4 shrink-0">
-                        <span className="text-sm font-bold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase">{item.name}</span>
-                        <div className="w-1.5 h-1.5 bg-zinc-300 dark:bg-zinc-600 rounded-full" />
-                    </div>
+                    <Fragment key={i}>
+                        <span className="text-sm font-bold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase leading-none shrink-0">{item.name}</span>
+                        <div className="w-1.5 h-1.5 shrink-0 bg-zinc-300 dark:bg-zinc-600 rounded-full" />
+                    </Fragment>
                 ))}
             </div>
         </div>

@@ -17,15 +17,17 @@ export const metadata: Metadata = {
     default: "Bagus Hidayat | Full-Stack Web Developer",
     template: "Bagus Hidayat | %s"
   },
-  description: "Portfolio of Bagus Hidayat, an Undergraduate Student at Universitas Negeri Malang specializing in Data Engineering, Machine Learning, and Robust Full-Stack Development.",
+  description: "Portfolio of Bagus Hidayat, Software Engineer & Graduate of Universitas Negeri Malang working full-time at PT Universal Big Data, specializing in Full-Stack Development, Data Engineering, and Machine Learning.",
   keywords: [
     "Bagus Hidayat",
     "Full Stack Web Developer",
+    "Software Engineer",
+    "PT Universal Big Data",
     "Data Engineer",
     "Machine Learning Engineer",
     "Universitas Negeri Malang",
     "Next.js",
-    "React Native",
+    "React",
     "Laravel",
     "Software Engineering"
   ],
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://www.bagus-hidayat.my.id",
     title: "Bagus Hidayat | Full-Stack Web Developer",
-    description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
+    description: "Software Engineer & Graduate of Universitas Negeri Malang working full-time at PT Universal Big Data.",
     siteName: "Bagus Hidayat Portfolio",
     images: [
       {
@@ -50,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Bagus Hidayat | Full-Stack Web Developer",
-    description: "Building intelligent digital ecosystems with Next.js and Machine Learning. Undergraduate at Universitas Negeri Malang.",
+    description: "Software Engineer & Graduate of Universitas Negeri Malang working full-time at PT Universal Big Data.",
     images: ["/og-image.png"],
   },
   robots: {
