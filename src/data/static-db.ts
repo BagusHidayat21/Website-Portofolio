@@ -43,6 +43,7 @@ export interface Experience {
     skills: string[];
     location?: string;
     category?: 'Work' | 'Project' | 'Achievement';
+    url?: string;
     isVisible: boolean;
     order: number;
 }
@@ -260,8 +261,8 @@ export const projectsData: Project[] = [
         content: `## Overview\nMagic Remove is an interactive web application designed for photo editing and image cleanup. Utilizing an HTML5 canvas mask selector and responsive web interface, users can upload images, select regions, and process extracted graphics directly in their web browser.\n\n## Key Features\n- Web-based photo canvas mask selection tool\n- Client-side image preview & subject extraction\n- High-resolution PNG image download\n- Responsive web UI for desktop and mobile browsers`,
         githubUrl: 'https://github.com/BagusHidayat21/magic-remove',
         liveUrl: null,
-        thumbnail: 'https://images.unsplash.com/photo-1542744094-3a31b272c490?w=800&auto=format&fit=crop&q=80',
-        images: ['https://images.unsplash.com/photo-1542744094-3a31b272c490?w=1200&auto=format&fit=crop&q=80'],
+        thumbnail: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80',
+        images: ['https://images.unsplash.com/photo-1626785774573-4b799315345d?w=1200&auto=format&fit=crop&q=80'],
         techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Canvas', 'Web API'],
         tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Web Tool', 'Canvas'],
         isFeatured: false,
@@ -435,12 +436,13 @@ export const experienceData: Experience[] = [
     },
     {
         id: 6,
-        title: 'Conference Paper (Scopus)',
-        company: 'State University of Malang',
-        year: '2024',
-        description: 'Co-authored "Comparison of Tesseract OCR, Easy OCR, and Transformer OCR on Handwritten Image". Research analyzing the performance of various OCR technologies on handwritten datasets.',
+        title: 'Conference Paper (IEEE)',
+        company: '2025 9th International Conference on Electrical, Electronics and Information Engineering (ICEEIE)',
+        year: '2025',
+        description: 'Co-authored "Comparison of Tesseract OCR, Easy OCR, and Transformer OCR on Handwritten Image" with Kartika Candra Kirana, Ira Kumalasari, and Gulpi Qorik Oktagalu. Benchmarked Tesseract, EasyOCR, and Transformer-based OCR (TrOCR, Donut) on crossed-out handwritten text using CER/WER metrics.',
         skills: ['Computer Vision', 'OCR', 'Python', 'Machine Learning'],
         category: 'Achievement',
+        url: 'https://ieeexplore.ieee.org/document/11252079/',
         isVisible: true,
         order: 4
     },
@@ -460,7 +462,7 @@ export const experienceData: Experience[] = [
         title: 'Full Stack Developer (HealMe)',
         company: 'Wintex IID 2024',
         year: '2024',
-        description: 'Sole developer for a comprehensive mental health platform. Architected the entire system using Laravel 10 for the international innovation competition.',
+        description: 'Core full-stack developer on a small team building a comprehensive mental health platform for the international innovation competition. Built the system using Laravel 10.',
         skills: ['Laravel 10', 'System Architecture', 'Full Stack Development', 'Database Design'],
         category: 'Project',
         isVisible: true,
@@ -480,9 +482,9 @@ export const experienceData: Experience[] = [
     {
         id: 3,
         title: 'API Developer (J-TAG)',
-        company: 'SMK Negeri 1 Jenangan',
+        company: 'Independent Project (Alumnus of SMK Negeri 1 Jenangan)',
         year: '2023',
-        description: 'Engineered the core REST API for J-TAG, an enterprise-grade RFID attendance system. Optimized real-time data handling between hardware scanners and the database.',
+        description: 'Engineered the core REST API for J-TAG, an enterprise-grade RFID attendance system built independently after graduating. Optimized real-time data handling between hardware scanners and the database.',
         skills: ['REST API Design', 'IoT Integration', 'Real-time Processing', 'Backend Optimization'],
         category: 'Project',
         isVisible: true,

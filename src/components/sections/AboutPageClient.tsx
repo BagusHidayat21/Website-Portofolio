@@ -13,7 +13,7 @@ export interface PhilosophyItem { title: string; description: string; icon: stri
 export interface ExperienceItem {
     id: number; title: string; company: string; year: string;
     description: string; skills: string[]; location?: string | null;
-    category?: string | null;
+    category?: string | null; url?: string | null;
     isVisible: boolean; order: number;
 }
 export interface EducationItem {
@@ -55,6 +55,56 @@ function FloatingParticle({ size, initialX, initialY, scrollY, speed = 1, delay 
     );
 }
 
+function ExperienceRow({ exp, index }: { exp: ExperienceItem; index: number }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.07 }}
+            className="py-8 first:pt-0 last:pb-0 group"
+        >
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                <div>
+                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                        {exp.title}
+                    </h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
+                        <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
+                        {exp.company}
+                    </p>
+                </div>
+                <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
+                    {exp.year}
+                </span>
+            </div>
+
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                {exp.description}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+                {exp.skills.map(skill => (
+                    <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
+                        {skill}
+                    </span>
+                ))}
+                {exp.url && (
+                    <Link
+                        href={exp.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4 ml-1"
+                    >
+                        View reference
+                        <ArrowUpRight className="w-3 h-3" />
+                    </Link>
+                )}
+            </div>
+        </motion.div>
+    );
+}
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
     return (
         <motion.div
@@ -75,26 +125,26 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
     const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
 
-    const bgY      = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), springConfig);
-    const bgScale  = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.1]), springConfig);
-    const bgOpac   = useSpring(useTransform(scrollYProgress, [0, 0.5], [0.06, 0.02]), springConfig);
+    const bgY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), springConfig);
+    const bgScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.1]), springConfig);
+    const bgOpac = useSpring(useTransform(scrollYProgress, [0, 0.5], [0.06, 0.02]), springConfig);
     const contentY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
     const contentO = useSpring(useTransform(scrollYProgress, [0.6, 1], [1, 0]), springConfig);
-    const orbLY    = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
-    const orbRY    = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
-    const statsY   = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), springConfig);
-    const decorY   = useSpring(useTransform(scrollYProgress, [0, 1], [0, 150]), springConfig);
-    const decorR   = useSpring(useTransform(scrollYProgress, [0, 1], [-12, 20]), springConfig);
+    const orbLY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
+    const orbRY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
+    const statsY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), springConfig);
+    const decorY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 150]), springConfig);
+    const decorR = useSpring(useTransform(scrollYProgress, [0, 1], [-12, 20]), springConfig);
 
     if (!aboutContent) return null;
 
     const { heroTitle, heroSubtitle, heroDescription, storyContent, images, tags, philosophy } = aboutContent;
-    const mainImage      = images?.[0];
+    const mainImage = images?.[0];
     const secondaryImage = images?.[1];
-    const visibleExp         = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
-    const workExperiences    = visibleExp.filter(e => e.category === 'Work');
+    const visibleExp = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
+    const workExperiences = visibleExp.filter(e => e.category === 'Work');
     const projectExperiences = visibleExp.filter(e => e.category === 'Project' || e.category === 'Achievement');
-    const visibleEdu         = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
+    const visibleEdu = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
 
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
@@ -105,20 +155,24 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
             >
                 <div className="hidden lg:block">
                     <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
-                    <FloatingParticle size={80}  initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
-                    <FloatingParticle size={60}  initialX="75%" initialY="60%" scrollY={scrollYProgress} speed={1.2} delay={0.6} />
-                    <FloatingParticle size={100} initialX="5%"  initialY="70%" scrollY={scrollYProgress} speed={0.6} delay={0.3} />
-                    <FloatingParticle size={40}  initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
+                    <FloatingParticle size={80} initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
+                    <FloatingParticle size={60} initialX="75%" initialY="60%" scrollY={scrollYProgress} speed={1.2} delay={0.6} />
+                    <FloatingParticle size={100} initialX="5%" initialY="70%" scrollY={scrollYProgress} speed={0.6} delay={0.3} />
+                    <FloatingParticle size={40} initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
                 </div>
 
                 <motion.div className="absolute inset-0 z-0 dark:hidden pointer-events-none"
-                    style={{ y: bgY, scale: bgScale, opacity: bgOpac,
+                    style={{
+                        y: bgY, scale: bgScale, opacity: bgOpac,
                         backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px' }} />
+                        backgroundSize: '40px 40px'
+                    }} />
                 <motion.div className="absolute inset-0 z-0 hidden dark:block pointer-events-none"
-                    style={{ y: bgY, scale: bgScale, opacity: bgOpac,
+                    style={{
+                        y: bgY, scale: bgScale, opacity: bgOpac,
                         backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px' }} />
+                        backgroundSize: '40px 40px'
+                    }} />
 
                 <motion.div className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none" style={{ y: orbLY }} />
                 <motion.div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-tl from-zinc-300/30 to-transparent dark:from-zinc-600/15 rounded-full blur-3xl pointer-events-none" style={{ y: orbRY }} />
@@ -158,7 +212,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                             >
                                 <Code className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 text-zinc-900 dark:text-zinc-100" />
                                 <div className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] sm:text-xs px-2 py-1 rounded absolute top-8 right-0 sm:top-10 sm:left-6 sm:right-auto whitespace-nowrap">
-                                    GPA 3.86
+                                    GPA 3.85
                                 </div>
                             </motion.div>
                         </div>
@@ -198,7 +252,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                         >
                             {[
                                 { value: `${experience.length}+`, label: 'Experience' },
-                                { value: '3.86', label: 'GPA' },
+                                { value: '3.85', label: 'GPA' },
                             ].map(stat => (
                                 <div key={stat.label} className="text-center lg:text-right">
                                     <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100">{stat.value}</span>
@@ -255,7 +309,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
                                 <Globe className="w-6 h-6 text-zinc-400" />
                                 <div>
                                     <h3 className="text-2xl font-black tracking-tight text-white mb-0.5">Malang</h3>
-                                    <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Universitas Negeri Malang</p>
+                                    <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">PT Universal Big Data</p>
                                 </div>
                             </motion.div>
                         </div>
@@ -337,41 +391,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
                         <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
                             {workExperiences.map((exp, i) => (
-                                <motion.div
-                                    key={exp.id}
-                                    initial={{ opacity: 0, y: 16 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.07 }}
-                                    className="py-8 first:pt-0 last:pb-0 group"
-                                >
-                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                                        <div>
-                                            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                                                {exp.title}
-                                            </h3>
-                                            <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                                                <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                                                {exp.company}
-                                            </p>
-                                        </div>
-                                        <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
-                                            {exp.year}
-                                        </span>
-                                    </div>
-
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                                        {exp.description}
-                                    </p>
-
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {exp.skills.map(skill => (
-                                            <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </motion.div>
+                                <ExperienceRow key={exp.id} exp={exp} index={i} />
                             ))}
                         </div>
                     </div>
@@ -396,41 +416,7 @@ export function AboutPageClient({ aboutContent, experience, education }: AboutPa
 
                             <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
                                 {projectExperiences.map((exp, i) => (
-                                    <motion.div
-                                        key={exp.id}
-                                        initial={{ opacity: 0, y: 16 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.07 }}
-                                        className="py-8 first:pt-0 last:pb-0 group"
-                                    >
-                                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                                            <div>
-                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                                                    {exp.title}
-                                                </h3>
-                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                                                    <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                                                    {exp.company}
-                                                </p>
-                                            </div>
-                                            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
-                                                {exp.year}
-                                            </span>
-                                        </div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                                            {exp.description}
-                                        </p>
-
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {exp.skills.map(skill => (
-                                                <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
-                                                    {skill}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </motion.div>
+                                    <ExperienceRow key={exp.id} exp={exp} index={i} />
                                 ))}
                             </div>
                         </div>
