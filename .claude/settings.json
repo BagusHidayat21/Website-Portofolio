@@ -8,7 +8,23 @@
       "Bash(curl -s -o /dev/null -w \"HOME: %{http_code}\\\\n\" http://localhost:3000/)",
       "Read(//tmp/**)",
       "Bash(convert /tmp/claude-1000/-home-bagus-hidayat-Documents-Project-Website-Portofolio/fddbf6df-73f8-4359-ab90-088b082b056c/scratchpad/full.png -crop 1400x60+0+840 -resize 200% /tmp/claude-1000/-home-bagus-hidayat-Documents-Project-Website-Portofolio/fddbf6df-73f8-4359-ab90-088b082b056c/scratchpad/marquee-zoom.png)",
-      "Bash(kill -9 8617)"
+      "Bash(kill -9 8617)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1542744094-3a31b272c490?w=1200&auto=format&fit=crop&q=80\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://images.unsplash.com/photo-1626785774573-4b799315345d?w=1200&auto=format&fit=crop&q=80\")",
+      "Bash(npx tsc *)",
+      "Bash(./node_modules/.bin/tsc --noEmit -p .)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(find / -maxdepth 4 -iname \"node\" -type f 2>/dev/null | grep -v node_modules | head -20; echo \"---\"; find /home -maxdepth 6 -iname \"node\" -type f 2>/dev/null | head; echo \"---nvm---\"; ls -la ~/.nvm 2>/dev/null; cat ~/.bashrc 2>/dev/null | grep -i node)",
+      "Read(//home/**)",
+      "Bash(pkill -f \"next start\")",
+      "Bash(pkill -f \"PORT=3100\")",
+      "WebSearch",
+      "WebFetch(domain:ieeexplore.ieee.org)",
+      "WebFetch(domain:www.semanticscholar.org)",
+      "WebFetch(domain:www.researchgate.net)",
+      "WebFetch(domain:api.semanticscholar.org)",
+      "Bash(curl -s \"https://api.github.com/repos/BagusHidayat21/Perpustaakan-Desa-Ngadimulyo\")",
+      "Bash(curl -s \"https://api.github.com/repos/dimassetio/healme-project\")"
     ]
   }
 }
