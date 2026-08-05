@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { projectsData } from "@/data/static-db";
-import { withGithubStats } from "@/lib/github";
 import { ProjectDetailClient } from "@/components/sections/ProjectDetailClient";
 import { notFound } from "next/navigation";
 
@@ -51,7 +50,5 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         return notFound();
     }
 
-    const [withStats] = await withGithubStats([project]);
-
-    return <ProjectDetailClient project={withStats} />;
+    return <ProjectDetailClient project={project} />;
 }
