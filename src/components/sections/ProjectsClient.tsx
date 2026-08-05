@@ -39,6 +39,9 @@ const categories = [
 ];
 
 function detectCategory(project: Project): string {
+    const all = [...(project.techStack || []), ...(project.tags || [])].map(t => t.toLowerCase());
+    if (all.some(t => ['android', 'ios', 'flutter', 'dart', 'react native', 'expo', 'kotlin', 'swift'].some(k => t.includes(k)))) return 'mobile';
+    if (all.some(t => ['machine learning', 'ai model', 'data science', 'openai', 'pytorch', 'tensorflow', 'scikit', 'pandas', 'fastapi', 'ai & data'].some(k => t.includes(k)))) return 'ai';
     return 'web';
 }
 
