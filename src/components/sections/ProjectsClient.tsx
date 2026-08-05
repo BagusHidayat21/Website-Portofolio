@@ -32,17 +32,9 @@ function FloatingParticle({ size, initialX, initialY, scrollY, speed = 1, delay 
 const categories = [
     { id: 'all', label: 'All' },
     { id: 'web', label: 'Web' },
-    { id: 'mobile', label: 'Mobile' },
-    { id: 'ai', label: 'AI & Data' },
-    { id: 'backend', label: 'Backend' },
-    { id: 'tool', label: 'Tools' },
 ];
 
 function detectCategory(project: Project): string {
-    const all = [...(project.techStack || []), ...(project.tags || [])].map(t => t.toLowerCase());
-    if (all.some(t => ['android', 'ios', 'flutter', 'dart', 'react native', 'expo', 'kotlin', 'swift'].some(k => t.includes(k)))) return 'mobile';
-    if (all.some(t => ['machine learning', 'ai model', 'data science', 'openai', 'pytorch', 'tensorflow', 'scikit', 'pandas', 'fastapi', 'ai & data'].some(k => t.includes(k)))) return 'ai';
-    if (all.some(t => ['node', 'express', 'nest', 'go', 'rust', 'docker', 'kubernetes'].includes(t)) && !all.some(t => ['react', 'vue', 'next.js', 'frontend'].includes(t))) return 'backend';
     return 'web';
 }
 
@@ -279,7 +271,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                             initial={{ opacity: 0, x: 30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.7 }}
-                            className="text-center lg:text-right"
+                            className="text-left md:text-right"
                         >
                             <h2
                                 className="text-7xl sm:text-8xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-none"
@@ -297,7 +289,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                             initial={{ opacity: 0, x: 30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.85 }}
-                            className="flex flex-wrap gap-x-5 gap-y-2 md:justify-end"
+                            className="flex flex-wrap gap-x-5 gap-y-2 justify-start md:justify-end"
                         >
                             {catCounts.map(c => (
                                 <div key={c.id} className="flex items-baseline gap-1.5">
