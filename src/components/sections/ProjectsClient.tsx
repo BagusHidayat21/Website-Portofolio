@@ -32,6 +32,10 @@ function FloatingParticle({ size, initialX, initialY, scrollY, speed = 1, delay 
 const categories = [
     { id: 'all', label: 'All' },
     { id: 'web', label: 'Web' },
+    { id: 'mobile', label: 'Mobile' },
+    { id: 'ai', label: 'AI & Data' },
+    { id: 'backend', label: 'Backend' },
+    { id: 'tool', label: 'Tools' },
 ];
 
 function detectCategory(project: Project): string {
