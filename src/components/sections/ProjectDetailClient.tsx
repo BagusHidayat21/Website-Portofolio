@@ -5,18 +5,26 @@ import { ArrowLeft, ArrowUpRight, Calendar, Code2, ExternalLink, FolderGit2, Git
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ProjectWithGithubStats } from '@/lib/github';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Project } from '@/data/static-db';
+import { useGithubStats } from '@/hooks/useGithubStats';
 import ReactMarkdown from 'react-markdown';
 
-export function ProjectDetailClient({ project }: { project: ProjectWithGithubStats }) {
+export function ProjectDetailClient({ project: baseProject }: { project: Project }) {
     const router = useRouter();
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
     const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
     const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+    const stats = useGithubStats();
+    const statsLoading = stats === null;
+    const project = useMemo(
+        () => ({ ...baseProject, ...stats?.[baseProject.slug] }),
+        [baseProject, stats]
+    );
 
     return (
         <div ref={containerRef} className="min-h-screen bg-white dark:bg-zinc-950 pb-20">
@@ -161,7 +169,18 @@ export function ProjectDetailClient({ project }: { project: ProjectWithGithubSta
                                 </div>
 
                                 {/* GitHub Live Stats */}
-                                {(typeof project.githubStars === 'number' || project.githubUpdatedAt) && (
+                                {project.githubUrl && statsLoading ? (
+                                    <div className="pt-4 border-t border-zinc-200/80 dark:border-zinc-800/80">
+                                        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">
+                                            <FolderGit2 className="w-3.5 h-3.5" />
+                                            <span>Repository Stats</span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Skeleton className="h-4 w-32" />
+                                            <Skeleton className="h-3 w-40" />
+                                        </div>
+                                    </div>
+                                ) : (typeof project.githubStars === 'number' || project.githubUpdatedAt) && (
                                     <div className="pt-4 border-t border-zinc-200/80 dark:border-zinc-800/80">
                                         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">
                                             <FolderGit2 className="w-3.5 h-3.5" />

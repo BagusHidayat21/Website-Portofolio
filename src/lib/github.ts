@@ -7,7 +7,7 @@ const GITHUB_USERNAME = 'BagusHidayat21';
 // window elapses — so this stays at ~1 request/hour to GitHub regardless of
 // traffic, comfortably under the unauthenticated 60 req/hour limit (and far
 // under the 5,000 req/hour limit once GITHUB_TOKEN is set).
-const REVALIDATE_SECONDS = 60 * 60;
+export const REVALIDATE_SECONDS = 60 * 60;
 
 export type ProjectWithGithubStats = Project & {
     githubStars?: number;

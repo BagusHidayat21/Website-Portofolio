@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { projectsData } from "@/data/static-db";
-import { withGithubStats } from "@/lib/github";
 import { ProjectsClient } from "@/components/sections/ProjectsClient";
 
 export const metadata: Metadata = {
@@ -13,8 +12,7 @@ export const metadata: Metadata = {
     },
 };
 
-export default async function ProjectsPage() {
+export default function ProjectsPage() {
     const projects = projectsData.filter((p) => p.isVisible).sort((a, b) => a.order - b.order);
-    const withStats = await withGithubStats(projects);
-    return <ProjectsClient projects={withStats} />;
+    return <ProjectsClient projects={projects} />;
 }

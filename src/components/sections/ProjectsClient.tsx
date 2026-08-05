@@ -1,12 +1,14 @@
 'use client';
 
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { ExternalLink, Github, ArrowUpRight, Search, FolderOpen, Layers, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Project } from '@/data/static-db';
 import { ProjectWithGithubStats } from '@/lib/github';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useGithubStats } from '@/hooks/useGithubStats';
 
 const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
 
@@ -44,7 +46,7 @@ function detectCategory(project: Project): string {
     return 'web';
 }
 
-function ProjectCard({ project, index }: { project: ProjectWithGithubStats; index: number }) {
+function ProjectCard({ project, index, statsLoading }: { project: ProjectWithGithubStats; index: number; statsLoading: boolean }) {
     const imageUrl = project.images?.[0] ?? null;
     const category = detectCategory(project);
 
@@ -110,7 +112,9 @@ function ProjectCard({ project, index }: { project: ProjectWithGithubStats; inde
                             {project.description}
                         </p>
                     </div>
-                    {typeof project.githubStars === 'number' && (
+                    {statsLoading && project.githubUrl ? (
+                        <Skeleton className="h-4 w-10 rounded-full shrink-0 mt-4" />
+                    ) : typeof project.githubStars === 'number' && (
                         <div className="flex items-center gap-1 text-xs font-medium text-zinc-400 dark:text-zinc-500 shrink-0 pt-4">
                             <Star className="w-3.5 h-3.5" />
                             {project.githubStars}
@@ -138,10 +142,17 @@ function ProjectCard({ project, index }: { project: ProjectWithGithubStats; inde
     );
 }
 
-export function ProjectsClient({ projects }: { projects: ProjectWithGithubStats[] }) {
+export function ProjectsClient({ projects: baseProjects }: { projects: Project[] }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const heroRef = useRef(null);
+    const stats = useGithubStats();
+    const statsLoading = stats === null;
+
+    const projects = useMemo(
+        () => baseProjects.map((project) => ({ ...project, ...stats?.[project.slug] })),
+        [baseProjects, stats]
+    );
 
     const { scrollYProgress } = useScroll({
         target: heroRef,
@@ -357,7 +368,7 @@ export function ProjectsClient({ projects }: { projects: ProjectWithGithubStats[
                         <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
                             <AnimatePresence mode="popLayout">
                                 {filteredProjects.map((project, index) => (
-                                    <ProjectCard key={project.id} project={project} index={index} />
+                                    <ProjectCard key={project.id} project={project} index={index} statsLoading={statsLoading} />
                                 ))}
                             </AnimatePresence>
                         </motion.div>

@@ -1,9 +1,8 @@
 
 import { projectsData } from "@/data/static-db";
-import { withGithubStats } from "@/lib/github";
 import { FeaturedProjectsClient } from "./FeaturedProjectsClient";
 
-export async function FeaturedProjects() {
+export function FeaturedProjects() {
     const projects = projectsData
         .filter(p => p.isFeatured && p.isVisible)
         .sort((a, b) => a.order - b.order);
@@ -12,9 +11,7 @@ export async function FeaturedProjects() {
         return null;
     }
 
-    const withStats = await withGithubStats(projects);
-
     return (
-        <FeaturedProjectsClient projects={withStats} />
+        <FeaturedProjectsClient projects={projects} />
     );
 }

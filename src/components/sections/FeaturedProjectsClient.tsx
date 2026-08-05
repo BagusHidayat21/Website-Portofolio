@@ -4,13 +4,22 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, Github, ExternalLink, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef } from 'react';
-import { ProjectWithGithubStats } from '@/lib/github';
+import { useMemo, useRef } from 'react';
+import { Project } from '@/data/static-db';
+import { useGithubStats } from '@/hooks/useGithubStats';
 
-export function FeaturedProjectsClient({ projects }: { projects: ProjectWithGithubStats[] }) {
+export function FeaturedProjectsClient({ projects: baseProjects }: { projects: Project[] }) {
     const containerRef = useRef(null);
+    const stats = useGithubStats();
+    const statsLoading = stats === null;
+
+    const projects = useMemo(
+        () => baseProjects.map((project) => ({ ...project, ...stats?.[project.slug] })),
+        [baseProjects, stats]
+    );
 
     return (
         <section id="projects" ref={containerRef} className="py-24 md:py-32 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-700">
@@ -66,6 +75,7 @@ export function FeaturedProjectsClient({ projects }: { projects: ProjectWithGith
                                                 fill
                                                 sizes="(min-width: 1024px) 58vw, 100vw"
                                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                priority={index === 0}
                                             />
                                         )}
 
@@ -96,7 +106,9 @@ export function FeaturedProjectsClient({ projects }: { projects: ProjectWithGith
                                                     {tech}
                                                 </Badge>
                                             ))}
-                                            {typeof project.githubStars === 'number' && (
+                                            {statsLoading && project.githubUrl ? (
+                                                <Skeleton className="h-4 w-10 rounded-full" />
+                                            ) : typeof project.githubStars === 'number' && (
                                                 <span className="flex items-center gap-1 text-xs font-medium text-zinc-400 dark:text-zinc-500">
                                                     <Star className="w-3.5 h-3.5" />
                                                     {project.githubStars}
