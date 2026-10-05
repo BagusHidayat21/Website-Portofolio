@@ -13,7 +13,7 @@ function SectionIntro({ labelWidth = "w-24" }: { labelWidth?: string }) {
 
 function TimelineRows({ count }: { count: number }) {
     return (
-        <div className="space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
+        <div className="space-y-0 divide-y divide-ink-line">
             {Array.from({ length: count }).map((_, i) => (
                 <div key={i} className="py-8 first:pt-0 last:pb-0 space-y-4">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
@@ -38,9 +38,9 @@ function TimelineRows({ count }: { count: number }) {
 
 export default function AboutLoading() {
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+        <div className="min-h-screen">
             {/* Hero */}
-            <section className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20">
+            <section className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden pt-24 pb-32 lg:py-20">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center">
                     <div className="md:col-span-8 flex flex-col justify-center">
                         <Skeleton className="h-5 w-32 mb-4" />
@@ -69,7 +69,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Gallery */}
-            <section className="py-16 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-16 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
                         <Skeleton className="md:col-span-8 h-[320px] md:h-[520px] rounded-2xl" />
@@ -82,7 +82,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Story */}
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
@@ -93,7 +93,7 @@ export default function AboutLoading() {
                             <Skeleton className="h-5 w-full" />
                             <Skeleton className="h-5 w-full" />
                             <Skeleton className="h-5 w-2/3" />
-                            <div className="flex flex-wrap gap-2 mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800">
+                            <div className="flex flex-wrap gap-2 mt-10 pt-8 border-t border-ink-line">
                                 <Skeleton className="h-8 w-20 rounded-full" />
                                 <Skeleton className="h-8 w-24 rounded-full" />
                                 <Skeleton className="h-8 w-16 rounded-full" />
@@ -104,7 +104,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Work Experience */}
-            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
@@ -118,7 +118,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Projects & Achievements */}
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
@@ -132,7 +132,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Education */}
-            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
@@ -146,7 +146,7 @@ export default function AboutLoading() {
             </section>
 
             {/* Philosophy */}
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+            <section className="py-24 border-t border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                         <div className="md:col-span-4">
@@ -154,7 +154,7 @@ export default function AboutLoading() {
                         </div>
                         <div className="md:col-span-8 grid sm:grid-cols-2 gap-4">
                             {Array.from({ length: 4 }).map((_, i) => (
-                                <div key={i} className="p-6 rounded-xl bg-white dark:bg-zinc-900 space-y-4">
+                                <div key={i} className="p-6 rounded-xl space-y-4">
                                     <Skeleton className="h-10 w-10 rounded-lg" />
                                     <Skeleton className="h-5 w-2/3" />
                                     <Skeleton className="h-4 w-full" />
@@ -167,15 +167,15 @@ export default function AboutLoading() {
             </section>
 
             {/* CTA */}
-            <section className="py-24 bg-zinc-900 dark:bg-zinc-900">
+            <section className="py-24 bg-ink-fg">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
                     <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
                         <div className="space-y-4">
-                            <Skeleton className="h-3 w-40 bg-zinc-700" />
-                            <Skeleton className="h-10 w-64 bg-zinc-700" />
-                            <Skeleton className="h-10 w-40 bg-zinc-700" />
+                            <Skeleton className="h-3 w-40 bg-ink-muted" />
+                            <Skeleton className="h-10 w-64 bg-ink-muted" />
+                            <Skeleton className="h-10 w-40 bg-ink-muted" />
                         </div>
-                        <Skeleton className="h-12 w-40 rounded-full bg-zinc-700" />
+                        <Skeleton className="h-12 w-40 rounded-full bg-ink-muted" />
                     </div>
                 </div>
             </section>

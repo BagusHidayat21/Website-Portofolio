@@ -68,7 +68,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
     );
 
     return (
-        <article ref={root} className="relative overflow-hidden bg-ink-bg text-ink-fg">
+        <article ref={root} className="relative overflow-hidden text-ink-fg">
             <header className="px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 md:pb-24 md:pt-48 lg:px-10">
                 <div className="mx-auto max-w-7xl">
                     <Link
@@ -86,7 +86,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                     <h1 className="mt-8 font-wide text-[clamp(2.25rem,6vw,5.25rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em] break-words">
                         <span className="pd-line block overflow-hidden pb-[0.06em]">
                             {project.title}
-                            <span className="text-ink-accent">.</span>
+                            <span className="text-ink-accent-ink">.</span>
                         </span>
                     </h1>
 
@@ -212,7 +212,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                                         </h2>
                                     ),
                                     h3: ({ children }) => (
-                                        <h3 className="mb-4 mt-10 font-wide text-xl font-bold uppercase tracking-[-0.02em]">{children}</h3>
+                                        <h3 className="mb-4 mt-10 font-wide text-xl font-extrabold uppercase tracking-[-0.02em]">{children}</h3>
                                     ),
                                     p: ({ children }) => (
                                         <p className="mb-6 max-w-[62ch] text-lg leading-relaxed text-ink-muted">{children}</p>

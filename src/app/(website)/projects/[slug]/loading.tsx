@@ -2,9 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectDetailLoading() {
     return (
-        <div className="min-h-screen bg-white dark:bg-zinc-950 pb-20">
+        <div className="min-h-screen pb-20">
             {/* Header hero */}
-            <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 pt-24 pb-16">
+            <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center pt-24 pb-16">
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
@@ -20,7 +20,7 @@ export default function ProjectDetailLoading() {
             </section>
 
             {/* Sticky action bar */}
-            <section className="bg-white/90 dark:bg-zinc-950/90 border-y border-zinc-200/80 dark:border-zinc-800/80 sticky top-0 z-30">
+            <section className="bg-ink-bg/90 border-y border-ink-line sticky top-0 z-30">
                 <div className="container mx-auto px-6 py-4 flex items-center justify-between gap-4">
                     <Skeleton className="h-9 w-36" />
                     <div className="flex items-center gap-3">
@@ -36,7 +36,7 @@ export default function ProjectDetailLoading() {
                     <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
                         {/* Sidebar */}
                         <div className="lg:col-span-4">
-                            <div className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 space-y-6">
+                            <div className="p-6 rounded-2xl border border-ink-line space-y-6">
                                 <div className="space-y-2">
                                     <Skeleton className="h-3 w-16" />
                                     <Skeleton className="h-5 w-40" />
@@ -61,7 +61,7 @@ export default function ProjectDetailLoading() {
                                     <Skeleton className="h-3 w-24" />
                                     <Skeleton className="h-4 w-28" />
                                 </div>
-                                <div className="pt-4 border-t border-zinc-200/80 dark:border-zinc-800/80 space-y-2">
+                                <div className="pt-4 border-t border-ink-line space-y-2">
                                     <Skeleton className="h-3 w-28" />
                                     <Skeleton className="h-4 w-32" />
                                     <Skeleton className="h-3 w-40" />
@@ -81,7 +81,7 @@ export default function ProjectDetailLoading() {
                                 <Skeleton className="h-5 w-2/3" />
                             </div>
 
-                            <div className="space-y-6 pt-10 border-t border-zinc-200/80 dark:border-zinc-800/80">
+                            <div className="space-y-6 pt-10 border-t border-ink-line">
                                 <Skeleton className="h-6 w-48" />
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <Skeleton className="aspect-video w-full rounded-xl" />

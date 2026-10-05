@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { AnimatedBackground } from "@/components/ui/animated-background";
+import { Backdrop } from "@/components/ui/backdrop";
 import { SplashScreen } from "@/components/layout/SplashScreen";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { ChatbotLoader } from "@/components/chat/ChatbotLoader";
@@ -14,9 +14,9 @@ export default function WebsiteLayout({
     return (
         <SmoothScroll>
             <SplashScreen>
-                <AnimatedBackground />
+                <Backdrop />
                 <Navbar />
-                <main className="relative z-10 flex min-h-screen flex-col bg-ink-bg">
+                <main id="main" className="relative z-10 flex min-h-screen flex-col">
                     {children}
                 </main>
                 <Footer />

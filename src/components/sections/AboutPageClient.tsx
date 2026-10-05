@@ -139,7 +139,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
     return (
         <>
             <div ref={root}>
-            <section className="relative overflow-hidden bg-ink-bg text-ink-fg">
+            <section className="relative overflow-hidden text-ink-fg">
                 <div className="ab-head overflow-hidden pt-28 sm:pt-36 md:pt-44">
                     <h1 className="font-wide text-[clamp(2.25rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                         <span className="sr-only">About {profile.name}</span>
@@ -152,7 +152,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
                         >
                             <span className="ab-line block overflow-hidden pb-[0.06em]">
                                 {aboutContent.heroSubtitle.replace('.', '')}
-                                <span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                                <span className="text-ink-accent-ink [-webkit-text-stroke:0]">.</span>
                             </span>
                         </span>
                     </h1>
@@ -222,7 +222,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={social.platform}
-                                        className="flex h-14 w-14 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:bg-ink-fg hover:text-ink-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent"
+                                        className="flex h-14 w-14 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:bg-ink-fg hover:text-ink-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink"
                                     >
                                         {Icon ? <Icon className="h-5 w-5" strokeWidth={1.75} /> : social.platform}
                                     </a>
@@ -235,10 +235,10 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
             </section>
 
             {/* Sticky cards need an ancestor without overflow clipping, so this sits outside the hero section. */}
-            <section className="pp-section relative bg-ink-bg pb-20 text-ink-fg sm:pb-32 md:pb-48">
+            <section className="pp-section relative pb-20 text-ink-fg sm:pb-32 md:pb-48">
                     <div className="overflow-hidden">
                         <h2 className="pp-heading mb-12 whitespace-nowrap px-4 font-wide text-[clamp(2.25rem,6.5vw,5.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em] sm:px-6 md:mb-20 lg:px-10">
-                            Principles<span className="text-ink-accent">.</span>
+                            Principles<span className="text-ink-accent-ink">.</span>
                         </h2>
                     </div>
 
@@ -298,10 +298,10 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
             {experienceItems.length > 0 && <ExperienceClient items={experienceItems} />}
 
             {educationItems.length > 0 && (
-                <section className="ed-section relative bg-ink-bg pb-32 pt-8 text-ink-fg md:pb-48">
+                <section className="ed-section relative pb-32 pt-8 text-ink-fg md:pb-48">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
                         <h2 className="font-wide text-[clamp(2.5rem,6vw,5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
-                            Education<span className="text-ink-accent">.</span>
+                            Education<span className="text-ink-accent-ink">.</span>
                         </h2>
                         <div className="mt-16 grid grid-cols-1 gap-6 md:mt-24 md:grid-cols-2">
                             {educationItems.map((edu, i) => (

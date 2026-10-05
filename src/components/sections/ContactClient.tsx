@@ -70,12 +70,12 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
     ].filter((s): s is { label: string; href: string; icon: typeof Github } => Boolean(s.href));
 
     return (
-        <section ref={root} id="contact" className="relative overflow-hidden bg-ink-bg py-16 text-ink-fg sm:py-24 md:py-36">
+        <section ref={root} id="contact" className="relative overflow-hidden py-16 text-ink-fg sm:py-24 md:py-36">
             <div className="overflow-hidden">
-                <h2 className="font-wide text-[clamp(2.25rem,8vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
-                    <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Let&apos;s build</span>
+                <h2 className="font-wide text-[clamp(1.75rem,6.6vw,6.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                    <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Have an idea?</span>
                     <span className="ct-right text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
-                        something<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                        Let&apos;s build it<span className="text-ink-accent-ink [-webkit-text-stroke:0]">.</span>
                     </span>
                 </h2>
             </div>
@@ -83,14 +83,14 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
             <div className="mx-auto mt-12 grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:mt-16 sm:px-6 md:mt-24 lg:grid-cols-12 lg:px-10">
                 <div className="lg:col-span-6" data-speed="0.8">
                     <p className="max-w-[44ch] text-lg leading-relaxed text-ink-muted md:text-xl">
-                        Working full-time at PT Universal Big Data, and still open to collaborations, technical work and
-                        data-driven projects.
+                        I work full-time at PT Universal Big Data and still make room for good collaborations,
+                        technical work and data projects. Email is the fastest way to reach me.
                     </p>
 
                     <div className="mt-10 flex flex-col gap-3">
                         <a
                             href={`mailto:${email}`}
-                            className="group inline-flex w-max max-w-full items-center gap-3 font-display text-[clamp(1.25rem,2.6vw,2.25rem)] font-medium tracking-[-0.03em]"
+                            className="group inline-flex w-max max-w-full items-center gap-3 font-sans text-[clamp(1.25rem,2.6vw,2.25rem)] font-medium tracking-[-0.03em]"
                         >
                             <span className="relative truncate">
                                 {email}
@@ -107,7 +107,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                             ) : (
                                 <Copy className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
                             )}
-                            <span aria-live="polite">{copied ? 'Copied to clipboard' : 'Copy address'}</span>
+                            <span aria-live="polite">{copied ? 'Email copied' : 'Copy email'}</span>
                         </button>
                     </div>
 
@@ -135,10 +135,10 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         href={`mailto:${email}`}
                         onPointerMove={onOrbMove}
                         onPointerLeave={onOrbLeave}
-                        className="group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent/40"
+                        className="group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent-ink/40"
                     >
                         <span className="font-wide text-[clamp(1.75rem,3.4vw,3rem)] font-extrabold uppercase leading-none tracking-[-0.03em]">
-                            Hire Me
+                            Say Hello
                         </span>
                         <ArrowUpRight
                             className="h-9 w-9 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45"

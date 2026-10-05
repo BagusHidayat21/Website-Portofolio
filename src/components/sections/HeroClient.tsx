@@ -86,7 +86,12 @@ export function HeroClient({
                     .to('.hero-meta', { yPercent: -120, autoAlpha: 0 }, 0)
                     .to('.hero-bottom', { yPercent: -60, autoAlpha: 0 }, 0)
                     .to('.hero-canvas', { scale: 1.35 }, 0)
-                    .to('.hero-veil', { autoAlpha: 1 }, 0.55);
+                    .fromTo(
+                        ['.hero-canvas', '.hero-title'],
+                        { autoAlpha: 1 },
+                        { autoAlpha: 0, immediateRender: false },
+                        0.55
+                    );
 
                 // Pause the WebGL loop once the hero is fully scrolled past.
                 ScrollTrigger.create({
@@ -112,7 +117,7 @@ export function HeroClient({
     return (
         <section
             ref={root}
-            className="relative isolate flex h-[100dvh] min-h-[620px] flex-col overflow-hidden bg-ink-bg text-ink-fg"
+            className="relative isolate flex h-[100dvh] min-h-[620px] flex-col overflow-hidden text-ink-fg"
         >
             {/* WebGL particle field */}
             <div className="hero-canvas pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
@@ -124,14 +129,10 @@ export function HeroClient({
                     reduceMotion={reduceMotion}
                 />
             </div>
-            {/* Edge vignette keeps the type legible over the particles. */}
+            {/* Soft edge vignette: keeps type legible over the particles while the site grid still shows through. */}
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_35%,var(--ink-bg)_88%)]"
-            />
-            <div
-                aria-hidden="true"
-                className="hero-veil pointer-events-none invisible absolute inset-0 z-20 bg-ink-bg opacity-0"
+                className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_45%,color-mix(in_srgb,var(--ink-bg)_70%,transparent)_100%)]"
             />
 
             <div className="relative flex flex-1 flex-col justify-between px-4 pb-6 pt-24 sm:px-6 md:pb-10 lg:px-10">
@@ -176,14 +177,14 @@ export function HeroClient({
                                     {ch}
                                 </span>
                             ))}
-                            <span className="hero-char inline-block text-ink-accent">.</span>
+                            <span className="hero-char inline-block text-ink-accent-ink">.</span>
                         </span>
                     </span>
                 </h1>
 
                 <div className="hero-bottom grid grid-cols-1 items-end gap-6 md:grid-cols-12">
                     <div className="md:col-span-6 lg:col-span-5">
-                        <p className="hero-fade font-wide text-sm font-semibold uppercase tracking-[0.02em] text-ink-fg">
+                        <p className="hero-fade font-mono text-xs uppercase tracking-[0.14em] text-ink-fg">
                             {tagline}
                         </p>
                         <p className="hero-fade mt-3 max-w-[44ch] text-base leading-relaxed text-ink-muted md:text-lg">
@@ -201,7 +202,7 @@ export function HeroClient({
                             icon={ArrowUpRight}
                             iconDirection="diagonal"
                         >
-                            Hire Me
+                            Say Hello
                         </MagneticButton>
                     </div>
                 </div>

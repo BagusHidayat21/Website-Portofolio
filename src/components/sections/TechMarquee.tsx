@@ -91,7 +91,7 @@ export function TechMarquee({ items }: { items: string[] }) {
         <section
             ref={root}
             aria-label="Tech stack"
-            className="relative max-w-[100vw] overflow-hidden bg-ink-bg py-12 sm:py-16 md:py-28"
+            className="relative max-w-[100vw] overflow-hidden py-12 sm:py-16 md:py-28"
         >
             <div className="mq-band relative overflow-hidden py-4 sm:py-6">
                 {/* Back tape, outlined, crossing the other way. */}

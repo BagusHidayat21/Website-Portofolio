@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import { getLenis } from '@/components/providers/SmoothScroll';
 
 export function BackToTop() {
     const [isVisible, setIsVisible] = useState(false);
@@ -18,7 +19,9 @@ export function BackToTop() {
     }, []);
 
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const lenis = getLenis();
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -30,7 +33,7 @@ export function BackToTop() {
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     onClick={scrollToTop}
-                    className="fixed bottom-6 right-24 z-40 hidden sm:flex items-center gap-1.5 rounded-full border border-ink-line bg-ink-bg/90 px-3.5 py-2 font-mono text-xs font-semibold uppercase text-ink-muted backdrop-blur-md shadow-md transition-all duration-200 hover:border-ink-accent hover:text-ink-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent"
+                    className="fixed bottom-6 right-24 z-40 hidden sm:flex items-center gap-1.5 rounded-full border border-ink-line bg-ink-bg/90 px-3.5 py-2 font-mono text-xs font-semibold uppercase text-ink-muted backdrop-blur-md shadow-md transition-all duration-200 hover:border-ink-accent-ink hover:text-ink-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink"
                     aria-label="Back to top"
                 >
                     <ArrowUp className="h-3.5 w-3.5" />

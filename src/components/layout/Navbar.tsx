@@ -139,7 +139,7 @@ export function Navbar() {
                                 type="button"
                                 onClick={() => setIsOpen(false)}
                                 aria-label="Close menu"
-                                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:border-ink-accent hover:text-ink-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent"
+                                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:border-ink-accent-ink hover:text-ink-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink"
                             >
                                 <X className="h-5 w-5" />
                             </button>
@@ -169,7 +169,7 @@ export function Navbar() {
                                                     </span>
                                                     <span className={cn(
                                                         'transition-colors duration-200',
-                                                        active ? 'text-ink-accent' : 'text-ink-fg group-hover:text-ink-accent'
+                                                        active ? 'text-ink-accent-ink' : 'text-ink-fg group-hover:text-ink-accent-ink'
                                                     )}>
                                                         {link.label}
                                                     </span>
@@ -254,9 +254,9 @@ export function Navbar() {
                         <Link
                             href="/"
                             aria-label="Bagus Hidayat Homepage"
-                            className="group flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent rounded-full"
+                            className="group flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink rounded-full"
                         >
-                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink-accent font-wide text-xs font-black tracking-wider text-ink-on-accent transition-transform duration-300 group-hover:scale-105 group-hover:rotate-[-6deg]">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink-accent font-wide text-xs font-extrabold tracking-wider text-ink-on-accent transition-transform duration-300 group-hover:scale-105 group-hover:rotate-[-6deg]">
                                 HID
                             </span>
                             <div className="hidden flex-col sm:flex">
@@ -286,7 +286,7 @@ export function Navbar() {
                                         onFocus={() => setHovered(link.href)}
                                         onBlur={() => setHovered(null)}
                                         className={cn(
-                                            'relative flex h-10 items-center gap-1.5 rounded-full px-4 text-xs font-semibold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent',
+                                            'relative flex h-10 items-center gap-1.5 rounded-full px-4 text-xs font-semibold uppercase tracking-wider transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink',
                                             active ? 'text-ink-fg' : 'text-ink-muted hover:text-ink-fg'
                                         )}
                                     >
@@ -329,7 +329,7 @@ export function Navbar() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Download Resume PDF"
-                            className="hidden items-center gap-1.5 rounded-full border border-ink-line px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-ink-muted transition-colors duration-200 hover:border-ink-fg hover:text-ink-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent lg:inline-flex"
+                            className="hidden items-center gap-1.5 rounded-full border border-ink-line px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-ink-muted transition-colors duration-200 hover:border-ink-fg hover:text-ink-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink lg:inline-flex"
                         >
                             <FileText className="h-3.5 w-3.5" />
                             Resume
@@ -354,7 +354,7 @@ export function Navbar() {
                             aria-expanded={isOpen}
                             aria-controls="mobile-nav"
                             aria-label={isOpen ? 'Close menu' : 'Open menu'}
-                            className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:border-ink-accent hover:text-ink-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent md:hidden"
+                            className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:border-ink-accent-ink hover:text-ink-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink md:hidden"
                         >
                             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </button>

@@ -2,9 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectsLoading() {
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+        <div className="min-h-screen">
             {/* Hero */}
-            <section className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20">
+            <section className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden pt-24 pb-32 lg:py-20">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center">
                     <div className="md:col-span-8 flex flex-col justify-center">
                         <Skeleton className="h-5 w-40 mb-4" />
@@ -28,7 +28,7 @@ export default function ProjectsLoading() {
             </section>
 
             {/* Sticky filter bar */}
-            <section className="sticky top-0 z-30 bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-100 dark:border-zinc-800">
+            <section className="sticky top-0 z-30 bg-ink-bg/80 border-b border-ink-line">
                 <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 py-3 flex flex-col sm:flex-row items-center gap-3 justify-between">
                     <div className="flex gap-1.5 w-full sm:w-auto">
                         {Array.from({ length: 6 }).map((_, i) => (

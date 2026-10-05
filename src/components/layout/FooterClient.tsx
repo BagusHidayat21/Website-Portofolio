@@ -1,9 +1,10 @@
-// Modern responsive footer with dynamic Malang local time, contact action, sitemap, and social links.
+// Footer with Malang local time, contact action, sitemap and social links.
 'use client';
 
 import Link from 'next/link';
 import { ArrowUp, ArrowUpRight, Check, Copy, FileText, Github, Instagram, Linkedin, Mail } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import { getLenis } from '@/components/providers/SmoothScroll';
 import { Profile } from '@/data/static-db';
 
 interface FooterClientProps {
@@ -17,6 +18,7 @@ const navLinks = [
 ];
 
 const techChips = ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS', 'Laravel', 'Python'];
+const marqueeItems = ['Bagus Hidayat', 'Full stack engineering', 'Data and machine learning', 'Industrial mentoring', 'Malang, Indonesia'];
 
 export function FooterClient({ profile }: FooterClientProps) {
     const currentYear = new Date().getFullYear();
@@ -55,8 +57,14 @@ export function FooterClient({ profile }: FooterClientProps) {
         }
     };
 
+    const status = profile.isAvailableForWork
+        ? 'Available for new work'
+        : `At ${profile.currentCompany ?? 'work'}, open to collaborations`;
+
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const lenis = getLenis();
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const github = profile.socials.find((s) => s.platform.toLowerCase() === 'github')?.url;
@@ -79,7 +87,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink-accent opacity-75" />
                             <span className="relative inline-flex h-2 w-2 rounded-full bg-ink-accent" />
                         </span>
-                        <span className="uppercase tracking-wider text-ink-fg">Available for engineering & collaboration</span>
+                        <span className="uppercase tracking-[0.14em] text-ink-fg">{status}</span>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -94,24 +102,24 @@ export function FooterClient({ profile }: FooterClientProps) {
 
                 {/* Main Call to Action Headline */}
                 <div className="mt-12 md:mt-16">
-                    <p className="font-mono text-xs uppercase tracking-widest text-ink-muted">
-                        {"//"} NEXT STEPS
+                    <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+                        Contact
                     </p>
                     <div className="mt-4 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
                         <h2 className="max-w-3xl font-wide text-[clamp(2.25rem,5.5vw,5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
-                            Let&apos;s build something <span className="text-ink-accent">exceptional.</span>
+                            Start a <span className="text-ink-accent-ink">conversation.</span>
                         </h2>
 
                         <div className="flex max-w-full flex-wrap items-center gap-3">
                             <button
                                 type="button"
                                 onClick={handleCopyEmail}
-                                className="group flex h-12 sm:h-14 max-w-[calc(100%-4.25rem)] items-center gap-2.5 sm:gap-3 rounded-full border border-ink-line bg-ink-fg/[0.04] px-4 sm:px-6 text-xs sm:text-sm font-medium text-ink-fg transition-all duration-300 hover:border-ink-accent hover:bg-ink-fg hover:text-ink-bg"
+                                className="group flex h-12 sm:h-14 max-w-[calc(100%-4.25rem)] items-center gap-2.5 sm:gap-3 rounded-full border border-ink-line bg-ink-fg/[0.04] px-4 sm:px-6 text-xs sm:text-sm font-medium text-ink-fg transition-all duration-300 hover:border-ink-accent-ink hover:bg-ink-fg hover:text-ink-bg"
                             >
                                 {copied ? (
                                     <>
-                                        <Check className="h-4 w-4 shrink-0 text-ink-accent" />
-                                        <span className="truncate">Copied email address!</span>
+                                        <Check className="h-4 w-4 shrink-0 text-ink-accent-ink" />
+                                        <span className="truncate">Email copied</span>
                                     </>
                                 ) : (
                                     <>
@@ -136,8 +144,8 @@ export function FooterClient({ profile }: FooterClientProps) {
                 <div className="mt-16 grid grid-cols-1 gap-12 border-t border-ink-line pt-14 md:mt-20 md:grid-cols-12 md:gap-8">
                     {/* Brand and Description (5 cols) */}
                     <div className="space-y-4 md:col-span-5">
-                        <div className="font-wide text-2xl font-black uppercase tracking-tight text-ink-fg">
-                            {profile.name}<span className="text-ink-accent">.</span>
+                        <div className="font-wide text-2xl font-extrabold uppercase tracking-tight text-ink-fg">
+                            {profile.name}<span className="text-ink-accent-ink">.</span>
                         </div>
                         <p className="max-w-md text-sm leading-relaxed text-ink-muted">
                             {profile.bio}
@@ -161,8 +169,8 @@ export function FooterClient({ profile }: FooterClientProps) {
 
                     {/* Navigation Links (3 cols) */}
                     <div className="space-y-4 md:col-span-3 md:col-start-7">
-                        <p className="font-mono text-xs uppercase tracking-widest text-ink-muted">
-                            {"//"} SITEMAP
+                        <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+                            Pages
                         </p>
                         <ul className="space-y-3">
                             {navLinks.map((link) => (
@@ -171,7 +179,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                                         href={link.href}
                                         className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
                                     >
-                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent">
+                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent-ink">
                                             {link.index}
                                         </span>
                                         <span>{link.label}</span>
@@ -187,7 +195,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                                         rel="noopener noreferrer"
                                         className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
                                     >
-                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent">
+                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent-ink">
                                             04
                                         </span>
                                         <span>Resume</span>
@@ -200,8 +208,8 @@ export function FooterClient({ profile }: FooterClientProps) {
 
                     {/* Connect and Socials (3 cols) */}
                     <div className="space-y-4 md:col-span-3">
-                        <p className="font-mono text-xs uppercase tracking-widest text-ink-muted">
-                            {"//"} CONNECT
+                        <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+                            Elsewhere
                         </p>
                         <ul className="space-y-3">
                             {github && (
@@ -252,7 +260,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                                     className="group inline-flex items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
                                 >
                                     <Mail className="h-4 w-4" />
-                                    <span>Direct Email</span>
+                                    <span>Email</span>
                                     <ArrowUpRight className="h-3 w-3 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                                 </a>
                             </li>
@@ -260,34 +268,28 @@ export function FooterClient({ profile }: FooterClientProps) {
                     </div>
                 </div>
 
-                {/* Subdued Editorial Marquee Strip */}
-                <div className="mt-16 overflow-hidden border-t border-ink-line py-5">
-                    <div className="flex animate-marquee-css items-center gap-8 whitespace-nowrap font-mono text-xs uppercase tracking-[0.25em] text-ink-muted/50 select-none">
-                        <span>BAGUS HIDAYAT</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>FULL-STACK SOFTWARE ENGINEER</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>DATA & APPLIED MACHINE LEARNING</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>MALANG, EAST JAVA, INDONESIA</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>BAGUS HIDAYAT</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>FULL-STACK SOFTWARE ENGINEER</span>
-                        <span className="text-ink-accent font-bold">✦</span>
-                        <span>DATA & APPLIED MACHINE LEARNING</span>
-                        <span className="text-ink-accent font-bold">✦</span>
+                {/* Subdued editorial marquee strip */}
+                <div className="mt-16 overflow-hidden border-t border-ink-line py-5" aria-hidden="true">
+                    <div className="flex animate-marquee-css items-center gap-8 whitespace-nowrap font-mono text-xs uppercase tracking-[0.14em] text-ink-muted/60 select-none motion-reduce:animate-none">
+                        {[0, 1].map((copy) =>
+                            marqueeItems.map((item) => (
+                                <Fragment key={`${copy}-${item}`}>
+                                    <span>{item}</span>
+                                    <span className="text-ink-accent-ink">/</span>
+                                </Fragment>
+                            ))
+                        )}
                     </div>
                 </div>
 
                 {/* Bottom Legal / Copyright Strip */}
                 <div className="flex flex-col items-center justify-between gap-4 border-t border-ink-line pt-8 text-xs text-ink-muted sm:flex-row">
                     <p>
-                        © {currentYear} {profile.name}. All rights reserved.
+                        © {currentYear} {profile.name}, Malang, Indonesia.
                     </p>
 
                     <p className="hidden md:block">
-                        Engineered with Next.js 16, Tailwind CSS & GSAP.
+                        Built with Next.js, Tailwind CSS and GSAP.
                     </p>
 
                     <button

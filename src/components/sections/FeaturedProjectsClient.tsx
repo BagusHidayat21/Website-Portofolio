@@ -107,7 +107,7 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
     );
 
     return (
-        <section ref={root} id="projects" className="relative bg-ink-bg text-ink-fg">
+        <section ref={root} id="projects" className="relative text-ink-fg">
             <div className="pj-pin relative overflow-hidden py-16 sm:py-24 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100dvh] lg:motion-safe:items-center lg:motion-safe:py-0">
                 <div
                     className="pj-track flex flex-col gap-14 sm:gap-20 lg:motion-safe:w-max lg:motion-safe:flex-row lg:motion-safe:items-center lg:motion-safe:gap-[5vw] lg:motion-safe:pl-10 lg:motion-safe:pr-[12vw]"
@@ -119,13 +119,13 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
                             <span className="pj-intro-word text-outline block">work</span>
                         </h2>
                         <p className="mt-8 max-w-[38ch] text-lg leading-relaxed text-ink-muted">
-                            Products I designed, built and shipped, from thesis research to production platforms.
+                            A few builds I am proud of, from thesis research to a marketplace running in production.
                         </p>
                         <Link
                             href="/projects"
                             className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink-fg"
                         >
-                            All projects
+                            View all projects
                             <ArrowRight
                                 className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1"
                                 strokeWidth={1.75}
@@ -135,7 +135,7 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
 
                     {projects.map((project, index) => (
                         <article key={project.id} className="pj-panel shrink-0 px-4 sm:px-6 lg:motion-safe:w-[56vw] lg:motion-safe:px-0">
-                            <Link href={`/projects/${project.slug}`} className="group block" aria-label={`${project.title} case study`}>
+                            <Link href={`/projects/${project.slug}`} className="group block" aria-label={`${project.title}: read the case study`}>
                                 <div
                                     className="pj-media relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-bg-2 ring-1 ring-ink-line sm:aspect-[16/11] lg:motion-safe:aspect-auto lg:motion-safe:h-[66vh]"
                                 >

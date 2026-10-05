@@ -62,10 +62,10 @@ export function ExperienceClient({ items }: { items: ExperienceItem[] }) {
     );
 
     return (
-        <section ref={root} className="relative bg-ink-bg pb-20 pt-16 text-ink-fg sm:pb-32 sm:pt-24 md:pb-48 md:pt-40">
+        <section ref={root} className="relative pb-20 pt-16 text-ink-fg sm:pb-32 sm:pt-24 md:pb-48 md:pt-40">
             <div className="overflow-hidden">
                 <h2 className="xp-heading mb-12 whitespace-nowrap px-4 font-wide text-[clamp(2.5rem,8vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em] sm:px-6 md:mb-20 lg:px-10">
-                    Experience<span className="text-ink-accent">.</span>
+                    Experience<span className="text-ink-accent-ink">.</span>
                 </h2>
             </div>
 

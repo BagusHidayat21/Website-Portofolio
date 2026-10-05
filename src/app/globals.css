@@ -7,87 +7,57 @@
 :root {
   --radius: 0.625rem;
 
-
-  --background: #FAFAFA;
-  --foreground: #0A0A0A;
-
-
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-
-  --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
-
-
-  --primary: #0A0A0A;
-  --primary-foreground: #FFFFFF;
-
-
-  --secondary: #F4F4F5;
-  --secondary-foreground: #18181B;
-
-
-  --muted: #F4F4F5;
-  --muted-foreground: #71717A;
-
-
-  --accent: #F4F4F5;
-  --accent-foreground: #18181B;
-
-  --destructive: #DC2626;
-
-
-  --border: #E4E4E7;
-  --input: #E4E4E7;
-  --ring: #A1A1AA;
-
-  /* Ink palette: home redesign tokens */
-  --ink-bg: #f3f3ef;
-  --ink-bg-2: #e8e8e2;
-  --ink-fg: #0b0b0c;
-  --ink-muted: #5c5c57;
-  --ink-line: rgb(11 11 12 / 0.1);
+  /* Ink palette (light). Every surface, text and accent color derives from these. */
+  --ink-bg: #f2f1ec;
+  --ink-bg-2: #e7e6df;
+  --ink-fg: #0e0e0f;
+  --ink-muted: #55554f;
+  --ink-line: rgb(14 14 15 / 0.12);
   --ink-accent: #c8ff3d;
   --ink-on-accent: #0b0b0c;
-  --ink-accent-ink: #4a6b00;
+  /* Accent for text, icons, rings and hairlines: lime fails contrast on cream, so light mode uses deep olive. */
+  --ink-accent-ink: #3f6212;
+  /* Backdrop atmosphere */
+  --ink-grid: rgb(14 14 15 / 0.075);
+  --ink-glow: rgb(170 230 20 / 0.32);
+  --ink-glow-2: rgb(14 14 15 / 0.07);
+  --ink-grain: 0.06;
+
+  --background: var(--ink-bg);
+  --foreground: var(--ink-fg);
+  --card: var(--ink-bg-2);
+  --card-foreground: var(--ink-fg);
+  --popover: var(--ink-bg);
+  --popover-foreground: var(--ink-fg);
+  --primary: var(--ink-fg);
+  --primary-foreground: var(--ink-bg);
+  --secondary: var(--ink-bg-2);
+  --secondary-foreground: var(--ink-fg);
+  --muted: var(--ink-bg-2);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--ink-bg-2);
+  --accent-foreground: var(--ink-fg);
+  --destructive: #c42b1c;
+  --border: var(--ink-line);
+  --input: var(--ink-line);
+  --ring: var(--ink-accent-ink);
 }
 
 .dark {
-  --background: #09090B;
-  --foreground: #F4F4F5;
-
-  --card: #18181B;
-  --card-foreground: #F4F4F5;
-
-  --popover: #18181B;
-  --popover-foreground: #F4F4F5;
-
-  --primary: #F4F4F5;
-  --primary-foreground: #18181B;
-
-  --secondary: #27272A;
-  --secondary-foreground: #F4F4F5;
-
-  --muted: #27272A;
-  --muted-foreground: #A1A1AA;
-
-  --accent: #27272A;
-  --accent-foreground: #F4F4F5;
-
-  --destructive: #EF4444;
-
-  --border: #27272A;
-  --input: #27272A;
-  --ring: #D4D4D8;
-
-  --ink-bg: #070708;
-  --ink-bg-2: #0f0f11;
+  --ink-bg: #08080a;
+  --ink-bg-2: #111114;
   --ink-fg: #f2f2ee;
-  --ink-muted: #8b8b85;
+  --ink-muted: #9a9a93;
   --ink-line: rgb(255 255 255 / 0.1);
   --ink-accent: #c8ff3d;
   --ink-on-accent: #0b0b0c;
   --ink-accent-ink: #c8ff3d;
+  --ink-grid: rgb(255 255 255 / 0.06);
+  --ink-glow: rgb(200 255 61 / 0.16);
+  --ink-glow-2: rgb(120 140 255 / 0.07);
+  --ink-grain: 0.07;
+
+  --destructive: #ef4444;
 }
 
 @theme inline {
@@ -99,7 +69,7 @@
   --color-ink-accent: var(--ink-accent);
   --color-ink-on-accent: var(--ink-on-accent);
   --color-ink-accent-ink: var(--ink-accent-ink);
-  --font-display: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -132,7 +102,16 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased min-h-screen;
+    @apply bg-ink-bg text-ink-fg antialiased min-h-screen;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
 
@@ -153,26 +132,6 @@
 
 
 @layer utilities {
-
-  .section-container {
-    @apply mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16;
-  }
-
-
-  .text-gradient {
-    @apply bg-gradient-to-r from-zinc-900 via-zinc-600 to-zinc-900 bg-clip-text text-transparent;
-  }
-
-
-  .glass {
-    @apply bg-white/90 dark:bg-zinc-900/90 border border-zinc-200/60 dark:border-zinc-800/60;
-  }
-
-  @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
-    .glass {
-      @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md;
-    }
-  }
 
   /* Frosted-glass pill (web approximation, not Apple Liquid Glass).
      Solid fill when blur is unsupported or the user reduces transparency. */
@@ -198,6 +157,24 @@
   @media (prefers-reduced-transparency: reduce) {
     .glass-pill {
       @apply bg-ink-bg backdrop-blur-none;
+    }
+  }
+
+  /* Backdrop grid: 80px cells plus a crosshair every 4 cells, fading out toward the bottom of the viewport. */
+  .backdrop-grid {
+    background-image:
+      radial-gradient(circle at center, var(--ink-accent-ink) 1.5px, transparent 2px),
+      linear-gradient(to right, var(--ink-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--ink-grid) 1px, transparent 1px);
+    background-size: 320px 320px, 80px 80px, 80px 80px;
+    background-position: -1px -1px, -1px -1px, -1px -1px;
+    -webkit-mask-image: radial-gradient(ellipse 110% 85% at 50% 18%, #000 30%, transparent 88%);
+    mask-image: radial-gradient(ellipse 110% 85% at 50% 18%, #000 30%, transparent 88%);
+  }
+
+  @media (max-width: 639px) {
+    .backdrop-grid {
+      background-size: 240px 240px, 60px 60px, 60px 60px;
     }
   }
 
@@ -235,77 +212,16 @@
       transform: translate3d(-50%, 0, 0);
     }
   }
-
-  .animate-loading-bar {
-    animation: loading-bar 1.5s ease-in-out infinite;
-  }
-
-  @keyframes loading-bar {
-    0% {
-      transform: translate3d(-100%, 0, 0);
-    }
-
-    100% {
-      transform: translate3d(200%, 0, 0);
-    }
-  }
-
-  .shadow-elegant {
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.02),
-      0 4px 8px rgba(0, 0, 0, 0.04),
-      0 16px 32px rgba(0, 0, 0, 0.04);
-  }
-
-  .shadow-elegant-lg {
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.02),
-      0 8px 16px rgba(0, 0, 0, 0.04),
-      0 24px 48px rgba(0, 0, 0, 0.06);
-  }
-
-
-  .hover-lift {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-  }
-
-
-  .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2;
-  }
-
-
-  .link-underline {
-    @apply relative;
-  }
-
-  .link-underline::after {
-    @apply content-[''] absolute left-0 bottom-0 w-0 h-[1px] bg-current transition-all duration-300;
-  }
-
-  .link-underline:hover::after {
-    @apply w-full;
-  }
 }
 
 
-/* Pseudo-elements (::selection, ::-webkit-scrollbar-*) can't be targeted by
-   Tailwind's `dark:is(.dark *)` variant — a selector can't follow a
-   pseudo-element, so the browser drops those rules silently. Use a plain
-   `.dark` ancestor selector instead for anything themed here. */
+/* Pseudo-elements read the ink variables directly, so they follow the theme
+   without the `dark:` variant (which cannot target pseudo-elements). */
 
 ::selection {
-  @apply bg-zinc-900 text-white;
+  background: var(--ink-accent);
+  color: var(--ink-on-accent);
 }
-
-.dark ::selection {
-  @apply bg-zinc-100 text-zinc-900;
-}
-
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -313,29 +229,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-zinc-100;
-}
-
-.dark ::-webkit-scrollbar-track {
-  @apply bg-zinc-900;
+  background: var(--ink-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-300 rounded-full;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-700;
+  background: color-mix(in srgb, var(--ink-fg) 22%, transparent);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-400;
+  background: color-mix(in srgb, var(--ink-fg) 38%, transparent);
 }
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-600;
-}
-
 
 ::view-transition-old(root),
 ::view-transition-new(root) {

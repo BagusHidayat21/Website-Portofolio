@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
 
 export function ThemeToggle() {
-    const { theme, setTheme } = useTheme();
+    const { resolvedTheme, setTheme } = useTheme();
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
@@ -15,7 +15,7 @@ export function ThemeToggle() {
     }, []);
 
     const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const isDark = theme === 'dark';
+        const isDark = resolvedTheme === 'dark';
         const nextTheme = isDark ? 'light' : 'dark';
 
         if (typeof document === 'undefined' || !('startViewTransition' in document)) {
@@ -56,20 +56,20 @@ export function ThemeToggle() {
 
     if (!mounted) {
         return (
-            <div className="h-9 w-[4.25rem] rounded-full bg-zinc-200/60 dark:bg-zinc-800/60" />
+            <div className="h-9 w-[4.25rem] rounded-full border border-ink-line bg-ink-fg/[0.05]" />
         );
     }
 
-    const isDark = theme === 'dark';
+    const isDark = resolvedTheme === 'dark';
 
     return (
         <button
             onClick={toggleTheme}
-            aria-label="Toggle Theme"
-            className="relative h-9 w-[4.25rem] p-1 flex items-center justify-between rounded-full bg-zinc-200/80 dark:bg-zinc-800/80 border border-zinc-300/80 dark:border-zinc-700/80 transition-colors focus:outline-none cursor-pointer"
+            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+            className="relative flex h-9 w-[4.25rem] cursor-pointer items-center justify-between rounded-full border border-ink-line bg-ink-fg/[0.05] p-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink"
         >
             <motion.div
-                className="absolute top-1 bottom-1 w-7 rounded-full bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 transform-gpu"
+                className="absolute bottom-1 top-1 w-7 rounded-full bg-ink-accent shadow-sm transform-gpu"
                 initial={false}
                 animate={{
                     x: isDark ? 28 : 0
@@ -77,14 +77,13 @@ export function ThemeToggle() {
                 transition={{ type: 'spring', stiffness: 500, damping: 32 }}
             />
 
-            <div className={`relative z-10 w-7 h-7 flex items-center justify-center transition-colors duration-200 ${!isDark ? 'text-amber-500 font-bold scale-105' : 'text-zinc-400 dark:text-zinc-500'}`}>
+            <div className={`relative z-10 w-7 h-7 flex items-center justify-center transition-colors duration-200 ${!isDark ? 'text-ink-on-accent' : 'text-ink-muted'}`}>
                 <Sun className="h-4 w-4" />
             </div>
 
-            <div className={`relative z-10 w-7 h-7 flex items-center justify-center transition-colors duration-200 ${isDark ? 'text-zinc-100 font-bold scale-105' : 'text-zinc-400'}`}>
+            <div className={`relative z-10 w-7 h-7 flex items-center justify-center transition-colors duration-200 ${isDark ? 'text-ink-on-accent' : 'text-ink-muted'}`}>
                 <Moon className="h-4 w-4" />
             </div>
-            <span className="sr-only">Toggle theme</span>
         </button>
     );
 }

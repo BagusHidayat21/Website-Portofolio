@@ -116,7 +116,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
     );
 
     return (
-        <section ref={root} className="relative overflow-hidden bg-ink-bg pb-20 pt-28 text-ink-fg sm:pb-32 sm:pt-36 md:pb-48 md:pt-44">
+        <section ref={root} className="relative overflow-hidden pb-20 pt-28 text-ink-fg sm:pb-32 sm:pt-36 md:pb-48 md:pt-44">
             <div className="pr-head overflow-hidden">
                 <h1 className="font-wide text-[clamp(2.25rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                     <span className="pr-h-1 block whitespace-nowrap px-4 sm:px-6 lg:px-10">
@@ -124,7 +124,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                     </span>
                     <span className="pr-h-2 text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
                         <span className="pr-line block overflow-hidden pb-[0.06em]">
-                            projects<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                            projects<span className="text-ink-accent-ink [-webkit-text-stroke:0]">.</span>
                         </span>
                     </span>
                 </h1>
@@ -150,7 +150,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder="Search by name or stack"
                                 aria-label="Search projects"
-                                className="h-12 w-full rounded-full border border-ink-line bg-ink-fg/[0.03] pl-12 pr-5 text-sm text-ink-fg placeholder:text-ink-muted focus-visible:border-ink-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent/40"
+                                className="h-12 w-full rounded-full border border-ink-line bg-ink-fg/[0.03] pl-12 pr-5 text-sm text-ink-fg placeholder:text-ink-muted focus-visible:border-ink-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink/40"
                             />
                         </div>
                     </div>
@@ -166,7 +166,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                                 onClick={() => setCategory(c.id)}
                                 aria-pressed={active}
                                 className={cn(
-                                    'inline-flex h-11 items-center gap-2 rounded-full border px-5 text-sm font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent',
+                                    'inline-flex h-11 items-center gap-2 rounded-full border px-5 text-sm font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink',
                                     active
                                         ? 'border-ink-accent bg-ink-accent text-ink-on-accent'
                                         : 'border-ink-line text-ink-muted hover:border-ink-fg/30 hover:text-ink-fg'

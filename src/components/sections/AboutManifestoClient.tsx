@@ -20,8 +20,8 @@ interface AboutManifestoClientProps {
 
 // Manifesto copy, condensed from the existing About section. The portrait pill is inserted after PILL_AFTER words.
 const MANIFESTO =
-    'I engineer full stack products with modern web architecture, machine learning and data, and I teach vocational students to ship software the way the industry does.';
-const HIGHLIGHT = new Set(['full', 'stack', 'machine', 'learning', 'data,']);
+    'I build full stack products, put data and machine learning to work inside them, and teach vocational students to ship software the way real teams do.';
+const HIGHLIGHT = new Set(['full', 'stack', 'data', 'machine', 'learning']);
 
 export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoClientProps) {
     const root = useRef<HTMLElement>(null);
@@ -100,14 +100,14 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
     );
 
     return (
-        <section ref={root} id="about" className="relative overflow-hidden bg-ink-bg py-14 text-ink-fg sm:py-20 md:py-28">
+        <section ref={root} id="about" className="relative overflow-hidden py-14 text-ink-fg sm:py-20 md:py-28">
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-                <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink-muted">
+                <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
                     <span className="h-1.5 w-1.5 rounded-full bg-ink-accent" />
-                    <span>Philosophy & Background</span>
+                    <span>01 / About</span>
                 </div>
                 <h2 className="sr-only">About {name}</h2>
-                <p className="mf-text max-w-6xl text-balance font-display text-[clamp(1.75rem,4vw,4.25rem)] font-medium leading-[1.15] tracking-[-0.03em]">
+                <p className="mf-text max-w-6xl text-balance font-sans text-[clamp(1.75rem,4vw,4.25rem)] font-medium leading-[1.15] tracking-[-0.03em]">
                     {words.map((word, i) => (
                         <Fragment key={i}>
                             <span
@@ -166,16 +166,16 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                         </div>
 
                         <p className="mt-14 max-w-[52ch] text-lg leading-relaxed text-ink-muted">
-                            Graduate of Universitas Negeri Malang, working full-time at PT Universal Big Data. My
-                            focus now sits where data engineering and machine learning meet everyday web apps.
+                            Software engineer at PT Universal Big Data and graduate of Universitas Negeri Malang. Most
+                            of my week goes to two things: building web systems and teaching students to build them.
                         </p>
 
                         <Link
                             href="/about"
-                            className="group mt-10 inline-flex w-max items-center gap-4 font-wide text-lg font-bold uppercase tracking-[-0.01em]"
+                            className="group mt-10 inline-flex w-max items-center gap-4 font-wide text-lg font-extrabold uppercase tracking-[-0.01em]"
                         >
                             <span className="relative">
-                                Read full story
+                                Read the story
                                 <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 bg-ink-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-x-100" />
                             </span>
                             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:rotate-45">
