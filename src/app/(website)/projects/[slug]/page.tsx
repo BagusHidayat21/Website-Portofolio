@@ -8,7 +8,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    return projectsData.filter(p => p.isVisible).map((project) => ({
+    return projectsData.filter((p) => p.isVisible).map((project) => ({
         slug: project.slug,
     }));
 }
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
     const decodedSlug = decodeURIComponent(slug);
-    const project = projectsData.find(p => p.slug === slug || p.slug === decodedSlug);
+    const project = projectsData.find((p) => p.slug === slug || p.slug === decodedSlug);
 
     if (!project) {
         return {
@@ -44,11 +44,22 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     }
 
     const decodedSlug = decodeURIComponent(slug);
-    const project = projectsData.find(p => p.slug === slug || p.slug === decodedSlug);
+    const project = projectsData.find((p) => p.slug === slug || p.slug === decodedSlug);
 
     if (!project) {
         return notFound();
     }
 
-    return <ProjectDetailClient project={project} />;
+    const sorted = projectsData.filter((p) => p.isVisible).sort((a, b) => a.order - b.order);
+    const currentIndex = sorted.findIndex((p) => p.id === project.id);
+    const prevProject = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+    const nextProject = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+
+    return (
+        <ProjectDetailClient
+            project={project}
+            prevProject={prevProject}
+            nextProject={nextProject}
+        />
+    );
 }
