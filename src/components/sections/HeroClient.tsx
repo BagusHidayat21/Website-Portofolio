@@ -106,8 +106,8 @@ export function HeroClient({
     const status = isAvailableForWork
         ? 'Available for work'
         : currentCompany
-          ? `Currently at ${currentCompany}`
-          : 'Currently employed';
+            ? `Currently at ${currentCompany}`
+            : 'Currently employed';
 
     return (
         <section

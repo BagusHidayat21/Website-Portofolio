@@ -71,7 +71,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
 
     return (
         <section ref={root} id="contact" className="relative overflow-hidden bg-ink-bg py-32 text-ink-fg md:py-48">
-            <h2 className="font-wide text-[clamp(3.25rem,13vw,14rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.045em]">
+            <h2 className="font-wide text-[clamp(2.5rem,8vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                 <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Let&apos;s build</span>
                 <span className="ct-right text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
                     something<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
