@@ -16,8 +16,7 @@ export default function WebsiteLayout({
             <SplashScreen>
                 <AnimatedBackground />
                 <Navbar />
-                {/* Opaque, clipped page sheet that slides off the sticky footer (curtain reveal). */}
-                <main className="relative z-10 overflow-clip rounded-b-[2rem] bg-ink-bg shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)] md:rounded-b-[3rem]">
+                <main className="relative z-10 flex min-h-screen flex-col bg-ink-bg">
                     {children}
                 </main>
                 <Footer />

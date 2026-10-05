@@ -1,15 +1,16 @@
+// Floating button to smoothly scroll the viewport back to the top of the page.
 'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export function BackToTop() {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const toggleVisibility = () => {
-            setIsVisible(window.scrollY > 300);
+            setIsVisible(window.scrollY > 400);
         };
 
         window.addEventListener('scroll', toggleVisibility, { passive: true });
@@ -24,18 +25,16 @@ export function BackToTop() {
         <AnimatePresence>
             {isVisible && (
                 <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 left-6 lg:left-1/2 lg:-translate-x-1/2 z-[999] group flex items-center gap-2 px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-lg hover:shadow-xl hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-300"
+                    className="fixed bottom-6 right-24 z-40 hidden sm:flex items-center gap-1.5 rounded-full border border-ink-line bg-ink-bg/90 px-3.5 py-2 font-mono text-xs font-semibold uppercase text-ink-muted backdrop-blur-md shadow-md transition-all duration-200 hover:border-ink-accent hover:text-ink-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent"
                     aria-label="Back to top"
                 >
-                    <ChevronUp className="w-4 h-4 text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
-                    <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">
-                        Back to top
-                    </span>
+                    <ArrowUp className="h-3.5 w-3.5" />
+                    <span>Top</span>
                 </motion.button>
             )}
         </AnimatePresence>
