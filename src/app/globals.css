@@ -22,6 +22,8 @@
   --ink-glow: rgb(170 230 20 / 0.32);
   --ink-glow-2: rgb(14 14 15 / 0.07);
   --ink-grain: 0.06;
+  /* Opaque equivalent of ink-fg at 4% over the page, for stacked shells that must not show what is behind them. */
+  --ink-shell: color-mix(in srgb, var(--ink-fg) 4%, var(--ink-bg));
 
   --background: var(--ink-bg);
   --foreground: var(--ink-fg);
@@ -69,6 +71,7 @@
   --color-ink-accent: var(--ink-accent);
   --color-ink-on-accent: var(--ink-on-accent);
   --color-ink-accent-ink: var(--ink-accent-ink);
+  --color-ink-shell: var(--ink-shell);
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --radius-sm: calc(var(--radius) - 4px);
@@ -117,13 +120,11 @@
 
   html {
     scroll-behavior: smooth;
-    max-width: 100vw;
-    overflow-x: hidden;
   }
 
+  /* clip, not hidden: hidden would make body a scroll container and silently disable every position: sticky. */
   body {
-    max-width: 100vw;
-    overflow-x: hidden;
+    overflow-x: clip;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -256,6 +257,28 @@
 }
 
 
+/* Shared surfaces and type roles, so every page uses the same card, chip, label and container. */
+@utility page-x {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+}
+
+@utility shell {
+  @apply rounded-[2.25rem] bg-ink-shell p-2 ring-1 ring-ink-line;
+}
+
+@utility shell-core {
+  @apply rounded-[calc(2.25rem-0.5rem)];
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+@utility label {
+  @apply font-mono text-xs uppercase tracking-[0.14em];
+}
+
+@utility chip {
+  @apply inline-flex items-center rounded-full border border-ink-line px-3 py-1 text-xs font-medium;
+}
+
 /* Wide display face (Archivo, wdth axis) for the kinetic headings. */
 @utility font-wide {
   font-family: var(--font-archivo), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
@@ -267,8 +290,6 @@
 html.lenis,
 html.lenis body {
   height: auto;
-  max-width: 100vw;
-  overflow-x: hidden;
 }
 
 .lenis.lenis-smooth {
