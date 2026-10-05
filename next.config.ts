@@ -1,47 +1,20 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+const securityHeaders = [
+    { key: 'X-Content-Type-Options', value: 'nosniff' },
+    { key: 'X-Frame-Options', value: 'DENY' },
+    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+];
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  trailingSlash: false,
-  images: {
-    formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      { protocol: "https", hostname: "picsum.photos" },
-      { protocol: "https", hostname: "loremflickr.com" },
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "placehold.co" },
-    ],
-  },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Robots-Tag',
-            value: 'index, follow',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb',
+    output: 'standalone',
+    reactCompiler: true,
+    typedRoutes: true,
+    images: {
+        formats: ['image/avif', 'image/webp'],
+        remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
     },
-  },
+    headers: async () => [{ source: '/:path*', headers: securityHeaders }],
 };
 
 export default nextConfig;
