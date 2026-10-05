@@ -1,11 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Copy, Check, Mail, HandMetal, Github, Linkedin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useState, useRef } from 'react';
-import { Card } from '@/components/ui/card';
+import { ArrowUpRight, Check, Copy, Github, Linkedin } from 'lucide-react';
+import { useRef, useState, type PointerEvent } from 'react';
+import { gsap, useGSAP, applyParallax, MOTION_OK } from '@/lib/gsap';
 
 interface ContactProps {
     email: string;
@@ -16,117 +13,137 @@ interface ContactProps {
 }
 
 export function ContactClient({ email, socialLinks }: ContactProps) {
-    const containerRef = useRef(null);
-    const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+    const root = useRef<HTMLElement>(null);
     const [copied, setCopied] = useState(false);
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(email);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(email);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2000);
+        } catch {
+            setCopied(false);
+        }
+    };
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add(MOTION_OK, () => {
+                const range = { trigger: root.current, start: 'top bottom', end: 'center center', scrub: 1 };
+                gsap.fromTo('.ct-left', { xPercent: -45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
+                gsap.fromTo('.ct-right', { xPercent: 45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
+                gsap.fromTo(
+                    '.ct-orb-wrap',
+                    { scale: 0.4, rotate: -90 },
+                    {
+                        scale: 1,
+                        rotate: 0,
+                        ease: 'none',
+                        scrollTrigger: { trigger: '.ct-orb-wrap', start: 'top bottom', end: 'center 55%', scrub: 1 },
+                    }
+                );
+                applyParallax(root.current);
+            });
+            return () => mm.revert();
+        },
+        { scope: root }
+    );
+
+    const onOrbMove = (e: PointerEvent<HTMLAnchorElement>) => {
+        if (e.pointerType !== 'mouse') return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const el = e.currentTarget;
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - (rect.left + rect.width / 2)) * 0.35;
+        const y = (e.clientY - (rect.top + rect.height / 2)) * 0.35;
+        gsap.to(el, { x, y, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
+    };
+
+    const onOrbLeave = (e: PointerEvent<HTMLAnchorElement>) => {
+        gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
     };
 
     const socials = [
         { label: 'GitHub', href: socialLinks.github, icon: Github },
         { label: 'LinkedIn', href: socialLinks.linkedin, icon: Linkedin },
-    ];
+    ].filter((s): s is { label: string; href: string; icon: typeof Github } => Boolean(s.href));
 
     return (
-        <section ref={containerRef} className="relative py-24 md:py-32 bg-white dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-700 overflow-hidden">
-            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10">
-                <div className="flex flex-col md:flex-row gap-12 md:gap-16 lg:gap-24 items-start">
+        <section ref={root} id="contact" className="relative overflow-hidden bg-ink-bg py-32 text-ink-fg md:py-48">
+            <h2 className="font-wide text-[clamp(3.25rem,13vw,14rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.045em]">
+                <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Let&apos;s build</span>
+                <span className="ct-right text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
+                    something<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                </span>
+            </h2>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6 }}
-                        className="md:w-1/2"
-                    >
-                        <div className="flex items-center gap-2 mb-6">
-                            <span className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800">
-                                <HandMetal className="w-5 h-5 text-zinc-900 dark:text-zinc-100" />
+            <div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 items-center gap-16 px-4 sm:px-6 md:mt-28 lg:grid-cols-12 lg:px-10">
+                <div className="lg:col-span-6" data-speed="0.8">
+                    <p className="max-w-[44ch] text-lg leading-relaxed text-ink-muted md:text-xl">
+                        Working full-time at PT Universal Big Data, and still open to collaborations, technical work and
+                        data-driven projects.
+                    </p>
+
+                    <div className="mt-10 flex flex-col gap-3">
+                        <a
+                            href={`mailto:${email}`}
+                            className="group inline-flex w-max max-w-full items-center gap-3 font-display text-[clamp(1.25rem,2.6vw,2.25rem)] font-medium tracking-[-0.03em]"
+                        >
+                            <span className="relative truncate">
+                                {email}
+                                <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 bg-ink-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-x-100" />
                             </span>
-                            <span className="text-sm font-bold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">Say Hello</span>
-                        </div>
+                        </a>
+                        <button
+                            type="button"
+                            onClick={handleCopy}
+                            className="inline-flex h-11 w-max items-center gap-2 rounded-full border border-ink-line px-4 text-sm font-medium text-ink-muted transition-colors hover:border-ink-fg/30 hover:text-ink-fg"
+                        >
+                            {copied ? (
+                                <Check className="h-4 w-4 text-ink-accent-ink" strokeWidth={1.75} aria-hidden="true" />
+                            ) : (
+                                <Copy className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                            )}
+                            <span aria-live="polite">{copied ? 'Copied to clipboard' : 'Copy address'}</span>
+                        </button>
+                    </div>
 
-                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-6 leading-tight">
-                            Have an idea? <br />
-                            <span className="text-zinc-400 dark:text-zinc-500">Let&apos;s build it.</span>
-                        </h2>
+                    <div className="mt-10 flex flex-wrap gap-3">
+                        {socials.map(({ label, href, icon: Icon }) => (
+                            <a
+                                key={label}
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex h-12 items-center gap-3 rounded-full border border-ink-line pl-5 pr-2 text-sm font-medium transition-colors hover:bg-ink-fg hover:text-ink-bg"
+                            >
+                                <Icon className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                                {label}
+                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink-fg/[0.08] transition-transform duration-500 group-hover:rotate-45">
+                                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
 
-                        <p className="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-md">
-                            I am currently working full-time as a Software Engineer & Industrial Trainer at PT Universal Big Data. However, I am always open to discussing innovative ideas, technical collaborations, and data-driven projects.
-                        </p>
-
-                        <div className="grid grid-cols-2 gap-4 max-w-sm">
-                            {socials.map((social) => (
-                                <Link
-                                    key={social.label}
-                                    href={social.href || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center justify-between p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all group"
-                                >
-                                    <span className="flex items-center gap-2 font-medium text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100">
-                                        <social.icon className="w-4 h-4 mr-2" />
-                                        {social.label}
-                                    </span>
-                                    <ArrowRight className="w-4 h-4 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                                </Link>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="md:w-1/2 w-full"
+                <div className="ct-orb-wrap flex justify-center lg:col-span-6 lg:justify-end">
+                    <a
+                        href={`mailto:${email}`}
+                        onPointerMove={onOrbMove}
+                        onPointerLeave={onOrbLeave}
+                        className="group relative flex aspect-square w-[min(78vw,24rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent/40"
                     >
-                        <Card className="bg-zinc-900 dark:bg-zinc-800 text-white dark:text-zinc-100 border-0 overflow-hidden relative flex flex-col justify-between p-6 md:p-8 shadow-2xl dark:shadow-zinc-900/50">
-                            <div className="absolute inset-0 opacity-20 dark:opacity-10"
-                                style={{
-                                    backgroundImage: `radial-gradient(circle, #333 1px, transparent 1px)`,
-                                    backgroundSize: '20px 20px'
-                                }}
-                            />
-
-                            <div className="relative z-10 mb-2">
-                                <h3 className="text-xl md:text-2xl font-semibold mb-1 md:mb-2">Send me a message</h3>
-                                <p className="text-sm md:text-base text-zinc-400 dark:text-zinc-300">Directly to my inbox, I reply quickly.</p>
-                            </div>
-
-                            <div className="relative z-10">
-                                <div className="flex flex-col gap-3 md:gap-4">
-                                    <Link
-                                        href={`mailto:${email}`}
-                                        className="group flex items-center justify-between w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10 border border-white/10 dark:border-white/5 hover:border-white/20 dark:hover:border-white/15 transition-all backdrop-blur-sm"
-                                    >
-                                        <div className="flex items-center gap-3 md:gap-4 min-w-0">
-                                            <div className="p-2 md:p-3 rounded-full bg-white dark:bg-zinc-100 text-zinc-900 flex-shrink-0">
-                                                <Mail className="w-4 h-4 md:w-5 md:h-5" />
-                                            </div>
-                                            <span className="text-sm md:text-xl font-medium tracking-tight truncate">{email}</span>
-                                        </div>
-                                        <ArrowRight className="w-5 h-5 md:w-6 md:h-6 rotate-45 group-hover:rotate-0 transition-transform flex-shrink-0 ml-2" />
-                                    </Link>
-
-                                    <Button
-                                        onClick={handleCopy}
-                                        variant="ghost"
-                                        className="w-full justify-between h-auto py-3 md:py-4 px-4 md:px-6 rounded-xl md:rounded-2xl text-zinc-400 dark:text-zinc-300 hover:text-white dark:hover:text-zinc-100 hover:bg-white/5 dark:hover:bg-white/10 font-normal"
-                                    >
-                                        <span className="flex items-center gap-2 text-sm md:text-base">
-                                            {copied ? <Check className="w-4 h-4 text-green-400 dark:text-green-500" /> : <Copy className="w-4 h-4" />}
-                                            {copied ? 'Copied!' : 'Copy address'}
-                                        </span>
-                                        <span className="text-xs uppercase tracking-wider opacity-50 hidden sm:block">Click to copy</span>
-                                    </Button>
-                                </div>
-                            </div>
-                        </Card>
-
-                    </motion.div>
+                        <span className="font-wide text-[clamp(1.75rem,3.4vw,3rem)] font-extrabold uppercase leading-none tracking-[-0.03em]">
+                            Hire Me
+                        </span>
+                        <ArrowUpRight
+                            className="h-9 w-9 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45"
+                            strokeWidth={1.5}
+                            aria-hidden="true"
+                        />
+                    </a>
                 </div>
             </div>
         </section>

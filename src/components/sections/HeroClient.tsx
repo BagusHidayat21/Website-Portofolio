@@ -1,394 +1,211 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
-import { ArrowRight, ArrowDownRight, Github, Linkedin, Mail, Send, MousePointer2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import Link from 'next/link';
-import { Fragment, useRef } from 'react';
-import { TechStack } from '@/data/static-db';
+import dynamic from 'next/dynamic';
+import { useTheme } from 'next-themes';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { MagneticButton } from '@/components/ui/magnetic-button';
+import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from '@/lib/gsap';
+
+const HeroParticles = dynamic(() => import('@/components/three/HeroParticles'), { ssr: false });
 
 interface HeroClientProps {
     name: string;
+    firstName: string;
+    lastName: string;
     tagline: string;
-    bio: string;
-    avatarUrl?: string | null;
-    yearsCoding: number;
-    projectsCount: number;
-    githubUrl?: string | null;
-    linkedinUrl?: string | null;
+    intro: string;
     email: string;
     location: string;
-    marqueeTech: TechStack[];
     isAvailableForWork: boolean;
-}
-
-const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-
-function useParallaxLayer(scrollYProgress: MotionValue<number>, yRange: [number, number], opacityRange?: [number, number]) {
-    const y = useTransform(scrollYProgress, [0, 1], yRange);
-    const smoothY = useSpring(y, springConfig);
-    const opacity = opacityRange
-        ? useSpring(useTransform(scrollYProgress, [opacityRange[0], opacityRange[1]], [1, 0]), springConfig)
-        : undefined;
-    return { y: smoothY, opacity };
-}
-
-function FloatingParticle({
-    size,
-    initialX,
-    initialY,
-    scrollY,
-    speed = 1,
-    delay = 0
-}: {
-    size: number;
-    initialX: string;
-    initialY: string;
-    scrollY: MotionValue<number>;
-    speed?: number;
-    delay?: number;
-}) {
-    const y = useTransform(scrollY, [0, 1], [0, 150 * speed]);
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 0.4, scale: 1 }}
-            transition={{ duration: 1.5, delay }}
-            style={{
-                y,
-                left: initialX,
-                top: initialY,
-                width: size,
-                height: size,
-            }}
-            className="absolute rounded-full bg-gradient-to-br from-zinc-400/30 to-zinc-600/20 dark:from-zinc-500/20 dark:to-zinc-300/10 blur-sm pointer-events-none transform-gpu"
-        />
-    );
-}
-
-function TechMarquee({ tech }: { tech: TechStack[] }) {
-    if (tech.length === 0) return null;
-
-    const displayTech = [...tech, ...tech, ...tech, ...tech];
-
-    return (
-        <div className="w-full overflow-hidden border-y border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-4 absolute bottom-0 left-0 z-20">
-            <div className="animate-marquee-css items-center gap-8">
-                {displayTech.map((item, i) => (
-                    <Fragment key={i}>
-                        <span className="text-sm font-bold tracking-widest text-zinc-900 dark:text-zinc-100 uppercase leading-none shrink-0">{item.name}</span>
-                        <div className="w-1.5 h-1.5 shrink-0 bg-zinc-300 dark:bg-zinc-600 rounded-full" />
-                    </Fragment>
-                ))}
-            </div>
-        </div>
-    );
+    currentCompany?: string;
 }
 
 export function HeroClient({
     name,
+    firstName,
+    lastName,
     tagline,
-    bio,
-    avatarUrl,
-    yearsCoding,
-    projectsCount,
-    githubUrl,
-    linkedinUrl,
+    intro,
     email,
     location,
-    marqueeTech,
-    isAvailableForWork
+    isAvailableForWork,
+    currentCompany,
 }: HeroClientProps) {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end start'],
-    });
+    const root = useRef<HTMLElement>(null);
+    const progressRef = useRef(0);
+    const [canvasActive, setCanvasActive] = useState(true);
+    const [reduceMotion, setReduceMotion] = useState(false);
+    const { resolvedTheme } = useTheme();
+    const particleColor = resolvedTheme === 'light' ? '#0b0b0c' : '#f2f2ee';
 
-    const bgY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), springConfig);
-    const bgScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.1]), springConfig);
-    const bgOpacity = useSpring(useTransform(scrollYProgress, [0, 0.5], [0.06, 0.02]), springConfig);
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
 
-    const contentY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
-    const contentOpacity = useSpring(useTransform(scrollYProgress, [0.6, 1], [1, 0]), springConfig);
+            mm.add({ motion: MOTION_OK, reduce: '(prefers-reduced-motion: reduce)' }, (ctx) => {
+                const { motion } = ctx.conditions as { motion: boolean; reduce: boolean };
+                setReduceMotion(!motion);
+                if (!motion) return;
 
-    const cardY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
-    const cardRotate = useSpring(useTransform(scrollYProgress, [0, 1], [3, -5]), springConfig);
-    const cardScale = useSpring(useTransform(scrollYProgress, [0, 0.5], [1, 0.95]), springConfig);
+                // Entrance: wait for the first-visit splash screen.
+                let splashPending = false;
+                try {
+                    splashPending = !sessionStorage.getItem('splashShown');
+                } catch {
+                    splashPending = false;
+                }
+                const delay = splashPending ? 2.1 : 0.15;
 
-    const statsY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), springConfig);
+                gsap.set('.hero-char', { yPercent: 115 });
+                gsap.set('.hero-fade', { autoAlpha: 0, y: 24 });
+                gsap.set('.hero-canvas', { autoAlpha: 0, scale: 0.85 });
 
-    const socialY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 30]), springConfig);
-    const socialOpacity = useSpring(useTransform(scrollYProgress, [0.7, 1], [1, 0]), springConfig);
+                gsap.timeline({ delay, defaults: { ease: 'expo.out' } })
+                    .to('.hero-canvas', { autoAlpha: 1, scale: 1, duration: 2.2 }, 0)
+                    .to('.hero-char', { yPercent: 0, duration: 1.4, stagger: 0.045 }, 0.1)
+                    .to('.hero-fade', { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.6);
 
-    const decorY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 150]), springConfig);
-    const decorRotate = useSpring(useTransform(scrollYProgress, [0, 1], [-12, 20]), springConfig);
-    const decorScale = useSpring(useTransform(scrollYProgress, [0, 0.3], [1, 1.2]), springConfig);
+                // Scroll: pin and tear the name apart while the particles collapse into terrain.
+                gsap.timeline({
+                    defaults: { ease: 'none' },
+                    scrollTrigger: {
+                        trigger: root.current,
+                        start: 'top top',
+                        end: '+=110%',
+                        pin: true,
+                        scrub: 1,
+                        onUpdate: (self) => {
+                            progressRef.current = self.progress;
+                        },
+                    },
+                })
+                    .to('.hero-line-1', { xPercent: -28 }, 0)
+                    .to('.hero-line-2', { xPercent: 22 }, 0)
+                    .to('.hero-title', { scale: 1.12, yPercent: -12 }, 0)
+                    .to('.hero-meta', { yPercent: -120, autoAlpha: 0 }, 0)
+                    .to('.hero-bottom', { yPercent: -60, autoAlpha: 0 }, 0)
+                    .to('.hero-canvas', { scale: 1.35 }, 0)
+                    .to('.hero-veil', { autoAlpha: 1 }, 0.55);
 
-    const badgeY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 40]), springConfig);
+                // Pause the WebGL loop once the hero is fully scrolled past.
+                ScrollTrigger.create({
+                    trigger: root.current,
+                    start: 'top top',
+                    end: () => `+=${window.innerHeight * 2.2}`,
+                    onLeave: () => setCanvasActive(false),
+                    onEnterBack: () => setCanvasActive(true),
+                });
+            });
 
-    const orbLeftY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
-    const orbRightY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
+            return () => mm.revert();
+        },
+        { scope: root }
+    );
+
+    const status = isAvailableForWork
+        ? 'Available for work'
+        : currentCompany
+          ? `Currently at ${currentCompany}`
+          : 'Currently employed';
 
     return (
-        <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20">
-            <div className="hidden lg:block">
-                <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
-                <FloatingParticle size={80} initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
-                <FloatingParticle size={60} initialX="75%" initialY="60%" scrollY={scrollYProgress} speed={1.2} delay={0.6} />
-                <FloatingParticle size={100} initialX="5%" initialY="70%" scrollY={scrollYProgress} speed={0.6} delay={0.3} />
-                <FloatingParticle size={40} initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
-                <FloatingParticle size={90} initialX="30%" initialY="10%" scrollY={scrollYProgress} speed={0.7} delay={0.1} />
+        <section
+            ref={root}
+            className="relative isolate flex h-[100dvh] min-h-[620px] flex-col overflow-hidden bg-ink-bg text-ink-fg"
+        >
+            {/* WebGL particle field */}
+            <div className="hero-canvas pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+                <HeroParticles
+                    progressRef={progressRef}
+                    eventSource={root}
+                    color={particleColor}
+                    active={canvasActive}
+                    reduceMotion={reduceMotion}
+                />
             </div>
-
-            <motion.div
-                className="absolute inset-0 z-0 dark:hidden pointer-events-none"
-                style={{
-                    y: bgY,
-                    scale: bgScale,
-                    opacity: bgOpacity,
-                    backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
-                }}
+            {/* Edge vignette keeps the type legible over the particles. */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_35%,var(--ink-bg)_88%)]"
             />
-            <motion.div
-                className="absolute inset-0 z-0 hidden dark:block pointer-events-none"
-                style={{
-                    y: bgY,
-                    scale: bgScale,
-                    opacity: bgOpacity,
-                    backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px'
-                }}
+            <div
+                aria-hidden="true"
+                className="hero-veil pointer-events-none invisible absolute inset-0 z-20 bg-ink-bg opacity-0"
             />
 
-            <motion.div
-                className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none"
-                style={{ y: orbLeftY }}
-            />
-            <motion.div
-                className="absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-tl from-zinc-300/30 to-transparent dark:from-zinc-600/15 rounded-full blur-3xl pointer-events-none"
-                style={{ y: orbRightY }}
-            />
+            <div className="relative flex flex-1 flex-col justify-between px-4 pb-6 pt-24 sm:px-6 md:pb-10 lg:px-10">
+                <div className="hero-meta flex flex-wrap items-center justify-between gap-3">
+                    <span className="hero-fade glass-pill inline-flex h-9 items-center gap-2.5 rounded-full pl-3 pr-4 text-xs font-medium text-ink-fg/80">
+                        {isAvailableForWork ? (
+                            <span className="relative flex h-2 w-2" aria-hidden="true">
+                                <span className="absolute inline-flex h-full w-full rounded-full bg-ink-accent opacity-70 motion-safe:animate-ping" />
+                                <span className="relative inline-flex h-2 w-2 rounded-full bg-ink-accent" />
+                            </span>
+                        ) : (
+                            <span className="h-2 w-2 rounded-full bg-ink-muted" aria-hidden="true" />
+                        )}
+                        {status}
+                    </span>
+                    <span className="hero-fade hidden font-mono text-xs text-ink-muted sm:block">{location}</span>
+                </div>
 
-            <motion.div
-                style={{ y: contentY, opacity: contentOpacity }}
-                className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center"
-            >
-                <div className="lg:col-span-8 flex flex-col justify-center">
-
-                    {isAvailableForWork && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                            style={{ y: badgeY }}
-                            className="mb-6 lg:mb-8"
-                        >
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-sm dark:shadow-zinc-950/50">
-                                <span className="relative flex h-2.5 w-2.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 dark:bg-green-500 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 dark:bg-green-400"></span>
+                <h1 className="hero-title relative my-auto select-none font-wide font-extrabold uppercase leading-[0.8] tracking-[-0.03em] will-change-transform">
+                    <span className="sr-only">
+                        {name}, {tagline}
+                    </span>
+                    <span
+                        aria-hidden="true"
+                        className="hero-line-1 block overflow-hidden pb-[0.04em] text-[clamp(3.6rem,15vw,17rem)]"
+                    >
+                        <span className="flex">
+                            {Array.from(firstName).map((ch, i) => (
+                                <span key={i} className="hero-char inline-block">
+                                    {ch}
                                 </span>
-                                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">Available for work</span>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="mb-3 lg:mb-4 flex items-center gap-3"
-                    >
-                        <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100" />
-                        <span className="text-base sm:text-lg 2xl:text-2xl font-medium text-zinc-600 dark:text-zinc-400">
-                            Hi, I&apos;m <span className="text-zinc-900 dark:text-zinc-100 font-bold">{name || "Bagus Hidayat"}</span>
+                            ))}
                         </span>
-                    </motion.div>
+                    </span>
+                    <span
+                        aria-hidden="true"
+                        className="hero-line-2 block overflow-hidden pb-[0.04em] text-right text-[clamp(3.6rem,15vw,17rem)]"
+                    >
+                        <span className="inline-flex">
+                            {Array.from(lastName).map((ch, i) => (
+                                <span key={i} className="hero-char inline-block">
+                                    {ch}
+                                </span>
+                            ))}
+                            <span className="hero-char inline-block text-ink-accent">.</span>
+                        </span>
+                    </span>
+                </h1>
 
-                    <div className="relative mb-6 lg:mb-8">
-                        <motion.h1
-                            initial={{ opacity: 0, y: 40 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                            className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-[0.95]"
-                        >
-                            {tagline.split(' ').slice(0, 2).join(' ').toUpperCase()}
-                            <br />
-                            <span className="text-zinc-900 dark:text-zinc-400">{tagline.split(' ').slice(2).join(' ').toUpperCase()}</span>
-                        </motion.h1>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            style={{
-                                y: decorY,
-                                rotate: decorRotate,
-                                scale: decorScale
-                            }}
-                            className="absolute -top-6 right-0 sm:-top-8 sm:right-4 md:-top-12 md:right-0 xl:-top-12 xl:right-8 2xl:-top-16 2xl:right-1 block"
-                        >
-                            <MousePointer2 className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 xl:w-12 xl:h-12 2xl:w-12 2xl:h-12 text-zinc-900 dark:text-zinc-100" />
-                            <div className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] sm:text-[11px] md:text-xs lg:text-[10px] xl:text-sm 2xl:text-xs px-2 py-1 rounded absolute top-8 right-0 md:top-8 md:left-6 md:right-auto xl:top-12 xl:left-8 2xl:top-10 2xl:left-8 whitespace-nowrap">
-                                Code + Scale
-                            </div>
-                        </motion.div>
+                <div className="hero-bottom grid grid-cols-1 items-end gap-6 md:grid-cols-12">
+                    <div className="md:col-span-6 lg:col-span-5">
+                        <p className="hero-fade font-wide text-sm font-semibold uppercase tracking-[0.02em] text-ink-fg">
+                            {tagline}
+                        </p>
+                        <p className="hero-fade mt-3 max-w-[44ch] text-base leading-relaxed text-ink-muted md:text-lg">
+                            {intro}
+                        </p>
                     </div>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="text-base sm:text-lg md:text-xl 2xl:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl font-medium leading-relaxed mb-8 lg:mb-10"
-                    >
-                        {bio}
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.6 }}
-                        className="flex flex-wrap items-center gap-4 lg:gap-5"
-                    >
-                        <Button size="lg" className="h-12 px-6 text-sm rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:scale-105 transition-all shadow-xl shadow-zinc-900/10 dark:shadow-zinc-950/50">
-                            <Link href="/projects" className="flex items-center gap-2">
-                                View Work
-                                <ArrowRight className="w-4 h-4" />
-                            </Link>
-                        </Button>
-                        <Button size="lg" variant="outline" className="h-12 px-6 text-sm rounded-full border-2 border-zinc-200 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-zinc-300 hover:bg-transparent dark:hover:bg-transparent transition-all">
-                            <Link href={`mailto:${email}`} className="flex items-center gap-2">
-                                Contact
-                                <Send className="w-4 h-4" />
-                            </Link>
-                        </Button>
-                    </motion.div>
+                    <div className="hero-fade flex flex-wrap items-center gap-3 md:col-span-6 md:justify-end lg:col-span-7">
+                        <MagneticButton href="/projects" size="lg" icon={ArrowRight}>
+                            View Work
+                        </MagneticButton>
+                        <MagneticButton
+                            href={`mailto:${email}`}
+                            size="lg"
+                            variant="secondary"
+                            icon={ArrowUpRight}
+                            iconDirection="diagonal"
+                        >
+                            Hire Me
+                        </MagneticButton>
+                    </div>
                 </div>
-
-                <div className="lg:col-span-4 relative flex flex-col justify-end items-start lg:items-end mt-8 lg:mt-0">
-
-                    <motion.div
-                        className="hidden 2xl:flex flex-col gap-12 absolute -left-32 top-1/2 -translate-y-1/2 z-0"
-                        style={{ y: statsY }}
-                    >
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.8 }}
-                            className="text-center"
-                        >
-                            <h3 className="text-7xl font-black stroke-text tracking-tighter dark:text-transparent"
-                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
-                                {yearsCoding.toString().padStart(2, '0')}
-                            </h3>
-                            <p className="text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">YEARS CODING</p>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.0 }}
-                            className="text-center"
-                        >
-                            <h3 className="text-7xl font-black stroke-text tracking-tighter dark:text-transparent"
-                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
-                                {projectsCount}+
-                            </h3>
-                            <p className="text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">PROJECTS</p>
-                        </motion.div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, rotate: 5 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 3 }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        style={{
-                            y: cardY,
-                            rotate: cardRotate,
-                            scale: cardScale,
-                            transformPerspective: 1000
-                        }}
-                        className="relative z-10 w-full max-w-sm xl:max-w-xs 2xl:max-w-sm ml-auto"
-                    >
-                        <div className="relative aspect-[4/5] bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border-2 border-zinc-900 dark:border-zinc-100 shadow-[12px_12px_0px_0px_rgba(24,24,27,1)] md:shadow-[16px_16px_0px_0px_rgba(24,24,27,1)] dark:shadow-[12px_12px_0px_0px_rgba(244,244,245,1)] dark:md:shadow-[16px_16px_0px_0px_rgba(244,244,245,1)] transition-shadow duration-500 hover:shadow-[16px_16px_0px_0px_rgba(24,24,27,1)] hover:md:shadow-[24px_24px_0px_0px_rgba(24,24,27,1)] dark:hover:shadow-[16px_16px_0px_0px_rgba(244,244,245,1)] dark:hover:md:shadow-[24px_24px_0px_0px_rgba(244,244,245,1)]">
-                            <Avatar className="w-full h-full rounded-none">
-                                <AvatarImage src={avatarUrl || ''} alt={name} className="object-cover" />
-                                <AvatarFallback className="text-9xl font-black bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 rounded-none w-full h-full flex items-center justify-center">
-                                    Hi, I&apos;m {name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                                </AvatarFallback>
-                            </Avatar>
-
-                            <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md p-3 md:p-4 border border-zinc-200 dark:border-zinc-700 shadow-lg dark:shadow-zinc-950/50">
-                                <div className="flex justify-between items-start mb-1 md:mb-2">
-                                    <div>
-                                        <p className="text-[10px] md:text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Based in</p>
-                                        <p className="text-sm md:text-base font-bold text-zinc-900 dark:text-zinc-100">{location}</p>
-                                    </div>
-                                    <ArrowDownRight className="w-4 h-4 md:w-5 md:h-5 text-zinc-900 dark:text-zinc-100" />
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        className="mt-8 w-full flex flex-row justify-between lg:justify-between gap-4 lg:gap-8 z-0 2xl:hidden"
-                        style={{ y: statsY }}
-                    >
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.8 }}
-                            className="text-center xl:text-center"
-                        >
-                            <h3 className="text-5xl sm:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tighter"
-                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
-                                {yearsCoding.toString().padStart(2, '0')}
-                            </h3>
-                            <p className="text-[10px] sm:text-xs font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">YEARS CODING</p>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.0 }}
-                            className="text-center xl:text-center"
-                        >
-                            <h3 className="text-5xl sm:text-6xl lg:text-5xl xl:text-7xl font-black tracking-tighter"
-                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}>
-                                {projectsCount}+
-                            </h3>
-                            <p className="text-[10px] sm:text-xs font-bold text-zinc-400 dark:text-zinc-500 tracking-widest mt-1">PROJECTS</p>
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </motion.div>
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                style={{ y: socialY, opacity: socialOpacity }}
-                className="hidden lg:flex flex-col gap-6 absolute left-6 xl:left-10 bottom-32 z-20"
-            >
-                <div className="w-px h-20 bg-zinc-300 dark:bg-zinc-700 mx-auto" />
-                {githubUrl && (
-                    <Link href={githubUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                        <Github className="w-5 h-5" />
-                    </Link>
-                )}
-                {linkedinUrl && (
-                    <Link href={linkedinUrl} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                        <Linkedin className="w-5 h-5" />
-                    </Link>
-                )}
-                <Link href={`mailto:${email}`} className="p-2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-110 transition-all">
-                    <Mail className="w-5 h-5" />
-                </Link>
-            </motion.div>
-
-            <TechMarquee tech={marqueeTech} />
+            </div>
         </section>
     );
 }

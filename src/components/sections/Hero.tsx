@@ -1,29 +1,28 @@
-
-import { profileData, techStackData } from "@/data/static-db";
+import { profileData } from "@/data/static-db";
 import { HeroClient } from "./HeroClient";
 
 export function Hero() {
     const profile = profileData;
-    const marqueeTech = techStackData.filter((tech) => tech.inMarquee);
 
     if (!profile) {
         return null;
     }
 
+    // Hero subtext stays short: the first sentence of the bio.
+    const intro = profile.bio.split(/(?<=\.)\s/)[0] ?? profile.bio;
+    const [firstName, ...rest] = profile.name.split(' ');
+
     return (
         <HeroClient
             name={profile.name}
+            firstName={firstName}
+            lastName={rest.join(' ') || firstName}
             tagline={profile.tagline}
-            bio={profile.bio}
-            avatarUrl={profile.avatarUrl}
-            yearsCoding={profile.yearsCoding}
-            projectsCount={profile.projectsCount}
-            githubUrl={profile.socials.find(s => s.platform === 'GitHub')?.url || profile.avatarUrl.replace('.png', '')} // Fallback or logic to get GitHub URL
-            linkedinUrl={profile.socials.find(s => s.platform === 'LinkedIn')?.url}
+            intro={intro}
             email={profile.email}
             location={profile.location}
-            marqueeTech={marqueeTech}
             isAvailableForWork={profile.isAvailableForWork}
+            currentCompany={profile.currentCompany}
         />
     );
 }

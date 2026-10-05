@@ -56,7 +56,7 @@ export function ThemeToggle() {
 
     if (!mounted) {
         return (
-            <div className="h-9 w-16 rounded-full bg-zinc-200/60 dark:bg-zinc-800/60" />
+            <div className="h-9 w-[4.25rem] rounded-full bg-zinc-200/60 dark:bg-zinc-800/60" />
         );
     }
 

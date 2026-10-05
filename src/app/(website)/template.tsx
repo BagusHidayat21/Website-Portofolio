@@ -24,7 +24,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
     return (
         <div
-            className="relative transform-gpu"
+            className="relative"
             style={{
                 opacity: visible ? 1 : 0,
                 transition: visible ? 'opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',

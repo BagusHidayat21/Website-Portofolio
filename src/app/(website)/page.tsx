@@ -1,18 +1,24 @@
 import { Hero } from "@/components/sections/Hero";
+import { TechMarquee } from "@/components/sections/TechMarquee";
 import { About } from "@/components/sections/About";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
+import { Experience } from "@/components/sections/Experience";
 import { Contact } from "@/components/sections/Contact";
-import { Separator } from "@/components/ui/separator";
+import { techStackData } from "@/data/static-db";
 
 export default function Home() {
+  const marqueeItems = techStackData
+    .filter((tech) => tech.inMarquee && tech.isVisible)
+    .sort((a, b) => a.order - b.order)
+    .map((tech) => tech.name);
+
   return (
     <>
       <Hero />
-      <Separator className="max-w-4xl mx-auto" />
+      <TechMarquee items={marqueeItems} />
       <About />
-      <Separator className="max-w-4xl mx-auto" />
       <FeaturedProjects />
-      <Separator className="max-w-4xl mx-auto" />
+      <Experience />
       <Contact />
     </>
   );

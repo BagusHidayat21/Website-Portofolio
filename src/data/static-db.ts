@@ -17,6 +17,7 @@ export interface Profile {
     projectsCount: number;
     socials: SocialLink[];
     isAvailableForWork: boolean;
+    currentCompany?: string;
 }
 
 export interface AboutContent {
@@ -356,6 +357,7 @@ export const profileData: Profile = {
     yearsCoding: new Date().getFullYear() - 2019,
     projectsCount: projectsData.length,
     isAvailableForWork: false,
+    currentCompany: 'PT Universal Big Data',
     socials: [
         { platform: 'GitHub', url: 'https://github.com/BagusHidayat21', icon: 'Github' },
         { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/bagushidayat-id/', icon: 'Linkedin' },

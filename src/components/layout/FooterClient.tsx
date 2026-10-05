@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { useRef } from 'react';
 import { Profile } from '@/data/static-db';
+import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
 
 interface FooterClientProps {
     profile: Profile;
@@ -15,101 +17,96 @@ const navLinks = [
 ];
 
 export function FooterClient({ profile }: FooterClientProps) {
+    const root = useRef<HTMLElement>(null);
     const currentYear = new Date().getFullYear();
-    const github = profile.socials.find(s => s.platform === 'GitHub')?.url;
-    const linkedin = profile.socials.find(s => s.platform === 'LinkedIn')?.url;
+    const lastName = profile.name.split(' ').slice(-1)[0] ?? profile.name;
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add(MOTION_OK, () => {
+                const main = document.querySelector('main');
+                if (!main || !root.current) return;
+                // The footer is sticky behind <main>; drive the reveal from main's bottom edge.
+                const reveal = {
+                    trigger: main,
+                    start: 'bottom bottom',
+                    end: () => `+=${root.current?.offsetHeight ?? window.innerHeight}`,
+                    scrub: true,
+                };
+                gsap.fromTo('.ft-mark', { yPercent: 60 }, { yPercent: 0, ease: 'none', scrollTrigger: reveal });
+                gsap.fromTo('.ft-top', { yPercent: -30, autoAlpha: 0.2 }, { yPercent: 0, autoAlpha: 1, ease: 'none', scrollTrigger: reveal });
+            });
+            return () => mm.revert();
+        },
+        { scope: root }
+    );
 
     return (
-        <footer className="relative bg-zinc-950 dark:bg-black border-t border-zinc-800 overflow-hidden">
-
-            <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1.5px, transparent 1.5px)',
-                    backgroundSize: '28px 28px',
-                }}
-            />
-
-            <div
-                className="absolute bottom-0 right-0 font-display font-black leading-none tracking-tighter pointer-events-none select-none"
-                style={{
-                    fontSize: 'clamp(60px, 12vw, 180px)',
-                    WebkitTextStroke: '1px #27272a',
-                    color: 'transparent',
-                    transform: 'translateX(6%) translateY(18%)',
-                }}
-                aria-hidden="true"
-            >
-                HID.
-            </div>
-
-            <div className="relative z-10 section-container pt-14 pb-10 border-b border-zinc-800">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-
-                    <div>
-                        <h2 className="font-display text-3xl md:text-4xl font-black tracking-tighter text-white leading-none mb-2">
-                            {profile.name}<span className="text-zinc-700">.</span>
-                        </h2>
-                        <p className="text-zinc-600 text-sm font-medium max-w-xs">
-                            {profile.tagline}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                        {github && (
-                            <Link
-                                href={github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2.5 text-zinc-600 hover:text-white transition-colors"
-                                aria-label="GitHub"
-                            >
-                                <Github className="w-4 h-4" />
-                            </Link>
-                        )}
-                        {linkedin && (
-                            <Link
-                                href={linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2.5 text-zinc-600 hover:text-white transition-colors"
-                                aria-label="LinkedIn"
-                            >
-                                <Linkedin className="w-4 h-4" />
-                            </Link>
-                        )}
-                        <Link
-                            href={`mailto:${profile.email}`}
-                            className="p-2.5 text-zinc-600 hover:text-white transition-colors"
-                            aria-label="Email"
-                        >
-                            <Mail className="w-4 h-4" />
-                        </Link>
-                    </div>
+        <footer
+            ref={root}
+            className="sticky bottom-0 z-0 flex min-h-[85dvh] flex-col justify-between overflow-hidden bg-ink-bg-2 text-ink-fg"
+        >
+            <div className="ft-top mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-4 pb-10 pt-24 sm:px-6 md:grid-cols-12 md:pt-32 lg:px-10">
+                <div className="md:col-span-7">
+                    <p className="text-sm text-ink-muted">Got a project in mind?</p>
+                    <a
+                        href={`mailto:${profile.email}`}
+                        className="group mt-4 inline-flex max-w-full items-center gap-4 font-wide text-[clamp(1.5rem,3.6vw,3.25rem)] font-extrabold uppercase leading-none tracking-[-0.035em]"
+                    >
+                        <span className="truncate">Hire Me</span>
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45 md:h-16 md:w-16">
+                            <ArrowUpRight className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1.75} aria-hidden="true" />
+                        </span>
+                    </a>
                 </div>
-            </div>
 
-            <div className="relative z-10 section-container py-5">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-
-                    <p className="text-zinc-700 text-xs font-mono tracking-wide">
-                        © {currentYear} {profile.name} · {profile.location}
-                    </p>
-
-                    <nav className="flex items-center gap-5">
-                        {navLinks.map(link => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="text-zinc-600 hover:text-zinc-300 transition-colors text-xs tracking-widest uppercase font-medium"
-                            >
-                                {link.label}
-                            </Link>
+                <nav aria-label="Footer" className="grid grid-cols-2 gap-8 text-sm md:col-span-5">
+                    <ul className="space-y-3">
+                        {navLinks.map((link) => (
+                            <li key={link.href}>
+                                <Link href={link.href} className="text-ink-muted transition-colors hover:text-ink-fg">
+                                    {link.label}
+                                </Link>
+                            </li>
                         ))}
-                    </nav>
-                </div>
+                    </ul>
+                    <ul className="space-y-3">
+                        {profile.socials.map((social) => (
+                            <li key={social.platform}>
+                                <a
+                                    href={social.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-ink-muted transition-colors hover:text-ink-fg"
+                                >
+                                    {social.platform}
+                                </a>
+                            </li>
+                        ))}
+                        <li>
+                            <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="text-ink-muted transition-colors hover:text-ink-fg">
+                                Resume
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
+            <div>
+                <div
+                    aria-hidden="true"
+                    className="ft-mark text-outline select-none whitespace-nowrap px-2 text-center font-wide text-[22vw] font-extrabold uppercase leading-[0.78] tracking-[-0.05em] text-ink-fg/25"
+                >
+                    {lastName}
+                </div>
+                <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 border-t border-ink-line px-4 py-6 text-xs text-ink-muted sm:flex-row sm:items-center sm:px-6 lg:px-10">
+                    <p>
+                        © {currentYear} {profile.name}
+                    </p>
+                    <p>{profile.tagline}</p>
+                </div>
+            </div>
         </footer>
     );
 }

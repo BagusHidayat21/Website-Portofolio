@@ -40,6 +40,16 @@
   --border: #E4E4E7;
   --input: #E4E4E7;
   --ring: #A1A1AA;
+
+  /* Ink palette: home redesign tokens */
+  --ink-bg: #f3f3ef;
+  --ink-bg-2: #e8e8e2;
+  --ink-fg: #0b0b0c;
+  --ink-muted: #5c5c57;
+  --ink-line: rgb(11 11 12 / 0.1);
+  --ink-accent: #c8ff3d;
+  --ink-on-accent: #0b0b0c;
+  --ink-accent-ink: #4a6b00;
 }
 
 .dark {
@@ -69,9 +79,28 @@
   --border: #27272A;
   --input: #27272A;
   --ring: #D4D4D8;
+
+  --ink-bg: #070708;
+  --ink-bg-2: #0f0f11;
+  --ink-fg: #f2f2ee;
+  --ink-muted: #8b8b85;
+  --ink-line: rgb(255 255 255 / 0.1);
+  --ink-accent: #c8ff3d;
+  --ink-on-accent: #0b0b0c;
+  --ink-accent-ink: #c8ff3d;
 }
 
 @theme inline {
+  --color-ink-bg: var(--ink-bg);
+  --color-ink-bg-2: var(--ink-bg-2);
+  --color-ink-fg: var(--ink-fg);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-line: var(--ink-line);
+  --color-ink-accent: var(--ink-accent);
+  --color-ink-on-accent: var(--ink-on-accent);
+  --color-ink-accent-ink: var(--ink-accent-ink);
+  --font-display: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -111,6 +140,10 @@
     scroll-behavior: smooth;
   }
 
+  body {
+    overflow-x: clip;
+  }
+
 
   body {
     -webkit-font-smoothing: antialiased;
@@ -137,6 +170,44 @@
   @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
     .glass {
       @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md;
+    }
+  }
+
+  /* Frosted-glass pill (web approximation, not Apple Liquid Glass).
+     Solid fill when blur is unsupported or the user reduces transparency. */
+  .glass-pill {
+    @apply border border-ink-line bg-ink-bg/70 backdrop-blur-md;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.6),
+      0 10px 40px -16px rgb(24 24 27 / 0.25);
+  }
+
+  .dark .glass-pill {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 12px 48px -16px rgb(0 0 0 / 0.8);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-pill {
+      @apply bg-ink-bg;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .glass-pill {
+      @apply bg-ink-bg backdrop-blur-none;
+    }
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px currentColor;
+  }
+
+  @media (min-width: 768px) {
+    .text-outline {
+      -webkit-text-stroke-width: 1.5px;
     }
   }
 
@@ -274,4 +345,30 @@
 
 ::view-transition-new(root) {
   z-index: 9999;
+}
+
+
+/* Wide display face (Archivo, wdth axis) for the kinetic headings. */
+@utility font-wide {
+  font-family: var(--font-archivo), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+}
+
+/* Lenis smooth scroll (overrides the html scroll-smooth class while active). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

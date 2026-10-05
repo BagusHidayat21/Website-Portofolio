@@ -1,18 +1,16 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Github, ExternalLink, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight, ArrowUpRight, ExternalLink, Github, Star } from 'lucide-react';
 import { useMemo, useRef } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Project } from '@/data/static-db';
 import { useGithubStats } from '@/hooks/useGithubStats';
+import { gsap, useGSAP, DESKTOP_MOTION } from '@/lib/gsap';
 
 export function FeaturedProjectsClient({ projects: baseProjects }: { projects: Project[] }) {
-    const containerRef = useRef(null);
+    const root = useRef<HTMLElement>(null);
     const stats = useGithubStats();
     const statsLoading = stats === null;
 
@@ -21,120 +19,224 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
         [baseProjects, stats]
     );
 
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+
+            mm.add(DESKTOP_MOTION, () => {
+                const scope = root.current;
+                if (!scope) return;
+                const pinEl = scope.querySelector<HTMLElement>('.pj-pin');
+                const track = scope.querySelector<HTMLElement>('.pj-track');
+                if (!pinEl || !track) return;
+
+                const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+                const pan = gsap.to(track, {
+                    x: () => -distance(),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: pinEl,
+                        start: 'top top',
+                        end: () => `+=${distance()}`,
+                        pin: true,
+                        scrub: 1,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                        onUpdate: (self) => gsap.set('.pj-bar', { scaleX: self.progress }),
+                    },
+                });
+
+                gsap.utils.toArray<HTMLElement>('.pj-panel').forEach((panel) => {
+                    const img = panel.querySelector('.pj-img');
+                    const title = panel.querySelector('.pj-title');
+                    const range = {
+                        trigger: panel,
+                        containerAnimation: pan,
+                        start: 'left right',
+                        end: 'right left',
+                        scrub: true,
+                    };
+                    if (img) gsap.fromTo(img, { xPercent: -9 }, { xPercent: 9, ease: 'none', scrollTrigger: range });
+                    if (title) gsap.fromTo(title, { xPercent: 30 }, { xPercent: -12, ease: 'none', scrollTrigger: range });
+                });
+
+                gsap.fromTo(
+                    '.pj-intro-word',
+                    { xPercent: 0 },
+                    {
+                        xPercent: -40,
+                        ease: 'none',
+                        stagger: 0.1,
+                        scrollTrigger: { trigger: pinEl, start: 'top top', end: () => `+=${window.innerWidth}`, scrub: true },
+                    }
+                );
+            });
+
+            mm.add('(max-width: 1023px) and (prefers-reduced-motion: no-preference)', () => {
+                gsap.utils.toArray<HTMLElement>('.pj-panel').forEach((panel) => {
+                    const card = panel.querySelector('.pj-media');
+                    const img = panel.querySelector('.pj-img');
+                    if (card)
+                        gsap.fromTo(
+                            card,
+                            { scale: 0.86, autoAlpha: 0.35 },
+                            {
+                                scale: 1,
+                                autoAlpha: 1,
+                                ease: 'none',
+                                scrollTrigger: { trigger: panel, start: 'top 95%', end: 'top 40%', scrub: true },
+                            }
+                        );
+                    if (img)
+                        gsap.fromTo(
+                            img,
+                            { yPercent: -8 },
+                            {
+                                yPercent: 8,
+                                ease: 'none',
+                                scrollTrigger: { trigger: panel, start: 'top bottom', end: 'bottom top', scrub: true },
+                            }
+                        );
+                });
+            });
+
+            return () => mm.revert();
+        },
+        { scope: root }
+    );
+
     return (
-        <section id="projects" ref={containerRef} className="py-24 md:py-32 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-700">
-            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h2 className="text-sm font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase mb-4">Selected Works</h2>
-                        <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-zinc-900 dark:text-zinc-100 max-w-xl leading-tight">
-                            Digital products crafted with precision.
-                        </h3>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                    >
-                        <Button variant="outline" className="h-12 px-6 rounded-full border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all font-medium">
-                            <Link href="/projects" className="flex items-center gap-2">
-                                View All Archive
-                                <ArrowRight className="w-4 h-4" />
-                            </Link>
-                        </Button>
-                    </motion.div>
-                </div>
-
-                <div className="grid gap-20">
-                    {projects.map((project, index) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-10%" }}
-                            transition={{ duration: 0.8 }}
-                            className="group relative"
+        <section ref={root} id="projects" className="relative bg-ink-bg text-ink-fg">
+            <div className="pj-pin relative overflow-hidden py-28 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100dvh] lg:motion-safe:items-center lg:motion-safe:py-0">
+                <div
+                    className="pj-track flex flex-col gap-24 lg:motion-safe:w-max lg:motion-safe:flex-row lg:motion-safe:items-center lg:motion-safe:gap-[5vw] lg:motion-safe:pl-10 lg:motion-safe:pr-[12vw]"
+                >
+                    {/* Intro panel */}
+                    <div className="shrink-0 px-4 sm:px-6 lg:motion-safe:w-[38vw] lg:motion-safe:px-0">
+                        <h2 className="font-wide text-[clamp(3.25rem,9vw,9.5rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.045em]">
+                            <span className="pj-intro-word block">Selected</span>
+                            <span className="pj-intro-word text-outline block">work</span>
+                        </h2>
+                        <p className="mt-8 max-w-[38ch] text-lg leading-relaxed text-ink-muted">
+                            Products I designed, built and shipped, from thesis research to production platforms.
+                        </p>
+                        <Link
+                            href="/projects"
+                            className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink-fg"
                         >
-                            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
-                                <div className={`lg:col-span-7 relative ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                                    <div className="relative aspect-[16/10] bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center">
-                                            <span className="text-9xl font-black text-zinc-50 dark:text-zinc-800 select-none opacity-50">{index + 1}</span>
-                                        </div>
-                                        {project.images && project.images[0] && (
+                            All projects
+                            <ArrowRight
+                                className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1"
+                                strokeWidth={1.75}
+                            />
+                        </Link>
+                    </div>
+
+                    {projects.map((project, index) => (
+                        <article key={project.id} className="pj-panel shrink-0 px-4 sm:px-6 lg:motion-safe:w-[56vw] lg:motion-safe:px-0">
+                            <Link href={`/projects/${project.slug}`} className="group block" aria-label={`${project.title} case study`}>
+                                <div
+                                    className="pj-media relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-bg-2 ring-1 ring-ink-line sm:aspect-[16/11] lg:motion-safe:aspect-auto lg:motion-safe:h-[66vh]"
+                                >
+                                    {project.images?.[0] && (
+                                        <div className="pj-img absolute inset-[-12%]">
                                             <Image
                                                 src={project.images[0]}
                                                 alt={project.title}
                                                 fill
-                                                sizes="(min-width: 1024px) 58vw, 100vw"
-                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                sizes="(min-width: 1024px) 60vw, 100vw"
                                                 priority={index === 0}
+                                                className="object-cover contrast-[1.08] grayscale-[40%] transition-[filter,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04] group-hover:grayscale-0"
                                             />
-                                        )}
-
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-sm">
-                                            {project.liveUrl && (
-                                                <Button size="icon" className="h-14 w-14 rounded-full bg-white text-zinc-900 hover:bg-zinc-200 border-none shadow-xl hover:scale-110 transition-all" asChild>
-                                                    <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                                                        <ExternalLink className="w-6 h-6" />
-                                                    </Link>
-                                                </Button>
-                                            )}
-                                            {project.githubUrl && (
-                                                <Button size="icon" variant="ghost" className="h-14 w-14 rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-zinc-900 shadow-xl hover:scale-110 transition-all" asChild>
-                                                    <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                                        <Github className="w-6 h-6" />
-                                                    </Link>
-                                                </Button>
-                                            )}
                                         </div>
-                                    </div>
-                                </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-                                <div className={`lg:col-span-5 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                                    <div className="flex flex-col h-full justify-center">
-                                        <div className="flex items-center gap-2 flex-wrap mb-6">
-                                            {project.techStack.slice(0, 4).map((tech, i) => (
-                                                <Badge key={i} variant="secondary" className="px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
+                                    <span className="absolute right-5 top-5 flex h-14 w-14 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45 md:right-7 md:top-7">
+                                        <ArrowUpRight className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+                                    </span>
+
+                                    <div className="absolute inset-x-5 bottom-5 md:inset-x-8 md:bottom-8">
+                                        <div className="mb-4 flex flex-wrap items-center gap-2">
+                                            {project.techStack.slice(0, 4).map((tech) => (
+                                                <span
+                                                    key={tech}
+                                                    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-md"
+                                                >
                                                     {tech}
-                                                </Badge>
+                                                </span>
                                             ))}
                                             {statsLoading && project.githubUrl ? (
-                                                <Skeleton className="h-4 w-10 rounded-full" />
-                                            ) : typeof project.githubStars === 'number' && (
-                                                <span className="flex items-center gap-1 text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                                                    <Star className="w-3.5 h-3.5" />
-                                                    {project.githubStars}
-                                                </span>
+                                                <Skeleton className="h-6 w-12 rounded-full bg-white/15" />
+                                            ) : (
+                                                typeof project.githubStars === 'number' && (
+                                                    <span className="flex items-center gap-1 rounded-full bg-black/30 px-3 py-1 text-xs font-medium text-white">
+                                                        <Star className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
+                                                        {project.githubStars}
+                                                    </span>
+                                                )
                                             )}
                                         </div>
-
-                                        <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                            <Link href={`/projects/${project.slug}`}>
-                                                {project.title}
-                                            </Link>
+                                        <h3 className="pj-title font-wide text-[clamp(2.25rem,5.5vw,6rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.04em] text-white">
+                                            {project.title}
                                         </h3>
-
-                                        <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-8 line-clamp-3">
-                                            {project.description}
-                                        </p>
-
-                                        <Link href={`/projects/${project.slug}`} className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4">
-                                            View Case Study
-                                            <ArrowUpRight className="w-4 h-4" />
-                                        </Link>
                                     </div>
                                 </div>
+                            </Link>
+
+                            <div className="mt-6 flex items-start justify-between gap-6">
+                                <p className="max-w-[56ch] text-base leading-relaxed text-ink-muted">{project.description}</p>
+                                <div className="flex shrink-0 items-center gap-1">
+                                    {project.githubUrl && (
+                                        <a
+                                            href={project.githubUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${project.title} on GitHub`}
+                                            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:bg-ink-fg hover:text-ink-bg"
+                                        >
+                                            <Github className="h-4 w-4" strokeWidth={1.75} />
+                                        </a>
+                                    )}
+                                    {project.liveUrl && (
+                                        <a
+                                            href={project.liveUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${project.title} live site`}
+                                            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:bg-ink-fg hover:text-ink-bg"
+                                        >
+                                            <ExternalLink className="h-4 w-4" strokeWidth={1.75} />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </motion.div>
+                        </article>
                     ))}
+
+                    {/* Closing panel */}
+                    <div className="flex shrink-0 justify-center px-4 sm:px-6 lg:motion-safe:w-[30vw] lg:motion-safe:px-0">
+                        <Link
+                            href="/projects"
+                            className="group relative flex aspect-square w-full max-w-[22rem] flex-col items-center justify-center gap-4 rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.04]"
+                        >
+                            <span className="font-wide text-[clamp(1.75rem,3vw,2.75rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.03em]">
+                                All
+                                <br />
+                                projects
+                            </span>
+                            <ArrowUpRight
+                                className="h-8 w-8 transition-transform duration-500 group-hover:rotate-45"
+                                strokeWidth={1.5}
+                                aria-hidden="true"
+                            />
+                        </Link>
+                    </div>
+                </div>
+
+                <div aria-hidden="true" className="absolute inset-x-10 bottom-10 hidden h-px bg-ink-line lg:motion-safe:block">
+                    <div className="pj-bar h-full origin-left scale-x-0 bg-ink-accent" />
                 </div>
             </div>
         </section>
