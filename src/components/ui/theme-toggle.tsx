@@ -6,13 +6,12 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
 
+const noopSubscribe = () => () => {};
+
 export function ThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme();
-    const [mounted, setMounted] = React.useState(false);
-
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
+    // False during SSR and hydration, true on the client, without a setState-in-effect pass.
+    const mounted = React.useSyncExternalStore(noopSubscribe, () => true, () => false);
 
     const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
         const isDark = resolvedTheme === 'dark';

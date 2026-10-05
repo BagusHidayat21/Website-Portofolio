@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 export default function Template({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const prevPathname = useRef(pathname);
-    const [overlay, setOverlay] = useState(false);
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
