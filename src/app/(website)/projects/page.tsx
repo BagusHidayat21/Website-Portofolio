@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import { projectsData } from "@/data/static-db";
+import { profileData, projectsData, techStackData } from "@/data/static-db";
 import { ProjectsClient } from "@/components/sections/ProjectsClient";
+import { Contact } from "@/components/sections/Contact";
 
 export const metadata: Metadata = {
     title: "Projects",
@@ -14,5 +15,16 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
     const projects = projectsData.filter((p) => p.isVisible).sort((a, b) => a.order - b.order);
-    return <ProjectsClient projects={projects} />;
+    const marqueeItems = techStackData
+        .filter((t) => t.inMarquee && t.isVisible)
+        .sort((a, b) => a.order - b.order)
+        .map((t) => t.name);
+    const githubUrl = profileData.socials.find((s) => s.platform === 'GitHub')?.url;
+
+    return (
+        <>
+            <ProjectsClient projects={projects} marqueeItems={marqueeItems} githubUrl={githubUrl} />
+            <Contact />
+        </>
+    );
 }

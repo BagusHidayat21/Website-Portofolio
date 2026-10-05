@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, Github, Star } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { KineticHero } from '@/components/sections/KineticHero';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { Project } from '@/data/static-db';
 import { useGithubStats } from '@/hooks/useGithubStats';
@@ -29,9 +30,6 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
         () => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
-                gsap.from('.pd-line', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.1 });
-                gsap.from('.pd-fade', { y: 24, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.08, delay: 0.4 });
-
                 gsap.fromTo(
                     '.pd-photo',
                     { yPercent: -9, scale: 1.18 },
@@ -52,6 +50,13 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                     }
                 );
 
+                // Next project headline slides in from both sides, as the home contact headline does.
+                if (root.current?.querySelector('.pd-next')) {
+                    const range = { trigger: '.pd-next', start: 'top bottom', end: 'center center', scrub: 1 };
+                    gsap.fromTo('.pd-next-left', { xPercent: -45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
+                    gsap.fromTo('.pd-next-right', { xPercent: 45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
+                }
+
                 gsap.utils.toArray<HTMLElement>('.pd-shot').forEach((el) => {
                     gsap.from(el, {
                         yPercent: 10,
@@ -68,63 +73,42 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
     );
 
     return (
-        <article ref={root} className="relative overflow-hidden text-ink-fg">
-            <header className="px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 md:pb-24 md:pt-48 lg:px-10">
-                <div className="mx-auto max-w-7xl">
-                    <Link
-                        href="/projects"
-                        className="pd-fade group inline-flex h-11 items-center gap-2 rounded-full border border-ink-line pl-3 pr-5 text-sm font-medium text-ink-muted transition-colors hover:border-ink-fg/30 hover:text-ink-fg"
-                    >
-                        <ArrowLeft
-                            className="h-4 w-4 transition-transform duration-500 group-hover:-translate-x-1"
-                            strokeWidth={1.75}
-                            aria-hidden="true"
-                        />
-                        All projects
-                    </Link>
-
-                    <h1 className="mt-8 font-wide text-[clamp(2.25rem,6vw,5.25rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em] break-words">
-                        <span className="pd-line block overflow-hidden pb-[0.06em]">
-                            {project.title}
-                            <span className="text-ink-accent-ink">.</span>
-                        </span>
-                    </h1>
-
-                    <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-12 sm:gap-10 lg:grid-cols-12">
-                        <p className="pd-fade max-w-[46ch] text-lg leading-relaxed text-ink-muted md:text-xl lg:col-span-7">
-                            {project.description}
-                        </p>
-                        <div className="pd-fade flex flex-wrap items-start gap-3 lg:col-span-5 lg:justify-end">
+        <article ref={root} className="relative overflow-clip text-ink-fg">
+            <KineticHero
+                lines={[project.title, String(year)]}
+                srTitle={`${project.title}, case study`}
+                pill={project.liveUrl ? 'Live site available' : 'Case study'}
+                pillLive={Boolean(project.liveUrl)}
+                meta={project.techStack.slice(0, 3).join(' / ')}
+                kicker="Case study"
+                intro={project.description}
+                density={0.6}
+                actions={
+                    project.liveUrl || project.githubUrl ? (
+                        <>
                             {project.liveUrl && (
                                 <MagneticButton href={project.liveUrl} external size="lg" icon={ArrowUpRight} iconDirection="diagonal">
-                                    Visit live site
+                                    Visit Live Site
                                 </MagneticButton>
                             )}
                             {project.githubUrl && (
-                                <MagneticButton
-                                    href={project.githubUrl}
-                                    external
-                                    variant="secondary"
-                                    size="lg"
-                                    icon={Github}
-                                >
-                                    Source code
+                                <MagneticButton href={project.githubUrl} external variant="secondary" size="lg" icon={Github}>
+                                    Source Code
                                 </MagneticButton>
                             )}
-                        </div>
-                    </div>
-                </div>
-            </header>
+                        </>
+                    ) : undefined
+                }
+            />
 
             {heroImage && (
                 <section className="px-4 sm:px-6 lg:px-10" aria-label={`${project.title} preview`}>
-                    <div className="mx-auto max-w-7xl rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line">
-                        <div className="pd-frame relative aspect-[16/10] overflow-hidden rounded-[calc(2.25rem-0.5rem)] bg-ink-bg-2">
+                    <div className="mx-auto max-w-7xl shell">
+                        <div className="pd-frame relative aspect-[16/10] overflow-hidden shell-core bg-ink-bg-2">
                             <Image
                                 src={heroImage}
                                 alt={project.title}
                                 fill
-                                priority
                                 sizes="(min-width: 1280px) 1240px, 100vw"
                                 className="pd-photo object-cover"
                             />
@@ -134,23 +118,23 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                 </section>
             )}
 
-            <section className="px-4 py-24 sm:px-6 md:py-40 lg:px-10">
-                <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-10">
+            <section className="py-24 md:py-40">
+                <div className="page-x grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-10">
                     <aside className="lg:col-span-4">
-                        <div className="rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line lg:sticky lg:top-28">
-                            <div className="space-y-8 rounded-[calc(2.25rem-0.5rem)] bg-ink-bg-2 p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] md:p-9">
+                        <div className="shell lg:sticky lg:top-28">
+                            <div className="space-y-8 shell-core bg-ink-bg-2 p-7 md:p-9">
                                 <div>
-                                    <p className="font-mono text-sm text-ink-muted">Year</p>
+                                    <p className="label text-ink-muted">Year</p>
                                     <p className="mt-1 font-wide text-3xl font-extrabold tracking-[-0.03em] tabular-nums">{year}</p>
                                 </div>
 
                                 <div>
-                                    <p className="font-mono text-sm text-ink-muted">Built with</p>
+                                    <p className="label text-ink-muted">Built with</p>
                                     <ul className="mt-3 flex flex-wrap gap-2">
                                         {project.techStack.map((tech) => (
                                             <li
                                                 key={tech}
-                                                className="rounded-full bg-ink-fg/[0.06] px-3 py-1 text-xs font-medium text-ink-fg/80"
+                                                className="chip text-ink-fg/80"
                                             >
                                                 {tech}
                                             </li>
@@ -160,7 +144,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
 
                                 {typeof project.githubStars === 'number' && (
                                     <div>
-                                        <p className="font-mono text-sm text-ink-muted">GitHub stars</p>
+                                        <p className="label text-ink-muted">GitHub stars</p>
                                         <p className="mt-1 flex items-center gap-2 font-wide text-3xl font-extrabold tracking-[-0.03em] tabular-nums">
                                             <Star className="h-6 w-6 text-ink-accent-ink" strokeWidth={1.75} aria-hidden="true" />
                                             {project.githubStars}
@@ -220,7 +204,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                                     ul: ({ children }) => <ul className="mb-8 space-y-3">{children}</ul>,
                                     li: ({ children }) => (
                                         <li className="flex max-w-[62ch] items-start gap-3 border-t border-ink-line pt-3 text-lg leading-relaxed text-ink-fg/80">
-                                            <span className="mt-[0.7em] h-2 w-2 shrink-0 rounded-full bg-ink-accent" aria-hidden="true" />
+                                            <span className="mt-[0.7em] h-2 w-2 shrink-0 rounded-full bg-ink-accent-ink" aria-hidden="true" />
                                             <span>{children}</span>
                                         </li>
                                     ),
@@ -257,36 +241,43 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                 </div>
             </section>
 
-            {(prevProject || nextProject) && (
-                <nav
-                    aria-label="More projects"
-                    className="border-t border-ink-line px-4 py-16 sm:px-6 md:py-24 lg:px-10"
-                >
-                    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 md:grid-cols-2">
-                        {prevProject ? (
-                            <Link href={`/projects/${prevProject.slug}`} className="group block">
-                                <p className="font-mono text-sm text-ink-muted">Previous</p>
-                                <p className="mt-3 font-wide text-[clamp(1.5rem,3.2vw,2.75rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em] text-ink-fg/60 transition-colors duration-500 group-hover:text-ink-fg">
-                                    {prevProject.title}
-                                </p>
-                            </Link>
-                        ) : (
-                            <span aria-hidden="true" />
-                        )}
-                        {nextProject && (
-                            <Link href={`/projects/${nextProject.slug}`} className="group block md:text-right">
-                                <p className="font-mono text-sm text-ink-muted">Next</p>
-                                <p className="mt-3 flex items-center gap-5 font-wide text-[clamp(1.5rem,3.2vw,2.75rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em] md:justify-end">
-                                    <span>{nextProject.title}</span>
-                                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45 md:h-16 md:w-16">
-                                        <ArrowUpRight className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1.75} aria-hidden="true" />
-                                    </span>
-                                </p>
-                            </Link>
-                        )}
-                    </div>
-                </nav>
-            )}
+            <nav aria-label="More projects" className="border-t border-ink-line pb-16 pt-16 md:pb-24 md:pt-28">
+                {nextProject && (
+                    <Link href={`/projects/${nextProject.slug}`} className="pd-next group block overflow-hidden">
+                        <span className="label page-x block text-ink-muted">Next project</span>
+                        <span className="mt-6 block font-wide text-[clamp(1.75rem,6.6vw,6.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                            <span className="pd-next-left block sm:whitespace-nowrap px-4 sm:px-6 lg:px-10">Up next</span>
+                            <span className="pd-next-right text-outline block sm:whitespace-nowrap px-4 text-right transition-colors duration-500 group-hover:text-ink-fg sm:px-6 lg:px-10">
+                                {nextProject.title}
+                                <span className="text-ink-accent-ink [-webkit-text-stroke:0]">.</span>
+                            </span>
+                        </span>
+                    </Link>
+                )}
+
+                <div className="page-x mt-12 flex flex-wrap items-center justify-between gap-4 md:mt-16">
+                    <Link
+                        href="/projects"
+                        className="group inline-flex h-11 items-center gap-2 rounded-full border border-ink-line pl-3 pr-5 text-sm font-medium text-ink-muted transition-colors hover:border-ink-fg/30 hover:text-ink-fg"
+                    >
+                        <ArrowLeft
+                            className="h-4 w-4 transition-transform duration-500 group-hover:-translate-x-1"
+                            strokeWidth={1.75}
+                            aria-hidden="true"
+                        />
+                        All projects
+                    </Link>
+                    {prevProject && (
+                        <Link
+                            href={`/projects/${prevProject.slug}`}
+                            className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
+                        >
+                            <span className="label">Previous</span>
+                            <span className="font-wide font-extrabold uppercase tracking-[-0.02em]">{prevProject.title}</span>
+                        </Link>
+                    )}
+                </div>
+            </nav>
         </article>
     );
 }
