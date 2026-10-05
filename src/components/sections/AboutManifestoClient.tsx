@@ -21,7 +21,6 @@ interface AboutManifestoClientProps {
 // Manifesto copy, condensed from the existing About section. The portrait pill is inserted after PILL_AFTER words.
 const MANIFESTO =
     'I engineer full stack products with modern web architecture, machine learning and data, and I teach vocational students to ship software the way the industry does.';
-const PILL_AFTER = 4;
 const HIGHLIGHT = new Set(['full', 'stack', 'machine', 'learning', 'data,']);
 
 export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoClientProps) {
@@ -42,28 +41,6 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                         ease: 'none',
                         stagger: 0.08,
                         scrollTrigger: { trigger: '.mf-text', start: 'top 75%', end: 'bottom 40%', scrub: true },
-                    }
-                );
-
-                gsap.fromTo(
-                    '.mf-pill',
-                    { scale: 0.4, rotate: -12 },
-                    {
-                        scale: 1,
-                        rotate: 0,
-                        ease: 'none',
-                        scrollTrigger: { trigger: '.mf-text', start: 'top 80%', end: 'top 35%', scrub: true },
-                    }
-                );
-
-                // Giant background word slides sideways.
-                gsap.fromTo(
-                    '.mf-bgword',
-                    { xPercent: 10 },
-                    {
-                        xPercent: -35,
-                        ease: 'none',
-                        scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: true },
                     }
                 );
 
@@ -123,15 +100,12 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
     );
 
     return (
-        <section ref={root} id="about" className="relative overflow-hidden bg-ink-bg py-32 text-ink-fg md:py-48">
-            <span
-                aria-hidden="true"
-                className="mf-bgword text-outline pointer-events-none absolute left-0 top-16 select-none whitespace-nowrap font-wide text-[clamp(6rem,22vw,22rem)] font-extrabold uppercase leading-none text-ink-fg/[0.07]"
-            >
-                Code and data
-            </span>
-
+        <section ref={root} id="about" className="relative overflow-hidden bg-ink-bg py-20 text-ink-fg md:py-28">
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+                <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink-muted">
+                    <span className="h-1.5 w-1.5 rounded-full bg-ink-accent" />
+                    <span>Philosophy & Background</span>
+                </div>
                 <h2 className="sr-only">About {name}</h2>
                 <p className="mf-text max-w-6xl text-balance font-display text-[clamp(1.85rem,4.2vw,4.25rem)] font-medium leading-[1.12] tracking-[-0.035em]">
                     {words.map((word, i) => (
@@ -145,19 +119,11 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                             >
                                 {word}
                             </span>{' '}
-                            {i === PILL_AFTER - 1 && (
-                                <span
-                                    aria-hidden="true"
-                                    className="mf-pill relative mx-1 inline-block h-[0.85em] w-[2.1em] overflow-hidden rounded-full align-[-0.08em] ring-1 ring-ink-line"
-                                >
-                                    <Image src={avatarUrl} alt="" fill sizes="10rem" className="object-cover object-top" />
-                                </span>
-                            )}
                         </Fragment>
                     ))}
                 </p>
 
-                <div className="mt-24 grid grid-cols-1 gap-12 md:mt-36 lg:grid-cols-12 lg:gap-10">
+                <div className="mt-14 grid grid-cols-1 gap-12 md:mt-20 lg:grid-cols-12 lg:gap-10">
                     <div className="lg:col-span-5" data-speed="-1">
                         {/* Double-bezel portrait frame */}
                         <div className="rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line">
@@ -169,7 +135,15 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                                     sizes="(min-width: 1024px) 40vw, 100vw"
                                     className="mf-photo object-cover object-top"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                                <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3 py-1 font-mono text-[11px] text-white backdrop-blur-md">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-ink-accent animate-pulse" />
+                                    <span>{name}</span>
+                                </div>
+                                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between text-xs text-white/90">
+                                    <span className="font-medium">Software Engineer</span>
+                                    <span className="font-mono text-[11px] text-white/70">Malang, ID</span>
+                                </div>
                             </div>
                         </div>
                     </div>

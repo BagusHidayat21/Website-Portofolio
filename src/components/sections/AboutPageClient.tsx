@@ -1,555 +1,344 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { BrainCircuit, Database, Github, Linkedin, Instagram, Shield, Target, Zap, FileText, type LucideIcon } from 'lucide-react';
 import { useRef } from 'react';
-import {
-    ArrowUpRight, Briefcase, Globe, Database, BrainCircuit,
-    Server, Code, Layers, Cpu, Shield, Zap, Target, LucideIcon, GraduationCap, Download
-} from 'lucide-react';
+import { ExperienceClient } from '@/components/sections/ExperienceClient';
+import { MagneticButton } from '@/components/ui/magnetic-button';
+import { type AboutContent, type Education, type Experience, type Profile } from '@/data/static-db';
+import { gsap, useGSAP, applyParallax, MOTION_OK } from '@/lib/gsap';
+import { cn } from '@/lib/utils';
 
-export interface PhilosophyItem { title: string; description: string; icon: string; }
-export interface ExperienceItem {
-    id: number; title: string; company: string; year: string;
-    description: string; skills: string[]; location?: string | null;
-    category?: string | null; url?: string | null;
-    isVisible: boolean; order: number;
-}
-export interface EducationItem {
-    id: number; institution: string; degree: string; field: string;
-    year: string; description: string; location?: string | null;
-    isVisible: boolean; order: number;
-}
-export interface AboutContentData {
-    heroTitle: string; heroSubtitle: string; heroDescription: string;
-    storyTitle: string | null; storyContent: string | null;
-    images: string[]; tags: string[]; philosophy?: PhilosophyItem[] | null;
-}
 interface AboutPageClientProps {
-    aboutContent: AboutContentData | null;
-    experience: ExperienceItem[];
-    education: EducationItem[];
+    profile: Profile;
+    aboutContent: AboutContent;
+    experience: Experience[];
+    education: Education[];
 }
 
-const ICON_MAP: Record<string, LucideIcon> = {
-    Database, BrainCircuit, Server, Code, Globe, Layers, Cpu, Shield, Zap, Target,
-};
+// Philosophy icons come from data; only icons that match each principle are mapped.
+const PRINCIPLE_ICONS: Record<string, LucideIcon> = { Database, BrainCircuit, Zap, Target, Shield };
+const SOCIAL_ICONS: Record<string, LucideIcon> = { GitHub: Github, LinkedIn: Linkedin, Instagram };
 
-const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
+export function AboutPageClient({ profile, aboutContent, experience, education }: AboutPageClientProps) {
+    const root = useRef<HTMLDivElement>(null);
 
-function FloatingParticle({ size, initialX, initialY, scrollY, speed = 1, delay = 0 }: {
-    size: number; initialX: string; initialY: string;
-    scrollY: MotionValue<number>; speed?: number; delay?: number;
-}) {
-    const y = useTransform(scrollY, [0, 1], [0, 200 * speed]);
-    const smoothY = useSpring(y, springConfig);
-    return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 0.4, scale: 1 }}
-            transition={{ duration: 1.5, delay }}
-            style={{ y: smoothY, left: initialX, top: initialY, width: size, height: size }}
-            className="absolute rounded-full bg-gradient-to-br from-zinc-400/30 to-zinc-600/20 dark:from-zinc-500/20 dark:to-zinc-300/10 blur-sm pointer-events-none"
-        />
+    const experienceItems = experience
+        .filter((e) => e.isVisible)
+        .sort((a, b) => a.order - b.order)
+        .map(({ id, title, company, year, description, skills, category }) => ({
+            id,
+            title,
+            company,
+            year,
+            description,
+            skills,
+            category: category ?? 'Work',
+        }));
+
+    const educationItems = education.filter((e) => e.isVisible).sort((a, b) => a.order - b.order);
+    const story = aboutContent.storyContent.split('\n\n');
+    const principles = aboutContent.philosophy;
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add(MOTION_OK, () => {
+                gsap.from('.ab-line', { yPercent: 110, duration: 1.3, ease: 'expo.out', stagger: 0.1 });
+                gsap.from('.ab-fade', { y: 24, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.08, delay: 0.45 });
+
+                gsap.to('.ab-h-1', {
+                    xPercent: -12,
+                    ease: 'none',
+                    scrollTrigger: { trigger: '.ab-head', start: 'top top', end: 'bottom top', scrub: true },
+                });
+                gsap.to('.ab-h-2', {
+                    xPercent: 10,
+                    ease: 'none',
+                    scrollTrigger: { trigger: '.ab-head', start: 'top top', end: 'bottom top', scrub: true },
+                });
+
+                // Portrait: frame opens up while the photo drifts the other way.
+                gsap.fromTo(
+                    '.ab-photo',
+                    { yPercent: -12, scale: 1.2 },
+                    {
+                        yPercent: 12,
+                        scale: 1.2,
+                        ease: 'none',
+                        scrollTrigger: { trigger: '.ab-frame', start: 'top bottom', end: 'bottom top', scrub: true },
+                    }
+                );
+                gsap.fromTo(
+                    '.ab-frame',
+                    { clipPath: 'inset(18% 12% 18% 12% round 2rem)' },
+                    {
+                        clipPath: 'inset(0% 0% 0% 0% round 2rem)',
+                        ease: 'none',
+                        scrollTrigger: { trigger: '.ab-frame', start: 'top 95%', end: 'top 35%', scrub: true },
+                    }
+                );
+
+                gsap.from('.ab-story > *', {
+                    y: 40,
+                    autoAlpha: 0,
+                    stagger: 0.12,
+                    duration: 1,
+                    ease: 'expo.out',
+                    scrollTrigger: { trigger: '.ab-story', start: 'top 80%' },
+                });
+
+                // Principles heading drifts, then each card shrinks as the next slides over it.
+                gsap.fromTo(
+                    '.pp-heading',
+                    { xPercent: 12 },
+                    {
+                        xPercent: -18,
+                        ease: 'none',
+                        scrollTrigger: { trigger: '.pp-section', start: 'top bottom', end: 'top top', scrub: true },
+                    }
+                );
+                const cards = gsap.utils.toArray<HTMLElement>('.pp-card');
+                cards.forEach((card, i) => {
+                    const next = cards[i + 1];
+                    if (next) {
+                        gsap.to(card.querySelector('.pp-inner'), {
+                            scale: 0.92,
+                            autoAlpha: 0.35,
+                            rotate: i % 2 === 0 ? -1.5 : 1.5,
+                            ease: 'none',
+                            scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 20%', scrub: true },
+                        });
+                    }
+                    gsap.from(card.querySelectorAll('.pp-rise'), {
+                        yPercent: 60,
+                        autoAlpha: 0,
+                        stagger: 0.08,
+                        duration: 1,
+                        ease: 'expo.out',
+                        scrollTrigger: { trigger: card, start: 'top 80%' },
+                    });
+                });
+
+                gsap.from('.ed-card', {
+                    yPercent: 14,
+                    autoAlpha: 0,
+                    stagger: 0.15,
+                    duration: 1.1,
+                    ease: 'expo.out',
+                    scrollTrigger: { trigger: '.ed-section', start: 'top 75%' },
+                });
+
+                applyParallax(root.current);
+            });
+            return () => mm.revert();
+        },
+        { scope: root }
     );
-}
 
-function ExperienceRow({ exp, index }: { exp: ExperienceItem; index: number }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.07 }}
-            className="py-8 first:pt-0 last:pb-0 group"
-        >
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                <div>
-                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                        {exp.title}
-                    </h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                        <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                        {exp.company}
+        <>
+            <div ref={root}>
+            <section className="relative overflow-hidden bg-ink-bg text-ink-fg">
+                <div className="ab-head pt-36 md:pt-48">
+                    <h1 className="font-wide text-[clamp(2.5rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                        <span className="sr-only">About {profile.name}</span>
+                        <span aria-hidden="true" className="ab-h-1 block whitespace-nowrap px-4 sm:px-6 lg:px-10">
+                            <span className="ab-line block overflow-hidden pb-[0.06em]">{aboutContent.heroTitle}</span>
+                        </span>
+                        <span
+                            aria-hidden="true"
+                            className="ab-h-2 text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10"
+                        >
+                            <span className="ab-line block overflow-hidden pb-[0.06em]">
+                                {aboutContent.heroSubtitle.replace('.', '')}
+                                <span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                            </span>
+                        </span>
+                    </h1>
+                </div>
+
+                <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 md:mt-24 lg:px-10">
+                    <p className="ab-fade max-w-[52ch] text-balance text-lg leading-relaxed text-ink-muted md:text-xl">
+                        {aboutContent.heroDescription}
                     </p>
                 </div>
-                <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
-                    {exp.year}
-                </span>
-            </div>
 
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                {exp.description}
-            </p>
-
-            <div className="flex flex-wrap items-center gap-1.5">
-                {exp.skills.map(skill => (
-                    <span key={skill} className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-medium">
-                        {skill}
-                    </span>
-                ))}
-                {exp.url && (
-                    <Link
-                        href={exp.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4 ml-1"
-                    >
-                        View reference
-                        <ArrowUpRight className="w-3 h-3" />
-                    </Link>
-                )}
-            </div>
-        </motion.div>
-    );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-3 mb-4"
-        >
-            <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100 flex-shrink-0" />
-            <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">{children}</span>
-        </motion.div>
-    );
-}
-
-export function AboutPageClient({ aboutContent, experience, education }: AboutPageClientProps) {
-    const heroRef = useRef(null);
-
-    const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-
-    const bgY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 100]), springConfig);
-    const bgScale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.1]), springConfig);
-    const bgOpac = useSpring(useTransform(scrollYProgress, [0, 0.5], [0.06, 0.02]), springConfig);
-    const contentY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
-    const contentO = useSpring(useTransform(scrollYProgress, [0.6, 1], [1, 0]), springConfig);
-    const orbLY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), springConfig);
-    const orbRY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 120]), springConfig);
-    const statsY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 60]), springConfig);
-    const decorY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 150]), springConfig);
-    const decorR = useSpring(useTransform(scrollYProgress, [0, 1], [-12, 20]), springConfig);
-
-    if (!aboutContent) return null;
-
-    const { heroTitle, heroSubtitle, heroDescription, storyContent, images, tags, philosophy } = aboutContent;
-    const mainImage = images?.[0];
-    const secondaryImage = images?.[1];
-    const visibleExp = experience.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
-    const workExperiences = visibleExp.filter(e => e.category === 'Work');
-    const projectExperiences = visibleExp.filter(e => e.category === 'Project' || e.category === 'Achievement');
-    const visibleEdu = education.filter(e => e.isVisible).sort((a, b) => a.order - b.order);
-
-    return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
-
-            <section
-                ref={heroRef}
-                className="relative min-h-[85dvh] flex flex-col justify-center overflow-hidden bg-zinc-50 dark:bg-zinc-950 pt-24 pb-32 lg:py-20"
-            >
-                <div className="hidden lg:block">
-                    <FloatingParticle size={120} initialX="10%" initialY="20%" scrollY={scrollYProgress} speed={0.5} delay={0.2} />
-                    <FloatingParticle size={80} initialX="85%" initialY="15%" scrollY={scrollYProgress} speed={0.8} delay={0.4} />
-                    <FloatingParticle size={60} initialX="75%" initialY="60%" scrollY={scrollYProgress} speed={1.2} delay={0.6} />
-                    <FloatingParticle size={100} initialX="5%" initialY="70%" scrollY={scrollYProgress} speed={0.6} delay={0.3} />
-                    <FloatingParticle size={40} initialX="50%" initialY="80%" scrollY={scrollYProgress} speed={1.5} delay={0.5} />
-                </div>
-
-                <motion.div className="absolute inset-0 z-0 dark:hidden pointer-events-none"
-                    style={{
-                        y: bgY, scale: bgScale, opacity: bgOpac,
-                        backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }} />
-                <motion.div className="absolute inset-0 z-0 hidden dark:block pointer-events-none"
-                    style={{
-                        y: bgY, scale: bgScale, opacity: bgOpac,
-                        backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }} />
-
-                <motion.div className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-zinc-200/40 to-transparent dark:from-zinc-700/20 rounded-full blur-3xl pointer-events-none" style={{ y: orbLY }} />
-                <motion.div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-tl from-zinc-300/30 to-transparent dark:from-zinc-600/15 rounded-full blur-3xl pointer-events-none" style={{ y: orbRY }} />
-
-                <motion.div
-                    style={{ y: contentY, opacity: contentO }}
-                    className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8 relative z-10 grid md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center"
-                >
-                    <div className="md:col-span-8 flex flex-col justify-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.1 }}
-                            className="mb-3 lg:mb-4 flex items-center gap-3"
-                        >
-                            <div className="h-[2px] w-8 bg-zinc-900 dark:bg-zinc-100" />
-                            <span className="text-lg font-medium text-zinc-600 dark:text-zinc-400">
-                                Who I <span className="text-zinc-900 dark:text-zinc-100 font-bold">Am</span>
-                            </span>
-                        </motion.div>
-
-                        <div className="relative mb-6 lg:mb-8">
-                            <motion.h1
-                                initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                className="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 leading-[0.95]"
-                            >
-                                {heroTitle.toUpperCase()}
-                                <br />
-                                <span className="text-zinc-900 dark:text-zinc-400">{heroSubtitle.toUpperCase()}</span>
-                            </motion.h1>
-
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
-                                style={{ y: decorY, rotate: decorR }}
-                                className="absolute -top-6 right-0 sm:-top-8 sm:right-4 lg:-top-12 lg:right-8 block"
-                            >
-                                <Code className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 text-zinc-900 dark:text-zinc-100" />
-                                <div className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] sm:text-xs px-2 py-1 rounded absolute top-8 right-0 sm:top-10 sm:left-6 sm:right-auto whitespace-nowrap">
-                                    GPA 3.85
-                                </div>
-                            </motion.div>
-                        </div>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.4 }}
-                            className="text-base sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl font-medium leading-relaxed"
-                        >
-                            {heroDescription}
-                        </motion.p>
-                    </div>
-
-                    <div className="md:col-span-4 flex flex-col items-start md:items-end gap-8">
-                        <motion.div
-                            style={{ y: statsY }}
-                            initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.7 }}
-                            className="text-center lg:text-right"
-                        >
-                            <h2
-                                className="text-7xl sm:text-8xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-tighter leading-none"
-                                style={{ WebkitTextStroke: '1px #d4d4d8', color: 'transparent' }}
-                            >
-                                {(new Date().getFullYear() - 2019).toString().padStart(2, '0')}
-                            </h2>
-                            <p className="text-sm font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase mt-1">
-                                Years Coding
-                            </p>
-                        </motion.div>
-
-                        <motion.div
-                            style={{ y: statsY }}
-                            initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.9 }}
-                            className="flex flex-row md:flex-col gap-6 md:items-end"
-                        >
-                            {[
-                                { value: `${experience.length}+`, label: 'Experience' },
-                                { value: '3.85', label: 'GPA' },
-                            ].map(stat => (
-                                <div key={stat.label} className="text-center lg:text-right">
-                                    <span className="text-2xl font-black text-zinc-900 dark:text-zinc-100">{stat.value}</span>
-                                    <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">{stat.label}</p>
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
-                </motion.div>
-            </section>
-
-            <section className="py-16 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.7 }}
-                            className="md:col-span-8 h-[320px] md:h-[520px] relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800"
-                        >
-                            {mainImage && (
-                                <Image src={mainImage} alt="Workspace" fill
-                                    sizes="(min-width: 768px) 66vw, 100vw"
-                                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
-                            )}
-                            <div className="absolute top-5 left-5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-zinc-900 dark:text-zinc-100">
-                                My Workspace
-                            </div>
-                        </motion.div>
-
-                        <div className="md:col-span-4 flex flex-col gap-4 md:gap-5">
-                            <motion.div
-                                initial={{ opacity: 0, x: 16 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.15 }}
-                                className="flex-1 relative group overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-800 min-h-[200px]"
-                            >
-                                {secondaryImage && (
-                                    <Image src={secondaryImage} alt="Setup" fill
-                                        sizes="(min-width: 768px) 33vw, 100vw"
-                                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
-                                )}
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, x: 16 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.3 }}
-                                className="rounded-2xl bg-zinc-900 dark:bg-zinc-800 p-6 md:p-7 flex flex-col justify-between min-h-[160px]"
-                            >
-                                <Globe className="w-6 h-6 text-zinc-400" />
-                                <div>
-                                    <h3 className="text-2xl font-black tracking-tight text-white mb-0.5">Malang</h3>
-                                    <p className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">PT Universal Big Data</p>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                    <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                        <div className="md:col-span-4">
-                            <div className="md:sticky md:top-32">
-                                <SectionLabel>Background</SectionLabel>
-                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                    The<br />Story.
-                                </h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                                    Design and building web applications powered by modern frontend & reliable backend APIs.
+                <div className="mx-auto mt-24 grid max-w-7xl grid-cols-1 gap-16 px-4 pb-32 sm:px-6 md:mt-36 md:pb-48 lg:grid-cols-12 lg:gap-10 lg:px-10">
+                    <div className="lg:col-span-5" data-speed="-1">
+                        <div className="rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line">
+                            <div className="ab-frame relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.5rem)] bg-ink-bg-2">
+                                <Image
+                                    src={profile.avatarUrl}
+                                    alt={`Portrait of ${profile.name}`}
+                                    fill
+                                    priority
+                                    sizes="(min-width: 1024px) 40vw, 100vw"
+                                    className="ab-photo object-cover object-top"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                <p className="absolute inset-x-6 bottom-6 font-mono text-sm text-white/85">
+                                    {profile.location}
+                                    {profile.currentCompany ? `, ${profile.currentCompany}` : ''}
                                 </p>
                             </div>
                         </div>
-
-                        <div className="md:col-span-8">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6 }}
-                                className="space-y-5 text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed"
-                            >
-                                {(storyContent ?? '').split('\n\n').map((paragraph, i) => (
-                                    <p key={i}>{paragraph}</p>
-                                ))}
-                            </motion.div>
-
-                            {tags.length > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.3 }}
-                                    className="flex flex-wrap gap-2 mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800"
-                                >
-                                    {tags.map(tag => (
-                                        <span key={tag} className="px-4 py-1.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-semibold">
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </div>
                     </div>
-                </div>
-            </section>
 
-            <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                    <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                        <div className="md:col-span-4">
-                            <div className="md:sticky md:top-32">
-                                <SectionLabel>Career Path</SectionLabel>
-                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                    Work Experience
-                                </h2>
-                                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm mb-8">
-                                    Professional engineering roles and industrial positions.
+                    <div className="ab-story flex flex-col justify-end lg:col-span-6 lg:col-start-7">
+                        <h2 className="font-wide text-[clamp(1.75rem,3.6vw,3.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em]">
+                            {aboutContent.storyTitle}
+                            <span className="text-ink-accent-ink">.</span>
+                        </h2>
+                        <div className="mt-8 space-y-6">
+                            {story.map((paragraph, i) => (
+                                <p key={i} className="max-w-[58ch] text-lg leading-relaxed text-ink-muted">
+                                    {paragraph}
                                 </p>
-                                <Link
-                                    href="/resume.pdf"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4"
-                                >
-                                    <Download className="w-4 h-4" />
-                                    Download Resume
-                                </Link>
-                            </div>
-                        </div>
-
-                        <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
-                            {workExperiences.map((exp, i) => (
-                                <ExperienceRow key={exp.id} exp={exp} index={i} />
                             ))}
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {projectExperiences.length > 0 && (
-                <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                            <div className="md:col-span-4">
-                                <div className="md:sticky md:top-32">
-                                    <SectionLabel>Key Highlights</SectionLabel>
-                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                        Projects & Achievements
-                                    </h2>
-                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                                        Award-winning products, research publications, and community projects.
-                                    </p>
-                                </div>
-                            </div>
+                        <ul className="mt-10 flex flex-wrap gap-2">
+                            {aboutContent.tags.map((tag) => (
+                                <li
+                                    key={tag}
+                                    className="rounded-full border border-ink-line px-4 py-2 text-sm font-medium text-ink-fg/80"
+                                >
+                                    {tag}
+                                </li>
+                            ))}
+                        </ul>
 
-                            <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
-                                {projectExperiences.map((exp, i) => (
-                                    <ExperienceRow key={exp.id} exp={exp} index={i} />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {visibleEdu.length > 0 && (
-                <section className="py-24 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                            <div className="md:col-span-4">
-                                <div className="md:sticky md:top-32">
-                                    <SectionLabel>Academic</SectionLabel>
-                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                        Education
-                                    </h2>
-                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                                        Academic background that built my foundation.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="md:col-span-8 space-y-0 divide-y divide-zinc-100 dark:divide-zinc-800">
-                                {visibleEdu.map((edu, i) => (
-                                    <motion.div
-                                        key={edu.id}
-                                        initial={{ opacity: 0, y: 16 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="py-8 first:pt-0 last:pb-0"
+                        <div className="mt-12 flex flex-wrap items-center gap-3">
+                            <MagneticButton href={profile.resumeUrl} external size="lg" icon={FileText}>
+                                Download resume
+                            </MagneticButton>
+                            {profile.socials.map((social) => {
+                                const Icon = SOCIAL_ICONS[social.platform];
+                                return (
+                                    <a
+                                        key={social.platform}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={social.platform}
+                                        className="flex h-14 w-14 items-center justify-center rounded-full border border-ink-line text-ink-fg transition-colors hover:bg-ink-fg hover:text-ink-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent"
                                     >
-                                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                                            <div>
-                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                                                    {edu.institution}
-                                                </h3>
-                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
-                                                    <GraduationCap className="w-3.5 h-3.5 flex-shrink-0" />
-                                                    {edu.degree} · {edu.field}
-                                                </p>
-                                            </div>
-                                            <span className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest whitespace-nowrap">
-                                                {edu.year}
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                                            {edu.description}
-                                        </p>
-                                    </motion.div>
-                                ))}
-                            </div>
+                                        {Icon ? <Icon className="h-5 w-5" strokeWidth={1.75} /> : social.platform}
+                                    </a>
+                                );
+                            })}
                         </div>
                     </div>
-                </section>
-            )}
+                </div>
 
-            {philosophy && philosophy.length > 0 && (
-                <section className="py-24 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
-                    <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                        <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-                            <div className="md:col-span-4">
-                                <div className="md:sticky md:top-32">
-                                    <SectionLabel>Principles</SectionLabel>
-                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-[0.95] mb-5">
-                                        Philosophy
-                                    </h2>
-                                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                                        Core principles that guide my approach to software and problem-solving.
-                                    </p>
-                                </div>
-                            </div>
+            </section>
 
-                            <div className="md:col-span-8">
-                                <div className="grid sm:grid-cols-2 gap-4">
-                                    {(philosophy as PhilosophyItem[]).map((item, i) => {
-                                        const Icon = ICON_MAP[item.icon] || Database;
-                                        const isOdd = philosophy.length % 2 !== 0;
-                                        const isLast = i === philosophy.length - 1;
-                                        return (
-                                            <motion.div
-                                                key={i}
-                                                initial={{ opacity: 0, y: 16 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: i * 0.08 }}
-                                                className={`group p-6 rounded-xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-300 ${isOdd && isLast ? 'sm:col-span-2' : ''}`}
-                                            >
-                                                <div className="w-10 h-10 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center mb-4">
-                                                    <Icon className="w-5 h-5 text-white dark:text-zinc-900" />
-                                                </div>
-                                                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            {/* Sticky cards need an ancestor without overflow clipping, so this sits outside the hero section. */}
+            <section className="pp-section relative bg-ink-bg pb-32 text-ink-fg md:pb-48">
+                    <h2 className="pp-heading mb-16 whitespace-nowrap px-4 font-wide text-[clamp(2.5rem,6.5vw,5.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em] sm:px-6 md:mb-24 lg:px-10">
+                        Principles<span className="text-ink-accent">.</span>
+                    </h2>
+
+                    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+                        {principles.map((item, i) => {
+                            const current = i === 0;
+                            const Icon = PRINCIPLE_ICONS[item.icon] ?? Zap;
+                            return (
+                                <div
+                                    key={item.title}
+                                    className="pp-card sticky mb-[18vh] last:mb-0"
+                                    style={{ top: `calc(5.5rem + ${i * 1.1}rem)` }}
+                                >
+                                    <article className="pp-inner origin-top rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line will-change-transform">
+                                        <div
+                                            className={cn(
+                                                'grid min-h-[44vh] grid-cols-1 gap-8 rounded-[calc(2.25rem-0.5rem)] p-7 md:min-h-[360px] md:grid-cols-12 md:p-12',
+                                                current
+                                                    ? 'bg-ink-accent text-ink-on-accent'
+                                                    : 'bg-ink-bg-2 text-ink-fg shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]'
+                                            )}
+                                        >
+                                            <div className="flex items-start justify-between gap-6 md:col-span-3 md:flex-col">
+                                                <p className="pp-rise font-mono text-sm">{String(i + 1).padStart(2, '0')}</p>
+                                                <span
+                                                    className={cn(
+                                                        'pp-rise flex h-14 w-14 items-center justify-center rounded-full',
+                                                        current ? 'bg-black/10' : 'bg-ink-fg/[0.06]'
+                                                    )}
+                                                    aria-hidden="true"
+                                                >
+                                                    <Icon className="h-6 w-6" strokeWidth={1.5} />
+                                                </span>
+                                            </div>
+                                            <div className="flex flex-col justify-between gap-8 md:col-span-9">
+                                                <h3 className="pp-rise font-wide text-[clamp(1.75rem,3.6vw,3.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em]">
                                                     {item.title}
                                                 </h3>
-                                                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                                                <p
+                                                    className={cn(
+                                                        'pp-rise max-w-[56ch] text-lg leading-relaxed',
+                                                        current ? 'text-black/75' : 'text-ink-muted'
+                                                    )}
+                                                >
                                                     {item.description}
                                                 </p>
-                                            </motion.div>
-                                        );
-                                    })}
+                                            </div>
+                                        </div>
+                                    </article>
                                 </div>
-                            </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            </div>
+
+            {experienceItems.length > 0 && <ExperienceClient items={experienceItems} />}
+
+            {educationItems.length > 0 && (
+                <section className="ed-section relative bg-ink-bg pb-32 pt-8 text-ink-fg md:pb-48">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+                        <h2 className="font-wide text-[clamp(2.5rem,6vw,5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                            Education<span className="text-ink-accent">.</span>
+                        </h2>
+                        <div className="mt-16 grid grid-cols-1 gap-6 md:mt-24 md:grid-cols-2">
+                            {educationItems.map((edu, i) => (
+                                <article
+                                    key={edu.id}
+                                    className="ed-card rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line"
+                                >
+                                    <div
+                                        className={cn(
+                                            'flex h-full min-h-[22rem] flex-col justify-between gap-10 rounded-[calc(2.25rem-0.5rem)] p-7 md:p-10',
+                                            i === 0
+                                                ? 'bg-ink-accent text-ink-on-accent'
+                                                : 'bg-ink-bg-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]'
+                                        )}
+                                    >
+                                        <p className="font-mono text-sm">{edu.year}</p>
+                                        <div>
+                                            <h3 className="font-wide text-[clamp(1.5rem,2.6vw,2.5rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em]">
+                                                {edu.institution}
+                                            </h3>
+                                            <p className={cn('mt-4 font-medium', i === 0 ? 'text-black/70' : 'text-ink-muted')}>
+                                                {edu.degree}, {edu.field}
+                                            </p>
+                                            <p
+                                                className={cn(
+                                                    'mt-4 max-w-[52ch] leading-relaxed',
+                                                    i === 0 ? 'text-black/80' : 'text-ink-fg/75'
+                                                )}
+                                            >
+                                                {edu.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
                     </div>
                 </section>
             )}
-
-            <section className="py-24 bg-zinc-900 dark:bg-zinc-900">
-                <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8"
-                    >
-                        <div>
-                            <p className="text-zinc-400 text-xs font-bold tracking-[0.25em] uppercase mb-4">Let&apos;s Work Together</p>
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white leading-[0.95]">
-                                Have a project<br />
-                                <span className="text-zinc-400">in mind?</span>
-                            </h2>
-                        </div>
-                        <Link
-                            href="mailto:bagus.hidayat.id@gmail.com"
-                            className="group inline-flex items-center gap-3 px-6 py-3 bg-white text-zinc-900 rounded-full font-bold text-sm hover:bg-zinc-100 transition-colors"
-                        >
-                            Get in touch
-                            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </Link>
-                    </motion.div>
-                </div>
-            </section>
-        </div>
+        </>
     );
 }
