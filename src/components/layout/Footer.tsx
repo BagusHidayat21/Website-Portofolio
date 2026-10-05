@@ -74,51 +74,53 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    <nav aria-label="Footer" className="space-y-4 md:col-span-3 md:col-start-7">
-                        <p className="label text-ink-muted">Pages</p>
-                        <ul className="space-y-0.5">
-                            {site.nav.map((link) => (
-                                <li key={link.href}>
-                                    <Link href={link.href} className={`${linkRow} gap-3 font-medium`}>
-                                        <span className="font-mono text-xs transition-colors group-hover:text-ink-accent-ink">{link.index}</span>
-                                        {link.label}
-                                        <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100" />
-                                    </Link>
-                                </li>
-                            ))}
-                            <li>
-                                <a href={site.resumeUrl} target="_blank" rel="noopener noreferrer" className={`${linkRow} gap-3 font-medium`}>
-                                    <span className="font-mono text-xs transition-colors group-hover:text-ink-accent-ink">04</span>
-                                    Resume
-                                    <FileText className="h-3.5 w-3.5 transition-colors group-hover:text-ink-fg" />
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    <div className="space-y-4 md:col-span-3">
-                        <p className="label text-ink-muted">Elsewhere</p>
-                        <ul className="space-y-0.5">
-                            {site.socials.map(({ platform, url }) => {
-                                const Icon = socialIcons[platform];
-                                return (
-                                    <li key={platform}>
-                                        <a href={url} target="_blank" rel="noopener noreferrer" className={linkRow}>
-                                            <Icon className="h-4 w-4" />
-                                            {platform}
-                                            <ArrowUpRight className={arrow} />
-                                        </a>
+                    <div className="grid grid-cols-2 gap-8 md:col-span-6 md:col-start-7">
+                        <nav aria-label="Footer" className="space-y-4">
+                            <p className="label text-ink-muted">Pages</p>
+                            <ul className="space-y-0.5">
+                                {site.nav.map((link) => (
+                                    <li key={link.href}>
+                                        <Link href={link.href} className={`${linkRow} gap-3 font-medium`}>
+                                            <span className="font-mono text-xs transition-colors group-hover:text-ink-accent-ink">{link.index}</span>
+                                            {link.label}
+                                            <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100" />
+                                        </Link>
                                     </li>
-                                );
-                            })}
-                            <li>
-                                <a href={`mailto:${profile.email}`} className={linkRow}>
-                                    <Mail className="h-4 w-4" />
-                                    Email
-                                    <ArrowUpRight className={arrow} />
-                                </a>
-                            </li>
-                        </ul>
+                                ))}
+                                <li>
+                                    <a href={site.resumeUrl} target="_blank" rel="noopener noreferrer" className={`${linkRow} gap-3 font-medium`}>
+                                        <span className="font-mono text-xs transition-colors group-hover:text-ink-accent-ink">04</span>
+                                        Resume
+                                        <FileText className="h-3.5 w-3.5 transition-colors group-hover:text-ink-fg" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <div className="space-y-4">
+                            <p className="label text-ink-muted">Elsewhere</p>
+                            <ul className="space-y-0.5">
+                                {site.socials.map(({ platform, url }) => {
+                                    const Icon = socialIcons[platform];
+                                    return (
+                                        <li key={platform}>
+                                            <a href={url} target="_blank" rel="noopener noreferrer" className={linkRow}>
+                                                <Icon className="h-4 w-4" />
+                                                {platform}
+                                                <ArrowUpRight className={arrow} />
+                                            </a>
+                                        </li>
+                                    );
+                                })}
+                                <li>
+                                    <a href={`mailto:${profile.email}`} className={linkRow}>
+                                        <Mail className="h-4 w-4" />
+                                        Email
+                                        <ArrowUpRight className={arrow} />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 

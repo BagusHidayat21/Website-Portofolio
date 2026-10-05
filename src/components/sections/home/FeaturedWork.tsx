@@ -100,14 +100,14 @@ export function FeaturedWork({ projects }: { projects: ProjectCardData[] }) {
                     <div className="flex shrink-0 justify-center px-4 sm:px-6 lg:motion-safe:w-[30vw] lg:motion-safe:px-0">
                         <Link
                             href="/projects"
-                            className="group relative flex aspect-square w-full max-w-[22rem] flex-col items-center justify-center gap-4 rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-700 ease-expo hover:scale-[1.04]"
+                            className="group relative flex aspect-square w-36 sm:w-48 lg:w-60 flex-col items-center justify-center gap-2 sm:gap-3 rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-700 ease-expo hover:scale-[1.04]"
                         >
-                            <span className="font-wide text-[clamp(1.75rem,3vw,2.75rem)] uppercase leading-[0.9] tracking-[-0.03em]">
+                            <span className="text-center font-wide text-sm sm:text-lg lg:text-2xl uppercase leading-[0.9] tracking-[-0.03em]">
                                 All
                                 <br />
                                 projects
                             </span>
-                            <ArrowUpRight aria-hidden="true" className="h-8 w-8 transition-transform duration-500 group-hover:rotate-45" strokeWidth={1.5} />
+                            <ArrowUpRight aria-hidden="true" className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 transition-transform duration-500 group-hover:rotate-45" strokeWidth={1.5} />
                         </Link>
                     </div>
                 </div>

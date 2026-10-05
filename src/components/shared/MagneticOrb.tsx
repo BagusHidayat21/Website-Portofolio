@@ -40,12 +40,12 @@ export function MagneticOrb({ href, label }: { href: string; label: string }) {
                 href={href}
                 onPointerMove={follow}
                 onPointerLeave={release}
-                className="group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink focus-visible:ring-offset-4 focus-visible:ring-offset-ink-bg"
+                className="group relative flex aspect-square w-36 sm:w-48 lg:w-60 flex-col items-center justify-center gap-2 sm:gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_20px_50px_-20px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink focus-visible:ring-offset-4 focus-visible:ring-offset-ink-bg"
             >
-                <span className="px-10 text-center font-wide text-[clamp(1.5rem,2.6vw,2.25rem)] uppercase leading-none tracking-[-0.03em]">{label}</span>
+                <span className="px-4 text-center font-wide text-sm sm:text-lg lg:text-2xl uppercase leading-none tracking-[-0.03em]">{label}</span>
                 <ArrowUpRight
                     aria-hidden="true"
-                    className="h-9 w-9 transition-transform duration-500 ease-expo group-hover:-translate-y-1 group-hover:translate-x-1"
+                    className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 transition-transform duration-500 ease-expo group-hover:-translate-y-1 group-hover:translate-x-1"
                     strokeWidth={1.5}
                 />
             </a>

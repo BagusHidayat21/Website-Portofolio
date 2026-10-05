@@ -51,19 +51,19 @@ export function Manifesto({ name, avatarUrl, stats }: ManifestoProps) {
                     </Parallax>
 
                     <div className="flex flex-col justify-end lg:col-span-6 lg:col-start-7">
-                        <RevealGroup className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
-                            {stats.map((stat, i) => (
-                                <Parallax key={stat.label} speed={0.3 + i * 0.25}>
-                                    <div className="rise border-t border-ink-line pt-6">
-                                        <p className="font-wide text-[clamp(3rem,6vw,5.5rem)] leading-none tracking-[-0.04em]">
+                        <Parallax speed={0.25}>
+                            <RevealGroup className="grid grid-cols-3 gap-3 sm:gap-6">
+                                {stats.map((stat) => (
+                                    <div key={stat.label} className="rise border-t border-ink-line pt-4 sm:pt-6">
+                                        <p className="font-wide text-[clamp(1.75rem,5.5vw,5rem)] leading-none tracking-[-0.04em]">
                                             <CountUp value={stat.value} />
                                             {stat.suffix ? <span className="text-ink-accent-ink">{stat.suffix}</span> : null}
                                         </p>
-                                        <p className="mt-3 text-sm text-ink-muted">{stat.label}</p>
+                                        <p className="mt-2 text-xs sm:text-sm leading-snug text-ink-muted">{stat.label}</p>
                                     </div>
-                                </Parallax>
-                            ))}
-                        </RevealGroup>
+                                ))}
+                            </RevealGroup>
+                        </Parallax>
 
                         <p className="mt-14 max-w-[52ch] text-lg leading-relaxed text-ink-muted">
                             Software engineer at PT Universal Big Data and graduate of Universitas Negeri Malang. Most of my week goes to two things:

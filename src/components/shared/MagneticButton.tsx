@@ -21,7 +21,7 @@ const variants = {
 } as const;
 
 const sizes = {
-    lg: { button: 'h-14 pl-7 pr-2 text-base', icon: 'h-10 w-10' },
+    lg: { button: 'h-11 sm:h-14 pl-5 sm:pl-7 pr-1.5 sm:pr-2 text-xs sm:text-base', icon: 'h-8 w-8 sm:h-10 sm:w-10' },
     sm: { button: 'h-10 pl-4 pr-1.5 text-sm', icon: 'h-7 w-7' },
 } as const;
 
