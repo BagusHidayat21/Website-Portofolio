@@ -4,7 +4,6 @@ import * as React from 'react';
 import { flushSync } from 'react-dom';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { motion } from 'framer-motion';
 
 const noopSubscribe = () => () => {};
 
@@ -63,17 +62,14 @@ export function ThemeToggle() {
 
     return (
         <button
+            type="button"
             onClick={toggleTheme}
             aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
             className="relative flex h-9 w-[4.25rem] cursor-pointer items-center justify-between rounded-full border border-ink-line bg-ink-fg/[0.05] p-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink"
         >
-            <motion.div
-                className="absolute bottom-1 top-1 w-7 rounded-full bg-ink-accent shadow-sm transform-gpu"
-                initial={false}
-                animate={{
-                    x: isDark ? 28 : 0
-                }}
-                transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+            <span
+                aria-hidden="true"
+                className={`absolute bottom-1 top-1 w-7 rounded-full bg-ink-accent shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.64,1)] motion-reduce:transition-none ${isDark ? 'translate-x-7' : 'translate-x-0'}`}
             />
 
             <div className={`relative z-10 w-7 h-7 flex items-center justify-center transition-colors duration-200 ${!isDark ? 'text-ink-on-accent' : 'text-ink-muted'}`}>

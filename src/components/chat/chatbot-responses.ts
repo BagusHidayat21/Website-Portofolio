@@ -90,11 +90,11 @@ const responses: ChatResponse[] = [
     },
     {
         patterns: ['thank', 'thanks', 'terima kasih', 'makasih'],
-        getResponse: () => "You're welcome! Feel free to ask if you have more questions. 😊"
+        getResponse: () => "You're welcome! Ask anytime if you have more questions."
     },
     {
         patterns: ['bye', 'goodbye', 'see you', 'sampai jumpa'],
-        getResponse: () => "Goodbye! Thanks for chatting. Feel free to come back anytime! 👋"
+        getResponse: () => "Thanks for stopping by. Come back anytime."
     }
 ];
 

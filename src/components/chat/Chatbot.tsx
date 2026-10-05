@@ -13,10 +13,10 @@ interface Message {
     isBot: boolean;
 }
 
-export function Chatbot() {
-    const [isOpen, setIsOpen] = useState(false);
+export function Chatbot({ defaultOpen = false }: { defaultOpen?: boolean }) {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
     const [showTooltip, setShowTooltip] = useState(false);
-    const [hasInteracted, setHasInteracted] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(defaultOpen);
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
@@ -157,8 +157,8 @@ export function Chatbot() {
             >
                 {!hasInteracted && (
                     <>
-                        <span className="absolute inset-0 rounded-full bg-ink-fg animate-ping opacity-20" />
-                        <span className="absolute inset-0 rounded-full bg-ink-fg animate-pulse opacity-30" />
+                        <span className="absolute inset-0 rounded-full bg-ink-fg animate-ping opacity-20 [animation-iteration-count:3]" />
+                        <span className="absolute inset-0 rounded-full bg-ink-fg animate-pulse opacity-30 [animation-iteration-count:3]" />
                     </>
                 )}
                 <MessageCircle className="w-6 h-6 relative z-10" />
@@ -266,9 +266,11 @@ function ChatTooltip({ onClose }: { onClose: () => void }) {
             className="fixed bottom-24 right-6 z-[1000] bg-ink-fg text-ink-bg px-5 py-3.5 rounded-2xl rounded-br-sm shadow-2xl max-w-[220px] border border-ink-line"
         >
             <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-bg/60">Virtual Assistant</p>
-            <p className="text-[13px] font-medium leading-relaxed">Hey! I&apos;m here to help with any questions. ✨</p>
+            <p className="text-[13px] font-medium leading-relaxed">Questions about my work or stack? Ask here.</p>
             <button
+                type="button"
                 onClick={onClose}
+                aria-label="Dismiss assistant message"
                 className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-ink-fg text-ink-bg flex items-center justify-center border border-ink-line shadow-lg"
             >
                 <X className="w-3 h-3" />

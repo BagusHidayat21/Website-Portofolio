@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useMotionValue, useReducedMotion, useSpring, type Variants } from 'framer-motion';
-import { useRef, type ComponentType, type PointerEvent, type ReactNode } from 'react';
+import { useEffect, useRef, type ComponentType, type PointerEvent, type ReactNode } from 'react';
+import { loadGsap } from '@/lib/gsap';
 import { cn } from '@/lib/utils';
 
-const MAGNET_SPRING = { stiffness: 150, damping: 15, mass: 0.4 };
 const MAX_PULL = 10;
 
 type Variant = 'primary' | 'secondary';
@@ -28,12 +27,17 @@ const variantClasses: Record<Variant, string> = {
     primary:
         'bg-ink-accent text-ink-on-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_12px_40px_-12px_rgba(200,255,61,0.45)] hover:brightness-105',
     secondary:
-        'border border-ink-line bg-ink-fg/[0.03] text-ink-fg hover:border-ink-fg/25 hover:bg-ink-fg/[0.06] backdrop-blur-md',
+        'border border-ink-line bg-ink-fg/[0.03] text-ink-fg hover:border-ink-fg/25 hover:bg-ink-fg/[0.06]',
 };
 
 const iconWrapClasses: Record<Variant, string> = {
     primary: 'bg-ink-on-accent/10',
     secondary: 'bg-ink-fg/[0.08]',
+};
+
+const iconNudge = {
+    right: 'group-hover:translate-x-[3px] group-hover:scale-[1.06]',
+    diagonal: 'group-hover:-translate-y-[2px] group-hover:translate-x-[2px] group-hover:scale-[1.06]',
 };
 
 const sizeClasses: Record<Size, { button: string; icon: string; withIcon: string }> = {
@@ -54,27 +58,41 @@ export function MagneticButton({
     onClick,
 }: MagneticButtonProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const reduceMotion = useReducedMotion();
-    const x = useSpring(useMotionValue(0), MAGNET_SPRING);
-    const y = useSpring(useMotionValue(0), MAGNET_SPRING);
+    const pull = useRef<{ x: (v: number) => void; y: (v: number) => void } | null>(null);
+
+    // Spring-like follow through GSAP quickTo (already loaded for the scroll scenes).
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        let cancelled = false;
+        let kill = () => {};
+        loadGsap().then(({ gsap }) => {
+            if (cancelled) return;
+            const x = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+            const y = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+            pull.current = { x, y };
+            kill = () => gsap.killTweensOf(el);
+        });
+        return () => {
+            cancelled = true;
+            kill();
+            pull.current = null;
+        };
+    }, []);
 
     const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
-        if (reduceMotion || e.pointerType !== 'mouse' || !ref.current) return;
+        if (e.pointerType !== 'mouse' || !ref.current || !pull.current) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const rect = ref.current.getBoundingClientRect();
         const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.3;
         const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.3;
-        x.set(Math.max(-MAX_PULL, Math.min(MAX_PULL, dx)));
-        y.set(Math.max(-MAX_PULL, Math.min(MAX_PULL, dy)));
+        pull.current.x(Math.max(-MAX_PULL, Math.min(MAX_PULL, dx)));
+        pull.current.y(Math.max(-MAX_PULL, Math.min(MAX_PULL, dy)));
     };
 
     const reset = () => {
-        x.set(0);
-        y.set(0);
-    };
-
-    const iconVariants: Variants = {
-        rest: { x: 0, y: 0, scale: 1 },
-        hover: iconDirection === 'diagonal' ? { x: 2, y: -2, scale: 1.06 } : { x: 3, y: 0, scale: 1.06 },
+        pull.current?.x(0);
+        pull.current?.y(0);
     };
 
     const s = sizeClasses[size];
@@ -83,14 +101,17 @@ export function MagneticButton({
         <>
             <span className="whitespace-nowrap">{children}</span>
             {Icon && (
-                <motion.span
-                    variants={reduceMotion ? undefined : iconVariants}
-                    transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                    className={cn('inline-flex items-center justify-center rounded-full', s.icon, iconWrapClasses[variant])}
+                <span
+                    className={cn(
+                        'inline-flex items-center justify-center rounded-full transition-transform duration-300 ease-[cubic-bezier(0.34,1.4,0.64,1)] motion-reduce:transition-none',
+                        s.icon,
+                        iconWrapClasses[variant],
+                        iconNudge[iconDirection]
+                    )}
                     aria-hidden="true"
                 >
                     <Icon className="h-4 w-4" strokeWidth={1.75} />
-                </motion.span>
+                </span>
             )}
         </>
     );
@@ -104,16 +125,7 @@ export function MagneticButton({
     );
 
     return (
-        <motion.div
-            ref={ref}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={reset}
-            style={{ x, y }}
-            initial="rest"
-            animate="rest"
-            whileHover="hover"
-            className="inline-flex"
-        >
+        <div ref={ref} onPointerMove={handlePointerMove} onPointerLeave={reset} className="inline-flex">
             {external ? (
                 <a href={href} target="_blank" rel="noopener noreferrer" className={classes} onClick={onClick}>
                     {content}
@@ -123,6 +135,6 @@ export function MagneticButton({
                     {content}
                 </Link>
             )}
-        </motion.div>
+        </div>
     );
 }
