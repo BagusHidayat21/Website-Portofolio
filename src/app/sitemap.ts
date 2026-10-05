@@ -1,38 +1,18 @@
-import { MetadataRoute } from 'next';
-import { projectsData } from '@/data/static-db';
+import type { MetadataRoute } from 'next';
+import { site } from '@/config/site';
+import { getProjects } from '@/lib/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://www.bagus-hidayat.my.id';
-
-    const staticPages: MetadataRoute.Sitemap = [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 1,
-        },
-        {
-            url: `${baseUrl}/about`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/projects`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-    ];
-
-    const projectPages: MetadataRoute.Sitemap = projectsData
-        .filter(p => p.isVisible)
-        .map((project) => ({
-            url: `${baseUrl}/projects/${project.slug}`,
-            lastModified: new Date(),
+    const now = new Date();
+    return [
+        { url: site.url, lastModified: now, changeFrequency: 'monthly', priority: 1 },
+        { url: `${site.url}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+        { url: `${site.url}/projects`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+        ...getProjects().map((project) => ({
+            url: `${site.url}/projects/${project.slug}`,
+            lastModified: project.updatedAt,
             changeFrequency: 'monthly' as const,
             priority: 0.6,
-        }));
-
-    return [...staticPages, ...projectPages];
+        })),
+    ];
 }

@@ -1,54 +1,33 @@
-import { Metadata } from "next";
-import { projectsData } from "@/data/static-db";
-import { ProjectDetailClient } from "@/components/sections/ProjectDetailClient";
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
+import { ProjectDetail } from '@/components/sections/projects/ProjectDetail';
+import { getAdjacentProjects, getProject, getProjects } from '@/lib/content';
+import { getRepoStars, starsFor } from '@/lib/github';
+import { pageMetadata } from '@/lib/seo';
 
-interface PageProps {
-    params: Promise<{ slug: string }>;
-}
+export const revalidate = 3600;
+export const dynamicParams = false;
 
-export async function generateStaticParams() {
-    return projectsData.filter(p => p.isVisible).map((project) => ({
-        slug: project.slug,
-    }));
-}
+export const generateStaticParams = () => getProjects().map(({ slug }) => ({ slug }));
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<'/projects/[slug]'>) {
     const { slug } = await params;
-    const decodedSlug = decodeURIComponent(slug);
-    const project = projectsData.find(p => p.slug === slug || p.slug === decodedSlug);
-
-    if (!project) {
-        return {
-            title: "Project Not Found",
-        };
-    }
-
-    return {
+    const project = getProject(slug);
+    if (!project) return { title: 'Project Not Found' };
+    return pageMetadata({
         title: project.title,
-        description: project.description || `${project.title} - A project by Bagus Hidayat built with ${project.techStack?.slice(0, 3).join(", ") || "modern technologies"}.`,
-        openGraph: {
-            title: `${project.title} | Bagus Hidayat`,
-            description: project.description || `${project.title} - A project by Bagus Hidayat.`,
-            url: `https://www.bagus-hidayat.my.id/projects/${project.slug}`,
-            images: project.thumbnail ? [{ url: project.thumbnail }] : undefined,
-        },
-    };
+        description: project.description,
+        path: `/projects/${project.slug}`,
+        image: project.thumbnail ?? undefined,
+    });
 }
 
-export default async function ProjectDetailPage({ params }: PageProps) {
+export default async function ProjectPage({ params }: PageProps<'/projects/[slug]'>) {
     const { slug } = await params;
+    const project = getProject(slug);
+    if (!project) notFound();
 
-    if (!slug) {
-        return notFound();
-    }
+    const stars = await getRepoStars();
+    const { prev, next } = getAdjacentProjects(project.slug);
 
-    const decodedSlug = decodeURIComponent(slug);
-    const project = projectsData.find(p => p.slug === slug || p.slug === decodedSlug);
-
-    if (!project) {
-        return notFound();
-    }
-
-    return <ProjectDetailClient project={project} />;
+    return <ProjectDetail project={project} stars={starsFor(stars, project.githubUrl)} prev={prev} next={next} />;
 }

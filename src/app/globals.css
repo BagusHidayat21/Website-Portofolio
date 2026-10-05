@@ -3,234 +3,297 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
+/* Ink palette. Every surface, text and accent color derives from these. */
 :root {
-  --radius: 0.625rem;
-
-
-  --background: #FAFAFA;
-  --foreground: #0A0A0A;
-
-
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-
-  --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
-
-
-  --primary: #0A0A0A;
-  --primary-foreground: #FFFFFF;
-
-
-  --secondary: #F4F4F5;
-  --secondary-foreground: #18181B;
-
-
-  --muted: #F4F4F5;
-  --muted-foreground: #71717A;
-
-
-  --accent: #F4F4F5;
-  --accent-foreground: #18181B;
-
-  --destructive: #DC2626;
-
-
-  --border: #E4E4E7;
-  --input: #E4E4E7;
-  --ring: #A1A1AA;
+  --ink-bg: #f2f1ec;
+  --ink-bg-2: #e7e6df;
+  --ink-fg: #0e0e0f;
+  --ink-muted: #55554f;
+  --ink-line: rgb(14 14 15 / 0.12);
+  --ink-accent: #c8ff3d;
+  --ink-on-accent: #0b0b0c;
+  /* Lime fails contrast on cream, so light mode uses deep olive for accent text, icons and rings. */
+  --ink-accent-ink: #3f6212;
+  /* Dimmed large text at 3.3:1, still AA for large type. */
+  --ink-dim: #85857e;
+  --ink-grid: rgb(14 14 15 / 0.075);
+  --ink-glow: rgb(170 230 20 / 0.32);
+  --ink-glow-2: rgb(14 14 15 / 0.07);
+  --ink-grain: 0.06;
+  /* Opaque ink-fg at 4% over the page, so stacked shells never show what is behind them. */
+  --ink-shell: color-mix(in srgb, var(--ink-fg) 4%, var(--ink-bg));
 }
 
 .dark {
-  --background: #09090B;
-  --foreground: #F4F4F5;
-
-  --card: #18181B;
-  --card-foreground: #F4F4F5;
-
-  --popover: #18181B;
-  --popover-foreground: #F4F4F5;
-
-  --primary: #F4F4F5;
-  --primary-foreground: #18181B;
-
-  --secondary: #27272A;
-  --secondary-foreground: #F4F4F5;
-
-  --muted: #27272A;
-  --muted-foreground: #A1A1AA;
-
-  --accent: #27272A;
-  --accent-foreground: #F4F4F5;
-
-  --destructive: #EF4444;
-
-  --border: #27272A;
-  --input: #27272A;
-  --ring: #D4D4D8;
+  --ink-bg: #08080a;
+  --ink-bg-2: #111114;
+  --ink-fg: #f2f2ee;
+  --ink-muted: #9a9a93;
+  --ink-line: rgb(255 255 255 / 0.1);
+  --ink-accent-ink: #c8ff3d;
+  --ink-dim: #64645f;
+  --ink-grid: rgb(255 255 255 / 0.06);
+  --ink-glow: rgb(200 255 61 / 0.16);
+  --ink-glow-2: rgb(120 140 255 / 0.07);
+  --ink-grain: 0.07;
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-ink-bg: var(--ink-bg);
+  --color-ink-bg-2: var(--ink-bg-2);
+  --color-ink-fg: var(--ink-fg);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-line: var(--ink-line);
+  --color-ink-accent: var(--ink-accent);
+  --color-ink-on-accent: var(--ink-on-accent);
+  --color-ink-accent-ink: var(--ink-accent-ink);
+  --color-ink-shell: var(--ink-shell);
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@theme {
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+  --radius-card: 2rem;
+  --radius-shell: 2.25rem;
+
+  --ease-expo: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-out-quint: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Display scale for the wide face; each step carries its own leading and tracking. */
+  --text-headline: clamp(1.75rem, 6.6vw, 6.5rem);
+  --text-headline--line-height: 0.88;
+  --text-headline--letter-spacing: -0.04em;
+  --text-section: clamp(2.25rem, 6.5vw, 5.5rem);
+  --text-section--line-height: 0.88;
+  --text-section--letter-spacing: -0.04em;
+  --text-subhead: clamp(1.75rem, 3.6vw, 3.5rem);
+  --text-subhead--line-height: 0.9;
+  --text-subhead--letter-spacing: -0.035em;
+  --text-card: clamp(1.5rem, 3.2vw, 3rem);
+  --text-card--line-height: 0.92;
+  --text-card--letter-spacing: -0.035em;
+  --text-statement: clamp(1.75rem, 4vw, 4.25rem);
+  --text-statement--line-height: 1.15;
+  --text-statement--letter-spacing: -0.03em;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-ink-line outline-ink-accent-ink/50;
   }
-
-  body {
-    @apply bg-background text-foreground antialiased min-h-screen;
-  }
-
 
   html {
     scroll-behavior: smooth;
   }
 
-
+  /* clip, not hidden: hidden makes body a scroll container and silently disables position: sticky. */
   body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply relative min-h-screen bg-ink-bg text-ink-fg antialiased;
+    overflow-x: clip;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
+@utility page-x {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+}
 
-@layer utilities {
+@utility shell {
+  @apply rounded-shell bg-ink-shell p-2 ring-1 ring-ink-line;
+}
 
-  .section-container {
-    @apply mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16;
-  }
+@utility shell-core {
+  @apply rounded-[calc(var(--radius-shell)-0.5rem)];
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
 
+@utility label {
+  @apply font-mono text-xs uppercase tracking-[0.14em];
+}
 
-  .text-gradient {
-    @apply bg-gradient-to-r from-zinc-900 via-zinc-600 to-zinc-900 bg-clip-text text-transparent;
-  }
+@utility chip {
+  @apply inline-flex items-center rounded-full border border-ink-line px-3 py-1 text-xs font-medium;
+}
 
+/* The wide display face: a static Archivo instance (width 125, weight 800). */
+@utility font-wide {
+  font-family: var(--font-archivo), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+}
 
-  .glass {
-    @apply bg-white/90 dark:bg-zinc-900/90 border border-zinc-200/60 dark:border-zinc-800/60;
-  }
-  @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
-    .glass {
-      @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md;
-    }
-  }
+/* The stroke needs an explicit color: currentColor would resolve to the transparent fill. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink-fg);
 
-  .transform-gpu {
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-  }
-
-  .animate-marquee-css {
-    display: flex;
-    width: max-content;
-    animation: marquee-css 60s linear infinite;
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-  }
-
-  @keyframes marquee-css {
-    0% {
-      transform: translate3d(0, 0, 0);
-    }
-    100% {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  .animate-loading-bar {
-    animation: loading-bar 1.5s ease-in-out infinite;
-  }
-
-  @keyframes loading-bar {
-    0% {
-      transform: translate3d(-100%, 0, 0);
-    }
-    100% {
-      transform: translate3d(200%, 0, 0);
-    }
-  }
-
-  .shadow-elegant {
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.02),
-      0 4px 8px rgba(0, 0, 0, 0.04),
-      0 16px 32px rgba(0, 0, 0, 0.04);
-  }
-
-  .shadow-elegant-lg {
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.02),
-      0 8px 16px rgba(0, 0, 0, 0.04),
-      0 24px 48px rgba(0, 0, 0, 0.06);
-  }
-
-
-  .hover-lift {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-  }
-
-
-  .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2;
-  }
-
-
-  .link-underline {
-    @apply relative;
-  }
-
-  .link-underline::after {
-    @apply content-[''] absolute left-0 bottom-0 w-0 h-[1px] bg-current transition-all duration-300;
-  }
-
-  .link-underline:hover::after {
-    @apply w-full;
+  @variant md {
+    -webkit-text-stroke-width: 1.5px;
   }
 }
 
+/* No backdrop blur: the pill sits over the particle canvas, where a blur re-renders every frame. */
+@utility glass-pill {
+  @apply border border-ink-line bg-ink-bg/80;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    0 10px 40px -16px rgb(24 24 27 / 0.25);
 
-/* Pseudo-elements (::selection, ::-webkit-scrollbar-*) can't be targeted by
-   Tailwind's `dark:is(.dark *)` variant — a selector can't follow a
-   pseudo-element, so the browser drops those rules silently. Use a plain
-   `.dark` ancestor selector instead for anything themed here. */
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 12px 48px -16px rgb(0 0 0 / 0.8);
+  }
 
+  @media (prefers-reduced-transparency: reduce) {
+    @apply bg-ink-bg;
+  }
+}
+
+/* 80px cells with a crosshair every 4 cells, fading toward the bottom of the viewport. */
+@utility backdrop-grid {
+  background-image:
+    radial-gradient(circle at center, var(--ink-accent-ink) 1.5px, transparent 2px),
+    linear-gradient(to right, var(--ink-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--ink-grid) 1px, transparent 1px);
+  background-size: 320px 320px, 80px 80px, 80px 80px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 110% 85% at 50% 18%, #000 30%, transparent 88%);
+
+  @media (max-width: 639px) {
+    background-size: 240px 240px, 60px 60px, 60px 60px;
+  }
+}
+
+/* Runs only while an ancestor reports being on screen (data-inview). */
+@utility marquee-strip {
+  display: flex;
+  width: max-content;
+  animation: marquee 60s linear infinite paused;
+
+  :where([data-inview]) & {
+    animation-play-state: running;
+  }
+}
+
+/* GSAP drives --sw-p from 0 to 1, mixing the dim color into the final one (theme-safe, no opacity). */
+.sw-word {
+  color: color-mix(in srgb, var(--sw-to, var(--ink-fg)) calc(var(--sw-p, 1) * 100%), var(--ink-dim));
+}
+
+.sw-word.sw-hl {
+  --sw-to: var(--ink-accent-ink);
+}
+
+/* Hero entrance is pure CSS so it costs nothing at hydration; it waits while the first-visit splash is up. */
+.hero-char {
+  animation: hero-char 1.4s var(--ease-out-quint) both;
+  animation-delay: calc(0.15s + var(--ci, 0) * 45ms);
+}
+
+.hero-fade {
+  animation: hero-fade 1.1s var(--ease-out-quint) both;
+  animation-delay: calc(0.75s + var(--fi, 0) * 80ms);
+}
+
+html[data-splash=""] .hero-anim {
+  animation-play-state: paused;
+}
+
+/* Scroll reveal (useReveal): hidden only once JS has armed the scope, animated only on the way in. */
+[data-reveal-ready] [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+}
+
+[data-reveal-ready] [data-reveal][data-revealed] {
+  transition:
+    opacity 0.9s var(--ease-out-quint),
+    transform 0.9s var(--ease-out-quint);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* First-visit splash is server-rendered and shown before first paint by the inline script in the root layout. */
+.splash {
+  display: none;
+}
+
+html[data-splash] .splash {
+  display: flex;
+}
+
+html[data-splash="leaving"] .splash {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.splash-bar {
+  transform: scaleX(0);
+  animation: splash-bar 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-char,
+  .hero-fade {
+    animation: none;
+  }
+}
+
+@keyframes hero-char {
+  from {
+    transform: translate3d(0, 115%, 0);
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+}
+
+@keyframes splash-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes loading-bar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Pseudo-elements read the ink variables directly; the dark: variant cannot target them. */
 ::selection {
-  @apply bg-zinc-900 text-white;
+  background: var(--ink-accent);
+  color: var(--ink-on-accent);
 }
-
-.dark ::selection {
-  @apply bg-zinc-100 text-zinc-900;
-}
-
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -238,29 +301,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-zinc-100;
-}
-
-.dark ::-webkit-scrollbar-track {
-  @apply bg-zinc-900;
+  background: var(--ink-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-300 rounded-full;
-}
+  background: color-mix(in srgb, var(--ink-fg) 22%, transparent);
+  border-radius: 999px;
 
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-700;
+  &:hover {
+    background: color-mix(in srgb, var(--ink-fg) 38%, transparent);
+  }
 }
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-400;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-600;
-}
-
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -274,4 +325,22 @@
 
 ::view-transition-new(root) {
   z-index: 9999;
+}
+
+/* Lenis owns smooth scrolling while active. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

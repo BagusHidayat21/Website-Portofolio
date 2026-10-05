@@ -1,23 +1,24 @@
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { AnimatedBackground } from "@/components/ui/animated-background";
-import { SplashScreen } from "@/components/layout/SplashScreen";
-import { BackToTop } from "@/components/layout/BackToTop";
-import { ChatbotLoader } from "@/components/chat/ChatbotLoader";
+import { ChatbotLoader } from '@/components/chat/ChatbotLoader';
+import { Backdrop } from '@/components/layout/Backdrop';
+import { BackToTop } from '@/components/layout/BackToTop';
+import { Footer } from '@/components/layout/Footer';
+import { Navbar } from '@/components/layout/Navbar';
+import { SmoothScroll } from '@/components/layout/SmoothScroll';
+import { SplashScreen } from '@/components/layout/SplashScreen';
 
-export default function WebsiteLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function WebsiteLayout({ children }: LayoutProps<'/'>) {
     return (
-        <SplashScreen>
-            <AnimatedBackground />
+        <>
+            <SmoothScroll />
+            <SplashScreen />
+            <Backdrop />
             <Navbar />
-            <main className="relative z-10">{children}</main>
+            <main id="main" className="relative z-10 flex min-h-screen flex-col">
+                {children}
+            </main>
             <Footer />
             <BackToTop />
             <ChatbotLoader />
-        </SplashScreen>
+        </>
     );
 }

@@ -1,79 +1,42 @@
-import { Project } from '@/data/static-db';
+import { cache } from 'react';
 
-const GITHUB_USERNAME = 'BagusHidayat21';
+const OWNER = 'BagusHidayat21';
+export const GITHUB_REVALIDATE = 3600;
+const REPO_NAME = /github\.com\/[^/]+\/([^/?#]+)/i;
 
-// One batched request covers every project's repo, and Next.js's fetch cache
-// dedupes/persists that request across all pages and requests until this
-// window elapses — so this stays at ~1 request/hour to GitHub regardless of
-// traffic, comfortably under the unauthenticated 60 req/hour limit (and far
-// under the 5,000 req/hour limit once GITHUB_TOKEN is set).
-export const REVALIDATE_SECONDS = 60 * 60;
-
-export type ProjectWithGithubStats = Project & {
-    githubStars?: number;
-    githubUpdatedAt?: string;
-};
-
-interface GithubApiRepo {
+interface Repo {
     name: string;
     stargazers_count: number;
-    updated_at: string;
 }
 
-function repoNameFromUrl(githubUrl: string | null): string | null {
-    if (!githubUrl) return null;
-    const match = githubUrl.match(/github\.com\/[^/]+\/([^/?#]+)/i);
-    return match ? match[1].toLowerCase() : null;
-}
+const isRepoList = (data: unknown): data is Repo[] =>
+    Array.isArray(data) && data.every((r) => typeof r?.name === 'string' && typeof r?.stargazers_count === 'number');
 
-async function fetchRepoList(useToken: boolean): Promise<Response> {
-    const headers: HeadersInit = { Accept: 'application/vnd.github+json' };
-    const hasToken = useToken && Boolean(process.env.GITHUB_TOKEN);
-
-    if (hasToken) {
-        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-    }
-
-    const url = hasToken
+function requestRepos(token?: string) {
+    const url = token
         ? 'https://api.github.com/user/repos?type=all&per_page=100'
-        : `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`;
-
-    return fetch(url, { headers, next: { revalidate: REVALIDATE_SECONDS } });
+        : `https://api.github.com/users/${OWNER}/repos?per_page=100`;
+    return fetch(url, {
+        headers: { Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        next: { revalidate: GITHUB_REVALIDATE },
+    });
 }
 
-async function fetchRepos(): Promise<Map<string, GithubApiRepo>> {
+/** Stars by lowercased repo name: one hourly-cached request; a bad token falls back to the public endpoint. */
+export const getRepoStars = cache(async (): Promise<Map<string, number>> => {
     try {
-        let res = await fetchRepoList(true);
-
-        // A stale/invalid token would otherwise take the whole feature down;
-        // our request volume is well within the unauthenticated limit anyway,
-        // so fall back to it rather than surface nothing.
-        if (res.status === 401 && process.env.GITHUB_TOKEN) {
-            res = await fetchRepoList(false);
-        }
-
+        const token = process.env.GITHUB_TOKEN;
+        let res = await requestRepos(token);
+        if (res.status === 401 && token) res = await requestRepos();
         if (!res.ok) return new Map();
-
-        const repos: GithubApiRepo[] = await res.json();
-        return new Map(repos.map((repo) => [repo.name.toLowerCase(), repo]));
+        const data: unknown = await res.json();
+        return isRepoList(data) ? new Map(data.map((r) => [r.name.toLowerCase(), r.stargazers_count])) : new Map();
     } catch {
         return new Map();
     }
-}
+});
 
-export async function withGithubStats<T extends Project>(
-    projects: T[]
-): Promise<(T & ProjectWithGithubStats)[]> {
-    const repos = await fetchRepos();
-
-    return projects.map((project) => {
-        const repoName = repoNameFromUrl(project.githubUrl);
-        const repo = repoName ? repos.get(repoName) : undefined;
-
-        return {
-            ...project,
-            githubStars: repo?.stargazers_count,
-            githubUpdatedAt: repo?.updated_at,
-        };
-    });
+export function starsFor(stars: Map<string, number>, githubUrl: string | null) {
+    const name = githubUrl?.match(REPO_NAME)?.[1]?.toLowerCase();
+    return name ? stars.get(name) : undefined;
 }
