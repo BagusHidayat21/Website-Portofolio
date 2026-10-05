@@ -1,29 +1,49 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useState, ReactNode } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SplashScreenProps {
     children: ReactNode;
 }
 
-export function SplashScreen({ children }: SplashScreenProps) {
-    const [showSplash, setShowSplash] = useState(false);
+const noopSubscribe = () => () => {};
 
-    useLayoutEffect(() => {
-        if (!sessionStorage.getItem('splashShown')) {
-            setShowSplash(true);
+function readFirstVisit() {
+    try {
+        // Reduced motion skips the intro entirely.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+        return !sessionStorage.getItem('splashShown');
+    } catch {
+        return false;
+    }
+}
+
+export function SplashScreen({ children }: SplashScreenProps) {
+    // Server renders no splash; the client decides from sessionStorage once hydrated.
+    const firstVisit = useSyncExternalStore(noopSubscribe, readFirstVisit, () => false);
+    const [done, setDone] = useState(false);
+    const showSplash = firstVisit && !done;
+
+    const dismiss = useCallback(() => {
+        try {
+            sessionStorage.setItem('splashShown', 'true');
+        } catch {
+            // Storage unavailable: the splash simply shows again next visit.
         }
+        setDone(true);
     }, []);
 
     useEffect(() => {
         if (!showSplash) return;
-        const timer = setTimeout(() => {
-            sessionStorage.setItem('splashShown', 'true');
-            setShowSplash(false);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, [showSplash]);
+        const timer = setTimeout(dismiss, 2000);
+        // Any key skips the intro.
+        window.addEventListener('keydown', dismiss);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('keydown', dismiss);
+        };
+    }, [showSplash, dismiss]);
 
     return (
         <>
@@ -34,7 +54,9 @@ export function SplashScreen({ children }: SplashScreenProps) {
                         initial={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed inset-0 z-[150] flex items-center justify-center bg-ink-bg text-ink-fg"
+                        onClick={dismiss}
+                        role="presentation"
+                        className="fixed inset-0 z-[150] flex cursor-pointer items-center justify-center bg-ink-bg text-ink-fg"
                     >
                         <div aria-hidden="true" className="backdrop-grid absolute inset-0" />
 

@@ -90,6 +90,23 @@ export function Navbar() {
             if (e.key === 'Escape') {
                 setIsOpen(false);
                 toggleRef.current?.focus();
+                return;
+            }
+            // Keep Tab focus inside the open dialog.
+            if (e.key !== 'Tab' || !panelRef.current) return;
+            const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+                'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            );
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            const active = document.activeElement;
+            if (e.shiftKey && (active === first || active === panelRef.current)) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && active === last) {
+                e.preventDefault();
+                first.focus();
             }
         };
 
