@@ -102,21 +102,21 @@ export function FooterClient({ profile }: FooterClientProps) {
                             Let&apos;s build something <span className="text-ink-accent">exceptional.</span>
                         </h2>
 
-                        <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex max-w-full flex-wrap items-center gap-3">
                             <button
                                 type="button"
                                 onClick={handleCopyEmail}
-                                className="group flex h-14 items-center gap-3 rounded-full border border-ink-line bg-ink-fg/[0.04] px-6 text-sm font-medium text-ink-fg transition-all duration-300 hover:border-ink-accent hover:bg-ink-fg hover:text-ink-bg"
+                                className="group flex h-12 sm:h-14 max-w-[calc(100%-4.25rem)] items-center gap-2.5 sm:gap-3 rounded-full border border-ink-line bg-ink-fg/[0.04] px-4 sm:px-6 text-xs sm:text-sm font-medium text-ink-fg transition-all duration-300 hover:border-ink-accent hover:bg-ink-fg hover:text-ink-bg"
                             >
                                 {copied ? (
                                     <>
-                                        <Check className="h-4 w-4 text-ink-accent" />
-                                        <span>Copied email address!</span>
+                                        <Check className="h-4 w-4 shrink-0 text-ink-accent" />
+                                        <span className="truncate">Copied email address!</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Copy className="h-4 w-4 text-ink-muted transition-colors group-hover:text-ink-bg" />
-                                        <span>{profile.email}</span>
+                                        <Copy className="h-4 w-4 shrink-0 text-ink-muted transition-colors group-hover:text-ink-bg" />
+                                        <span className="truncate">{profile.email}</span>
                                     </>
                                 )}
                             </button>
@@ -124,7 +124,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                             <a
                                 href={`mailto:${profile.email}`}
                                 aria-label="Send email"
-                                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-45"
+                                className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-ink-accent text-ink-on-accent transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-45"
                             >
                                 <ArrowUpRight className="h-5 w-5" strokeWidth={2} />
                             </a>

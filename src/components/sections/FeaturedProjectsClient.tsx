@@ -108,13 +108,13 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
 
     return (
         <section ref={root} id="projects" className="relative bg-ink-bg text-ink-fg">
-            <div className="pj-pin relative overflow-hidden py-28 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100dvh] lg:motion-safe:items-center lg:motion-safe:py-0">
+            <div className="pj-pin relative overflow-hidden py-16 sm:py-24 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100dvh] lg:motion-safe:items-center lg:motion-safe:py-0">
                 <div
-                    className="pj-track flex flex-col gap-24 lg:motion-safe:w-max lg:motion-safe:flex-row lg:motion-safe:items-center lg:motion-safe:gap-[5vw] lg:motion-safe:pl-10 lg:motion-safe:pr-[12vw]"
+                    className="pj-track flex flex-col gap-14 sm:gap-20 lg:motion-safe:w-max lg:motion-safe:flex-row lg:motion-safe:items-center lg:motion-safe:gap-[5vw] lg:motion-safe:pl-10 lg:motion-safe:pr-[12vw]"
                 >
                     {/* Intro panel */}
                     <div className="shrink-0 px-4 sm:px-6 lg:motion-safe:w-[38vw] lg:motion-safe:px-0">
-                        <h2 className="font-wide text-[clamp(3.25rem,9vw,9.5rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.045em]">
+                        <h2 className="font-wide text-[clamp(2.25rem,7vw,7.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                             <span className="pj-intro-word block">Selected</span>
                             <span className="pj-intro-word text-outline block">work</span>
                         </h2>

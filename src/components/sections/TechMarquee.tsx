@@ -91,9 +91,9 @@ export function TechMarquee({ items }: { items: string[] }) {
         <section
             ref={root}
             aria-label="Tech stack"
-            className="relative overflow-hidden bg-ink-bg py-20 md:py-32"
+            className="relative max-w-[100vw] overflow-hidden bg-ink-bg py-12 sm:py-16 md:py-28"
         >
-            <div className="mq-band relative">
+            <div className="mq-band relative overflow-hidden py-4 sm:py-6">
                 {/* Back tape, outlined, crossing the other way. */}
                 <div className="absolute inset-x-[-5%] top-1/2 -translate-y-1/2 rotate-[4deg] border-y border-ink-line bg-ink-bg-2 py-4 text-ink-fg/40 md:py-6">
                     <div className="mq-track">
@@ -101,7 +101,7 @@ export function TechMarquee({ items }: { items: string[] }) {
                     </div>
                 </div>
                 {/* Front tape, accent. */}
-                <div className="relative -mx-[5%] -rotate-[3deg] bg-ink-accent py-4 text-ink-on-accent shadow-[0_30px_60px_-30px_rgba(200,255,61,0.5)] md:py-6">
+                <div className="relative -mx-[5%] -rotate-[3deg] bg-ink-accent py-4 text-ink-on-accent shadow-[0_20px_50px_-20px_rgba(0,0,0,0.35)] dark:shadow-[0_30px_60px_-30px_rgba(200,255,61,0.5)] md:py-6">
                     <div className="mq-track">
                         <Row items={items} />
                     </div>

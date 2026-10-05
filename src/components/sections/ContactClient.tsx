@@ -70,15 +70,17 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
     ].filter((s): s is { label: string; href: string; icon: typeof Github } => Boolean(s.href));
 
     return (
-        <section ref={root} id="contact" className="relative overflow-hidden bg-ink-bg py-32 text-ink-fg md:py-48">
-            <h2 className="font-wide text-[clamp(2.5rem,8vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
-                <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Let&apos;s build</span>
-                <span className="ct-right text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
-                    something<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
-                </span>
-            </h2>
+        <section ref={root} id="contact" className="relative overflow-hidden bg-ink-bg py-16 text-ink-fg sm:py-24 md:py-36">
+            <div className="overflow-hidden">
+                <h2 className="font-wide text-[clamp(2.25rem,8vw,7rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                    <span className="ct-left block whitespace-nowrap px-4 sm:px-6 lg:px-10">Let&apos;s build</span>
+                    <span className="ct-right text-outline block whitespace-nowrap px-4 text-right sm:px-6 lg:px-10">
+                        something<span className="text-ink-accent [-webkit-text-stroke:0]">.</span>
+                    </span>
+                </h2>
+            </div>
 
-            <div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 items-center gap-16 px-4 sm:px-6 md:mt-28 lg:grid-cols-12 lg:px-10">
+            <div className="mx-auto mt-12 grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:mt-16 sm:px-6 md:mt-24 lg:grid-cols-12 lg:px-10">
                 <div className="lg:col-span-6" data-speed="0.8">
                     <p className="max-w-[44ch] text-lg leading-relaxed text-ink-muted md:text-xl">
                         Working full-time at PT Universal Big Data, and still open to collaborations, technical work and
@@ -133,7 +135,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         href={`mailto:${email}`}
                         onPointerMove={onOrbMove}
                         onPointerLeave={onOrbLeave}
-                        className="group relative flex aspect-square w-[min(78vw,24rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent/40"
+                        className="group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent/40"
                     >
                         <span className="font-wide text-[clamp(1.75rem,3.4vw,3rem)] font-extrabold uppercase leading-none tracking-[-0.03em]">
                             Hire Me

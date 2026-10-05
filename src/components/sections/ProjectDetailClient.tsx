@@ -69,7 +69,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
 
     return (
         <article ref={root} className="relative overflow-hidden bg-ink-bg text-ink-fg">
-            <header className="px-4 pb-16 pt-36 sm:px-6 md:pb-24 md:pt-48 lg:px-10">
+            <header className="px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 md:pb-24 md:pt-48 lg:px-10">
                 <div className="mx-auto max-w-7xl">
                     <Link
                         href="/projects"
@@ -90,7 +90,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                         </span>
                     </h1>
 
-                    <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12">
+                    <div className="mt-8 grid grid-cols-1 gap-8 sm:mt-12 sm:gap-10 lg:grid-cols-12">
                         <p className="pd-fade max-w-[46ch] text-lg leading-relaxed text-ink-muted md:text-xl lg:col-span-7">
                             {project.description}
                         </p>

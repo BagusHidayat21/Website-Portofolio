@@ -116,9 +116,9 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
     );
 
     return (
-        <section ref={root} className="relative overflow-hidden bg-ink-bg pb-32 pt-36 text-ink-fg md:pb-48 md:pt-48">
-            <div className="pr-head">
-                <h1 className="font-wide text-[clamp(2.5rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+        <section ref={root} className="relative overflow-hidden bg-ink-bg pb-20 pt-28 text-ink-fg sm:pb-32 sm:pt-36 md:pb-48 md:pt-44">
+            <div className="pr-head overflow-hidden">
+                <h1 className="font-wide text-[clamp(2.25rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                     <span className="pr-h-1 block whitespace-nowrap px-4 sm:px-6 lg:px-10">
                         <span className="pr-line block overflow-hidden pb-[0.06em]">Selected</span>
                     </span>
@@ -130,7 +130,7 @@ export function ProjectsClient({ projects: baseProjects }: { projects: Project[]
                 </h1>
             </div>
 
-            <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 md:mt-24 lg:px-10">
+            <div className="mx-auto mt-10 max-w-7xl px-4 sm:mt-16 sm:px-6 md:mt-24 lg:px-10">
                 <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
                     <p className="pr-fade max-w-[46ch] text-lg leading-relaxed text-ink-muted md:text-xl lg:col-span-6">
                         Web platforms, mobile apps and data work I built for schools, small teams and my own research.

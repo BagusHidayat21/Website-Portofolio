@@ -150,13 +150,13 @@ export function HeroClient({
                     <span className="hero-fade hidden font-mono text-xs text-ink-muted sm:block">{location}</span>
                 </div>
 
-                <h1 className="hero-title relative my-auto select-none font-wide font-extrabold uppercase leading-[0.8] tracking-[-0.03em] will-change-transform">
+                <h1 className="hero-title relative my-auto max-w-full overflow-hidden select-none font-wide font-extrabold uppercase leading-[0.82] tracking-[-0.03em] will-change-transform">
                     <span className="sr-only">
                         {name}, {tagline}
                     </span>
                     <span
                         aria-hidden="true"
-                        className="hero-line-1 block overflow-hidden pb-[0.04em] text-[clamp(3.6rem,15vw,17rem)]"
+                        className="hero-line-1 block overflow-hidden pb-[0.04em] text-[clamp(2.5rem,12vw,14rem)]"
                     >
                         <span className="flex">
                             {Array.from(firstName).map((ch, i) => (
@@ -168,7 +168,7 @@ export function HeroClient({
                     </span>
                     <span
                         aria-hidden="true"
-                        className="hero-line-2 block overflow-hidden pb-[0.04em] text-right text-[clamp(3.6rem,15vw,17rem)]"
+                        className="hero-line-2 block overflow-hidden pb-[0.04em] text-right text-[clamp(2.5rem,12vw,14rem)]"
                     >
                         <span className="inline-flex">
                             {Array.from(lastName).map((ch, i) => (

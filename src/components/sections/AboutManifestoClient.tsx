@@ -100,14 +100,14 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
     );
 
     return (
-        <section ref={root} id="about" className="relative overflow-hidden bg-ink-bg py-20 text-ink-fg md:py-28">
+        <section ref={root} id="about" className="relative overflow-hidden bg-ink-bg py-14 text-ink-fg sm:py-20 md:py-28">
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
                 <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink-muted">
                     <span className="h-1.5 w-1.5 rounded-full bg-ink-accent" />
                     <span>Philosophy & Background</span>
                 </div>
                 <h2 className="sr-only">About {name}</h2>
-                <p className="mf-text max-w-6xl text-balance font-display text-[clamp(1.85rem,4.2vw,4.25rem)] font-medium leading-[1.12] tracking-[-0.035em]">
+                <p className="mf-text max-w-6xl text-balance font-display text-[clamp(1.75rem,4vw,4.25rem)] font-medium leading-[1.15] tracking-[-0.03em]">
                     {words.map((word, i) => (
                         <Fragment key={i}>
                             <span
@@ -123,7 +123,7 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                     ))}
                 </p>
 
-                <div className="mt-14 grid grid-cols-1 gap-12 md:mt-20 lg:grid-cols-12 lg:gap-10">
+                <div className="mt-10 grid grid-cols-1 gap-10 sm:mt-14 md:mt-20 md:gap-12 lg:grid-cols-12 lg:gap-10">
                     <div className="lg:col-span-5" data-speed="-1">
                         {/* Double-bezel portrait frame */}
                         <div className="rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line">

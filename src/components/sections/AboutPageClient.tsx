@@ -140,8 +140,8 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
         <>
             <div ref={root}>
             <section className="relative overflow-hidden bg-ink-bg text-ink-fg">
-                <div className="ab-head pt-36 md:pt-48">
-                    <h1 className="font-wide text-[clamp(2.5rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                <div className="ab-head overflow-hidden pt-28 sm:pt-36 md:pt-44">
+                    <h1 className="font-wide text-[clamp(2.25rem,7.5vw,6rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                         <span className="sr-only">About {profile.name}</span>
                         <span aria-hidden="true" className="ab-h-1 block whitespace-nowrap px-4 sm:px-6 lg:px-10">
                             <span className="ab-line block overflow-hidden pb-[0.06em]">{aboutContent.heroTitle}</span>
@@ -158,8 +158,8 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
                     </h1>
                 </div>
 
-                <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 md:mt-24 lg:px-10">
-                    <p className="ab-fade max-w-[52ch] text-balance text-lg leading-relaxed text-ink-muted md:text-xl">
+                <div className="mx-auto mt-10 max-w-7xl px-4 sm:mt-16 sm:px-6 md:mt-24 lg:px-10">
+                    <p className="ab-fade max-w-[52ch] text-balance text-base leading-relaxed text-ink-muted sm:text-lg md:text-xl">
                         {aboutContent.heroDescription}
                     </p>
                 </div>
@@ -235,10 +235,12 @@ export function AboutPageClient({ profile, aboutContent, experience, education }
             </section>
 
             {/* Sticky cards need an ancestor without overflow clipping, so this sits outside the hero section. */}
-            <section className="pp-section relative bg-ink-bg pb-32 text-ink-fg md:pb-48">
-                    <h2 className="pp-heading mb-16 whitespace-nowrap px-4 font-wide text-[clamp(2.5rem,6.5vw,5.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em] sm:px-6 md:mb-24 lg:px-10">
-                        Principles<span className="text-ink-accent">.</span>
-                    </h2>
+            <section className="pp-section relative bg-ink-bg pb-20 text-ink-fg sm:pb-32 md:pb-48">
+                    <div className="overflow-hidden">
+                        <h2 className="pp-heading mb-12 whitespace-nowrap px-4 font-wide text-[clamp(2.25rem,6.5vw,5.5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em] sm:px-6 md:mb-20 lg:px-10">
+                            Principles<span className="text-ink-accent">.</span>
+                        </h2>
+                    </div>
 
                     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
                         {principles.map((item, i) => {
