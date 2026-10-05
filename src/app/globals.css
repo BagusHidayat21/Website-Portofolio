@@ -167,6 +167,7 @@
   .glass {
     @apply bg-white/90 dark:bg-zinc-900/90 border border-zinc-200/60 dark:border-zinc-800/60;
   }
+
   @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
     .glass {
       @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md;
@@ -200,9 +201,10 @@
     }
   }
 
+  /* Outline type. The stroke uses an explicit variable because currentColor would resolve to the transparent fill. */
   .text-outline {
     color: transparent;
-    -webkit-text-stroke: 1px currentColor;
+    -webkit-text-stroke: 1px var(--outline-stroke, var(--ink-fg));
   }
 
   @media (min-width: 768px) {
@@ -228,6 +230,7 @@
     0% {
       transform: translate3d(0, 0, 0);
     }
+
     100% {
       transform: translate3d(-50%, 0, 0);
     }
@@ -241,6 +244,7 @@
     0% {
       transform: translate3d(-100%, 0, 0);
     }
+
     100% {
       transform: translate3d(200%, 0, 0);
     }
