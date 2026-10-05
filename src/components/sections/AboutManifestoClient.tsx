@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { useRef } from 'react';
 import { ScrollWords } from './ScrollWords';
-import { gsap, useGSAP, applyParallax, MOTION_OK, DESKTOP_MOTION } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { applyParallax, MOTION_OK } from '@/lib/gsap';
 
 interface Stat {
     value: number;
@@ -26,9 +28,10 @@ const HIGHLIGHT = ['full', 'stack', 'data', 'machine', 'learning'];
 
 export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoClientProps) {
     const root = useRef<HTMLElement>(null);
+    useReveal(root, '.mf-stat');
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
 
             mm.add(MOTION_OK, () => {
@@ -68,23 +71,12 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                     });
                 });
 
-                applyParallax(root.current);
-            });
-
-            mm.add(DESKTOP_MOTION, () => {
-                gsap.from('.mf-stat', {
-                    yPercent: 40,
-                    autoAlpha: 0,
-                    stagger: 0.12,
-                    ease: 'expo.out',
-                    duration: 1.2,
-                    scrollTrigger: { trigger: '.mf-stats', start: 'top 85%' },
-                });
+                applyParallax(gsap, root.current);
             });
 
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     return (
@@ -111,7 +103,7 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
                                 <div className="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3 py-1 font-mono text-[11px] text-white backdrop-blur-md">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-ink-accent animate-pulse" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-ink-accent" />
                                     <span>{name}</span>
                                 </div>
                                 <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between text-xs text-white/90">

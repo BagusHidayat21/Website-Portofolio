@@ -3,7 +3,9 @@
 import { ArrowUpRight } from 'lucide-react';
 import { useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { MOTION_OK } from '@/lib/gsap';
 
 interface ExperienceItem {
     id: number;
@@ -21,9 +23,10 @@ const STACK_MOTION = '(min-width: 768px) and (min-height: 700px) and (prefers-re
 
 export function ExperienceClient({ items }: { items: ExperienceItem[] }) {
     const root = useRef<HTMLElement>(null);
+    useReveal(root, '.xp-rise');
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
 
             mm.add(MOTION_OK, () => {
@@ -38,16 +41,6 @@ export function ExperienceClient({ items }: { items: ExperienceItem[] }) {
                     }
                 );
 
-                gsap.utils.toArray<HTMLElement>('.xp-inner').forEach((inner) => {
-                    gsap.from(inner.querySelectorAll('.xp-rise'), {
-                        yPercent: 40,
-                        autoAlpha: 0,
-                        stagger: 0.06,
-                        duration: 0.9,
-                        ease: 'expo.out',
-                        scrollTrigger: { trigger: inner, start: 'top 80%', once: true },
-                    });
-                });
             });
 
             mm.add(STACK_MOTION, () => {
@@ -65,7 +58,7 @@ export function ExperienceClient({ items }: { items: ExperienceItem[] }) {
 
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     return (
@@ -149,7 +142,7 @@ export function ExperienceClient({ items }: { items: ExperienceItem[] }) {
                                                     href={item.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="xp-rise group mt-6 inline-flex items-center gap-2 text-sm font-semibold underline decoration-1 underline-offset-4"
+                                                    className="xp-rise group mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold underline decoration-1 underline-offset-4"
                                                 >
                                                     Read the paper
                                                     <ArrowUpRight

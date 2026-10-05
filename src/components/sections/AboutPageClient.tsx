@@ -23,7 +23,9 @@ import { ScrollWords } from '@/components/sections/ScrollWords';
 import { TechMarquee } from '@/components/sections/TechMarquee';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { type AboutContent, type Education, type Experience, type Profile } from '@/data/static-db';
-import { gsap, useGSAP, applyParallax, MOTION_OK } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { applyParallax, MOTION_OK } from '@/lib/gsap';
 import { cn } from '@/lib/utils';
 
 interface AboutPageClientProps {
@@ -41,6 +43,9 @@ const STACK_MOTION = '(min-width: 768px) and (min-height: 700px) and (prefers-re
 
 export function AboutPageClient({ profile, aboutContent, experience, education, marqueeItems }: AboutPageClientProps) {
     const root = useRef<HTMLDivElement>(null);
+    const educationRef = useRef<HTMLElement>(null);
+    useReveal(root, '.ab-story > *, .pp-rise');
+    useReveal(educationRef, '.ed-card');
 
     const experienceItems = experience
         .filter((e) => e.isVisible)
@@ -63,8 +68,8 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
     // Closing lines of the story become the scroll-lit statement, as on the home manifesto.
     const statement = story[story.length - 1].split(/(?<=\.)\s/).slice(-2).join(' ');
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 // Portrait: frame opens up while the photo drifts the other way.
@@ -88,15 +93,6 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
                     }
                 );
 
-                gsap.from('.ab-story > *', {
-                    y: 40,
-                    autoAlpha: 0,
-                    stagger: 0.12,
-                    duration: 1,
-                    ease: 'expo.out',
-                    scrollTrigger: { trigger: '.ab-story', start: 'top 80%' },
-                });
-
                 // Principles heading settles on the container edge; cards rise in once.
                 gsap.fromTo(
                     '.pp-heading',
@@ -107,27 +103,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
                         scrollTrigger: { trigger: '.pp-section', start: 'top bottom', end: 'top 30%', scrub: true },
                     }
                 );
-                gsap.utils.toArray<HTMLElement>('.pp-card').forEach((card) => {
-                    gsap.from(card.querySelectorAll('.pp-rise'), {
-                        yPercent: 40,
-                        autoAlpha: 0,
-                        stagger: 0.06,
-                        duration: 0.9,
-                        ease: 'expo.out',
-                        scrollTrigger: { trigger: card, start: 'top 80%', once: true },
-                    });
-                });
-
-                gsap.from('.ed-card', {
-                    yPercent: 14,
-                    autoAlpha: 0,
-                    stagger: 0.15,
-                    duration: 1.1,
-                    ease: 'expo.out',
-                    scrollTrigger: { trigger: '.ed-section', start: 'top 75%' },
-                });
-
-                applyParallax(root.current);
+                applyParallax(gsap, root.current);
             });
 
             mm.add(STACK_MOTION, () => {
@@ -144,7 +120,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
 
             return () => mm.revert();
         },
-        { scope: root }
+        root, { target: '.ab-story' }
     );
 
     return (
@@ -379,7 +355,7 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
             {experienceItems.length > 0 && <ExperienceClient items={experienceItems} />}
 
             {educationItems.length > 0 && (
-                <section aria-labelledby="education-heading" className="ed-section relative pb-32 pt-8 text-ink-fg md:pb-48">
+                <section ref={educationRef} aria-labelledby="education-heading" className="ed-section relative pb-32 pt-8 text-ink-fg md:pb-48">
                     <div className="page-x">
                         <p className="label text-ink-muted">Where I studied</p>
                         <h2

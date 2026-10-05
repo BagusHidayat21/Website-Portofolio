@@ -9,7 +9,9 @@ import { KineticHero } from '@/components/sections/KineticHero';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { Project } from '@/data/static-db';
 import { useGithubStats } from '@/hooks/useGithubStats';
-import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { MOTION_OK } from '@/lib/gsap';
 
 interface ProjectDetailClientProps {
     project: Project;
@@ -19,6 +21,7 @@ interface ProjectDetailClientProps {
 
 export function ProjectDetailClient({ project: baseProject, prevProject, nextProject }: ProjectDetailClientProps) {
     const root = useRef<HTMLElement>(null);
+    useReveal(root, '.pd-shot');
     const stats = useGithubStats();
     const project = useMemo(() => ({ ...baseProject, ...stats?.[baseProject.slug] }), [baseProject, stats]);
 
@@ -26,8 +29,8 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
     const gallery = project.images?.slice(1) ?? [];
     const year = new Date(project.createdAt).getFullYear();
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 gsap.fromTo(
@@ -57,19 +60,10 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                     gsap.fromTo('.pd-next-right', { xPercent: 45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
                 }
 
-                gsap.utils.toArray<HTMLElement>('.pd-shot').forEach((el) => {
-                    gsap.from(el, {
-                        yPercent: 10,
-                        autoAlpha: 0,
-                        duration: 1,
-                        ease: 'expo.out',
-                        scrollTrigger: { trigger: el, start: 'top 90%' },
-                    });
-                });
             });
             return () => mm.revert();
         },
-        { scope: root }
+        root, { target: '.pd-frame' }
     );
 
     return (
@@ -270,7 +264,7 @@ export function ProjectDetailClient({ project: baseProject, prevProject, nextPro
                     {prevProject && (
                         <Link
                             href={`/projects/${prevProject.slug}`}
-                            className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
+                            className="group inline-flex min-h-11 items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
                         >
                             <span className="label">Previous</span>
                             <span className="font-wide font-extrabold uppercase tracking-[-0.02em]">{prevProject.title}</span>

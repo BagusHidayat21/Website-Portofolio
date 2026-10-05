@@ -3,7 +3,8 @@
 import { Asterisk } from 'lucide-react';
 import { Fragment, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { MOTION_OK } from '@/lib/gsap';
 
 function Row({ items, className, outline }: { items: string[]; className?: string; outline?: boolean }) {
     // Two identical halves so the track can wrap seamlessly at -50%.
@@ -30,8 +31,8 @@ function Row({ items, className, outline }: { items: string[]; className?: strin
 export function TechMarquee({ items }: { items: string[] }) {
     const root = useRef<HTMLElement>(null);
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap, ScrollTrigger }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 const tracks = gsap.utils.toArray<HTMLElement>('.mq-track', root.current);
@@ -100,7 +101,7 @@ export function TechMarquee({ items }: { items: string[] }) {
             });
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     if (items.length === 0) return null;
@@ -113,7 +114,7 @@ export function TechMarquee({ items }: { items: string[] }) {
         >
             <div className="mq-band relative overflow-hidden py-4 sm:py-6">
                 {/* Back tape, outlined, crossing the other way. */}
-                <div className="absolute inset-x-[-5%] top-1/2 -translate-y-1/2 rotate-[4deg] border-y border-ink-line bg-ink-bg-2 py-4 text-ink-fg/40 md:py-6">
+                <div aria-hidden="true" className="absolute inset-x-[-5%] top-1/2 -translate-y-1/2 rotate-[4deg] border-y border-ink-line bg-ink-bg-2 py-4 text-ink-fg/40 md:py-6">
                     <div className="mq-track">
                         <Row items={items} outline />
                     </div>

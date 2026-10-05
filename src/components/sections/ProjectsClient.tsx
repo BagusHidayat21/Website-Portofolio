@@ -10,7 +10,9 @@ import { MagneticButton } from '@/components/ui/magnetic-button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Project } from '@/data/static-db';
 import { useGithubStats } from '@/hooks/useGithubStats';
-import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { MOTION_OK } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
 import { cn } from '@/lib/utils';
 
 const CATEGORIES = [
@@ -36,6 +38,7 @@ interface ProjectsClientProps {
 
 export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl }: ProjectsClientProps) {
     const root = useRef<HTMLElement>(null);
+    useReveal(root, '.pr-fade');
     const stats = useGithubStats();
     const statsLoading = stats === null;
     const [category, setCategory] = useState<string>('all');
@@ -68,8 +71,8 @@ export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl
         });
     }, [projects, category, query]);
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 gsap.fromTo(
@@ -81,23 +84,15 @@ export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl
                         scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 30%', scrub: true },
                     }
                 );
-                gsap.from('.pr-fade', {
-                    y: 24,
-                    autoAlpha: 0,
-                    duration: 1,
-                    ease: 'expo.out',
-                    stagger: 0.08,
-                    scrollTrigger: { trigger: root.current, start: 'top 75%', once: true },
-                });
             });
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     // Cards re-enter whenever the filter result changes.
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 // Same panel motion as the home gallery: frame scales in, image and title drift against each other.
@@ -123,7 +118,8 @@ export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl
             });
             return () => mm.revert();
         },
-        { scope: root, dependencies: [category, query, projects.length], revertOnUpdate: true }
+        root,
+        { dependencies: [category, query, projects.length] }
     );
 
     return (
@@ -239,7 +235,7 @@ export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl
                                     <Link
                                         href={`/projects/${project.slug}`}
                                         className="group block"
-                                        aria-label={`${project.title}: read the case study`}
+                                       
                                     >
                                         <div className="pr-media relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-bg-2 ring-1 ring-ink-line sm:aspect-[16/11]">
                                             {project.images?.[0] && (
@@ -249,7 +245,6 @@ export function ProjectsClient({ projects: baseProjects, marqueeItems, githubUrl
                                                         alt={project.title}
                                                         fill
                                                         sizes="(min-width: 1024px) 50vw, 100vw"
-                                                        priority={index < 2}
                                                         className="object-cover contrast-[1.08] grayscale-[40%] transition-[filter,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04] group-hover:grayscale-0"
                                                     />
                                                 </div>

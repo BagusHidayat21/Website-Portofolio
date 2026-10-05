@@ -1,13 +1,13 @@
 'use client';
 
-import Lenis from 'lenis';
+import type Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
-import { useEffect, type ReactNode } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { getGsap, loadGsap } from '@/lib/gsap';
 
 let lenisInstance: Lenis | null = null;
 
-/** Access the active Lenis instance (null when smooth scroll is disabled). */
+/** Access the active Lenis instance (null when smooth scroll is disabled or still loading). */
 export function getLenis() {
     return lenisInstance;
 }
@@ -15,36 +15,44 @@ export function getLenis() {
 export function SmoothScroll({ children }: { children: ReactNode }) {
     const pathname = usePathname();
 
+    // Lenis and GSAP load after first paint; until then the page scrolls natively, which is identical at rest.
     useEffect(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        let cancelled = false;
+        let teardown = () => {};
 
-        const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1 });
-        lenisInstance = lenis;
-        lenis.on('scroll', ScrollTrigger.update);
+        Promise.all([import('lenis'), loadGsap()]).then(([{ default: LenisCtor }, { gsap, ScrollTrigger }]) => {
+            if (cancelled) return;
+            const lenis = new LenisCtor({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1 });
+            lenisInstance = lenis;
+            lenis.on('scroll', ScrollTrigger.update);
 
-        const tick = (time: number) => lenis.raf(time * 1000);
-        gsap.ticker.add(tick);
-        gsap.ticker.lagSmoothing(0);
+            const tick = (time: number) => lenis.raf(time * 1000);
+            gsap.ticker.add(tick);
+            gsap.ticker.lagSmoothing(0);
+
+            teardown = () => {
+                gsap.ticker.remove(tick);
+                lenis.destroy();
+                lenisInstance = null;
+            };
+        });
 
         return () => {
-            gsap.ticker.remove(tick);
-            lenis.destroy();
-            lenisInstance = null;
+            cancelled = true;
+            teardown();
         };
     }, []);
 
-    // Recalculate pin/scrub positions once fonts and images have settled.
+    // Client-side navigation: jump to top and re-measure after the new page has painted. Skipped on first load.
+    const firstRoute = useRef(true);
     useEffect(() => {
-        const refresh = () => ScrollTrigger.refresh();
-        window.addEventListener('load', refresh);
-        document.fonts?.ready.then(refresh).catch(() => undefined);
-        return () => window.removeEventListener('load', refresh);
-    }, []);
-
-    // New route: jump to top and re-measure after the page has painted.
-    useEffect(() => {
+        if (firstRoute.current) {
+            firstRoute.current = false;
+            return;
+        }
         lenisInstance?.scrollTo(0, { immediate: true, force: true });
-        const id = window.setTimeout(() => ScrollTrigger.refresh(), 500);
+        const id = window.setTimeout(() => getGsap()?.ScrollTrigger.refresh(), 500);
         return () => window.clearTimeout(id);
     }, [pathname]);
 

@@ -2,7 +2,8 @@
 
 import { ArrowUpRight, Check, Copy, Github, Linkedin } from 'lucide-react';
 import { useRef, useState, type PointerEvent } from 'react';
-import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { getGsap, MOTION_OK } from '@/lib/gsap';
 
 interface ContactProps {
     email: string;
@@ -26,8 +27,8 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
         }
     };
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 const range = { trigger: root.current, start: 'top bottom', end: 'center center', scrub: 1 };
@@ -44,7 +45,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
             });
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     const onOrbMove = (e: PointerEvent<HTMLAnchorElement>) => {
@@ -54,11 +55,11 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
         const rect = el.getBoundingClientRect();
         const x = (e.clientX - (rect.left + rect.width / 2)) * 0.35;
         const y = (e.clientY - (rect.top + rect.height / 2)) * 0.35;
-        gsap.to(el, { x, y, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
+        getGsap()?.gsap.to(el, { x, y, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
     };
 
     const onOrbLeave = (e: PointerEvent<HTMLAnchorElement>) => {
-        gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
+        getGsap()?.gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
     };
 
     const socials = [

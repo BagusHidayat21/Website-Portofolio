@@ -2,8 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
-import { useRef, useState, type ReactNode } from 'react';
-import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
+import { useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { MOTION_OK } from '@/lib/gsap';
 import { cn } from '@/lib/utils';
 
 const HeroParticles = dynamic(() => import('@/components/three/HeroParticles'), { ssr: false });
@@ -31,20 +32,21 @@ function displaySize(lines: [string, string]) {
     return `clamp(2.25rem, ${vw.toFixed(2)}vw, 14rem)`;
 }
 
-function Chars({ text, accentStop }: { text: string; accentStop?: boolean }) {
+function Chars({ text, accentStop, offset = 0 }: { text: string; accentStop?: boolean; offset?: number }) {
     const words = text.split(' ');
+    let index = offset;
+    // Each character carries its stagger index for the CSS entrance.
+    const char = (ch: string, key: string | number, className = '') => (
+        <span key={key} className={cn('hero-anim hero-char inline-block', className)} style={{ '--ci': index++ } as CSSProperties}>
+            {ch}
+        </span>
+    );
     return (
         <>
             {words.map((word, w) => (
                 <span key={w} className={cn('inline-flex', w < words.length - 1 && 'mr-[0.28em]')}>
-                    {Array.from(word).map((ch, i) => (
-                        <span key={i} className="hero-char inline-block">
-                            {ch}
-                        </span>
-                    ))}
-                    {accentStop && w === words.length - 1 && (
-                        <span className="hero-char inline-block text-ink-accent-ink">.</span>
-                    )}
+                    {Array.from(word).map((ch, i) => char(ch, i))}
+                    {accentStop && w === words.length - 1 && char('.', 'stop', 'text-ink-accent-ink')}
                 </span>
             ))}
         </>
@@ -69,7 +71,7 @@ export function KineticHero({
     const root = useRef<HTMLElement>(null);
     const progressRef = useRef(0);
     // Particle zoom (entrance x scroll), tweened by GSAP and applied inside the WebGL scene, never as a CSS transform on the canvas.
-    const zoomRef = useRef({ intro: 1, scroll: 1 });
+    const zoomRef = useRef({ intro: 0.85, scroll: 1 });
     const [canvasActive, setCanvasActive] = useState(true);
     const [reduceMotion, setReduceMotion] = useState(false);
     const { resolvedTheme } = useTheme();
@@ -80,8 +82,8 @@ export function KineticHero({
     const [first, second] = lines;
     const secondText = second.replace(/\.$/, '');
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
 
             mm.add({ motion: MOTION_OK, reduce: '(prefers-reduced-motion: reduce)' }, (ctx) => {
@@ -89,27 +91,7 @@ export function KineticHero({
                 setReduceMotion(!motion);
                 if (!motion) return;
 
-                // Entrance: wait for the first-visit splash screen.
-                let splashPending = false;
-                try {
-                    splashPending = !sessionStorage.getItem('splashShown');
-                } catch {
-                    splashPending = false;
-                }
-                const delay = splashPending ? 2.1 : 0.15;
-
-                gsap.set('.hero-char', { yPercent: 115 });
-                gsap.set('.hero-fade', { autoAlpha: 0, y: 24 });
-                // Entrance owns the inner canvas wrapper; the scroll fade owns the outer one, so they never fight.
-                gsap.set('.hero-canvas-in', { autoAlpha: 0 });
-                zoomRef.current.intro = 0.85;
-
-                gsap.timeline({ delay, defaults: { ease: 'expo.out' } })
-                    .to('.hero-canvas-in', { autoAlpha: 1, duration: 2.2 }, 0)
-                    .to(zoomRef.current, { intro: 1, duration: 2.2 }, 0)
-                    .to('.hero-char', { yPercent: 0, duration: 1.4, stagger: 0.045 }, 0.1)
-                    .to('.hero-fade', { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.08 }, 0.6);
-
+                // The entrance is pure CSS (see .hero-anim in globals.css) so it costs no main-thread work at hydration.
                 // Scroll: pin and tear the lines apart while the particles collapse into terrain.
                 gsap.timeline({
                     defaults: { ease: 'none' },
@@ -144,7 +126,8 @@ export function KineticHero({
 
             return () => mm.revert();
         },
-        { scope: root }
+        root,
+        { eager: true }
     );
 
     return (
@@ -154,7 +137,7 @@ export function KineticHero({
         >
             {/* WebGL particle field */}
             <div className="hero-canvas pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-                <div className="hero-canvas-in absolute inset-0">
+                <div className="absolute inset-0">
                     <HeroParticles
                         progressRef={progressRef}
                         zoomRef={zoomRef}
@@ -175,10 +158,10 @@ export function KineticHero({
 
             <div className="relative flex flex-1 flex-col justify-between px-4 pb-6 pt-24 sm:px-6 md:pb-10 lg:px-10">
                 <div className="hero-meta flex flex-wrap items-center justify-between gap-3">
-                    <span className="hero-fade glass-pill inline-flex h-9 items-center gap-2.5 rounded-full pl-3 pr-4 text-xs font-medium text-ink-fg/80">
+                    <span style={{ '--fi': 0 } as CSSProperties} className="hero-anim hero-fade glass-pill inline-flex h-9 items-center gap-2.5 rounded-full pl-3 pr-4 text-xs font-medium text-ink-fg/80">
                         {pillLive ? (
                             <span className="relative flex h-2 w-2" aria-hidden="true">
-                                <span className="absolute inline-flex h-full w-full rounded-full bg-ink-accent opacity-70 motion-safe:animate-ping" />
+                                <span className="absolute inline-flex h-full w-full rounded-full bg-ink-accent opacity-70 motion-safe:animate-ping motion-safe:[animation-iteration-count:4]" />
                                 <span className="relative inline-flex h-2 w-2 rounded-full bg-ink-accent" />
                             </span>
                         ) : (
@@ -186,11 +169,11 @@ export function KineticHero({
                         )}
                         {pill}
                     </span>
-                    {meta && <span className="hero-fade label hidden text-ink-muted sm:block">{meta}</span>}
+                    {meta && <span style={{ '--fi': 1 } as CSSProperties} className="hero-anim hero-fade label hidden text-ink-muted sm:block">{meta}</span>}
                 </div>
 
                 <h1
-                    className="hero-title relative my-auto max-w-full overflow-hidden select-none font-wide font-extrabold uppercase leading-[0.82] tracking-[-0.03em] will-change-transform"
+                    className="hero-title relative my-auto max-w-full overflow-hidden select-none font-wide font-extrabold uppercase leading-[0.82] tracking-[-0.03em]"
                     style={{ fontSize: displaySize(lines) }}
                 >
                     <span className="sr-only">{srTitle}</span>
@@ -201,22 +184,23 @@ export function KineticHero({
                     </span>
                     <span aria-hidden="true" className="hero-line-2 block overflow-hidden pb-[0.04em] text-right">
                         <span className="inline-flex flex-wrap justify-end">
-                            <Chars text={secondText} accentStop />
+                            <Chars text={secondText} accentStop offset={first.replace(/ /g, '').length} />
                         </span>
                     </span>
                 </h1>
 
                 <div className="hero-bottom grid grid-cols-1 items-end gap-6 md:grid-cols-12">
                     <div className="md:col-span-6 lg:col-span-5">
-                        {kicker && <p className="hero-fade label text-ink-fg">{kicker}</p>}
+                        {kicker && <p style={{ '--fi': 2 } as CSSProperties} className="hero-anim hero-fade label text-ink-fg">{kicker}</p>}
                         {intro && (
-                            <p className="hero-fade mt-3 max-w-[44ch] text-base leading-relaxed text-ink-muted md:text-lg">
+                            // Not part of the entrance fade: this paragraph is the LCP element and must paint immediately.
+                            <p className="mt-3 max-w-[44ch] text-base leading-relaxed text-ink-muted md:text-lg">
                                 {intro}
                             </p>
                         )}
                     </div>
                     {actions && (
-                        <div className="hero-fade flex flex-wrap items-center gap-3 md:col-span-6 md:justify-end lg:col-span-7">
+                        <div style={{ '--fi': 3 } as CSSProperties} className="hero-anim hero-fade flex flex-wrap items-center gap-3 md:col-span-6 md:justify-end lg:col-span-7">
                             {actions}
                         </div>
                     )}

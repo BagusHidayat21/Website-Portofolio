@@ -7,7 +7,8 @@ import { useMemo, useRef } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Project } from '@/data/static-db';
 import { useGithubStats } from '@/hooks/useGithubStats';
-import { gsap, useGSAP, DESKTOP_MOTION } from '@/lib/gsap';
+import { useLazyGSAP } from '@/hooks/useLazyGSAP';
+import { DESKTOP_MOTION } from '@/lib/gsap';
 
 export function FeaturedProjectsClient({ projects: baseProjects }: { projects: Project[] }) {
     const root = useRef<HTMLElement>(null);
@@ -19,8 +20,8 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
         [baseProjects, stats]
     );
 
-    useGSAP(
-        () => {
+    useLazyGSAP(
+        ({ gsap }) => {
             const mm = gsap.matchMedia();
 
             mm.add(DESKTOP_MOTION, () => {
@@ -103,7 +104,7 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
 
             return () => mm.revert();
         },
-        { scope: root }
+        root
     );
 
     return (
@@ -123,7 +124,7 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
                         </p>
                         <Link
                             href="/projects"
-                            className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink-fg"
+                            className="group mt-8 inline-flex min-h-11 items-center gap-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink-fg"
                         >
                             View all projects
                             <ArrowRight
@@ -133,9 +134,9 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
                         </Link>
                     </div>
 
-                    {projects.map((project, index) => (
+                    {projects.map((project) => (
                         <article key={project.id} className="pj-panel shrink-0 px-4 sm:px-6 lg:motion-safe:w-[56vw] lg:motion-safe:px-0">
-                            <Link href={`/projects/${project.slug}`} className="group block" aria-label={`${project.title}: read the case study`}>
+                            <Link href={`/projects/${project.slug}`} className="group block">
                                 <div
                                     className="pj-media relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-bg-2 ring-1 ring-ink-line sm:aspect-[16/11] lg:motion-safe:aspect-auto lg:motion-safe:h-[66vh]"
                                 >
@@ -146,7 +147,6 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
                                                 alt={project.title}
                                                 fill
                                                 sizes="(min-width: 1024px) 60vw, 100vw"
-                                                priority={index === 0}
                                                 className="object-cover contrast-[1.08] grayscale-[40%] transition-[filter,transform] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04] group-hover:grayscale-0"
                                             />
                                         </div>
