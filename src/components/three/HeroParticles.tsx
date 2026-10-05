@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useMemo, useRef, type RefObject } from 'react';
+import { useEffect, useMemo, useRef, type RefObject } from 'react';
 import * as THREE from 'three';
 
 const vertexShader = /* glsl */ `
@@ -46,13 +46,14 @@ const vertexShader = /* glsl */ `
         gl_PointSize = uSize * uPixelRatio * (0.55 + aRand * 0.9) * accentBoost / -mv.z;
 
         vAccent = aAccent;
-        vAlpha = 0.25 + aRand * 0.75;
+        vAlpha = 0.45 + aRand * 0.55;
     }
 `;
 
 const fragmentShader = /* glsl */ `
     uniform vec3 uColor;
     uniform vec3 uAccent;
+    uniform float uOpacity;
 
     varying float vAccent;
     varying float vAlpha;
@@ -61,9 +62,10 @@ const fragmentShader = /* glsl */ `
         vec2 c = gl_PointCoord - 0.5;
         float d = length(c);
         if (d > 0.5) discard;
-        float a = smoothstep(0.5, 0.05, d);
+        // Solid core with a short falloff keeps points crisp instead of misty.
+        float a = smoothstep(0.5, 0.18, d);
         vec3 col = mix(uColor, uAccent, vAccent);
-        gl_FragColor = vec4(col, a * vAlpha);
+        gl_FragColor = vec4(col, a * vAlpha * uOpacity);
     }
 `;
 
@@ -104,12 +106,20 @@ function buildGeometry(count: number) {
 function ParticleField({
     count,
     color,
+    accent,
+    glow,
     progressRef,
+    zoomRef,
+    pointerRef,
     animate,
 }: {
     count: number;
     color: string;
+    accent: string;
+    glow: boolean;
     progressRef: RefObject<number>;
+    zoomRef: RefObject<{ intro: number; scroll: number }>;
+    pointerRef: RefObject<THREE.Vector2>;
     animate: boolean;
 }) {
     const points = useRef<THREE.Points>(null);
@@ -121,11 +131,12 @@ function ParticleField({
             uProgress: { value: 0 },
             uMouse: { value: new THREE.Vector2(0, 0) },
             uPixelRatio: { value: 1 },
-            uSize: { value: 26 },
+            uSize: { value: 30 },
+            uOpacity: { value: 1 },
             uColor: { value: new THREE.Color(color) },
-            uAccent: { value: new THREE.Color('#c8ff3d') },
+            uAccent: { value: new THREE.Color(accent) },
         }),
-        // Color updates are applied in useFrame; uniforms object must stay stable.
+        // Color and opacity updates are applied in useFrame; uniforms object must stay stable.
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
@@ -134,15 +145,23 @@ function ParticleField({
         const mat = material.current;
         if (!mat) return;
         const u = mat.uniforms;
+        // Clamp so a resumed loop (after a pause) does not jump the simulation forward.
+        const dt = Math.min(delta, 1 / 30);
+        // Frame-rate independent easing.
+        const k = 1 - Math.exp(-dt * 6);
         u.uPixelRatio.value = state.gl.getPixelRatio();
         (u.uColor.value as THREE.Color).set(color);
+        (u.uAccent.value as THREE.Color).set(accent);
+        u.uOpacity.value = glow ? 0.8 : 1;
         if (animate) {
-            u.uTime.value += delta;
-            (u.uMouse.value as THREE.Vector2).lerp(state.pointer, 0.06);
-            if (points.current) points.current.rotation.y += delta * 0.06;
+            u.uTime.value += dt;
+            (u.uMouse.value as THREE.Vector2).lerp(pointerRef.current, k * 0.6);
+            if (points.current) points.current.rotation.y += dt * 0.06;
         }
+        // Zoom lives here, not as a CSS transform: Canvas measures its container, so scaling it would resize the canvas every frame.
+        if (points.current) points.current.scale.setScalar(zoomRef.current.intro * zoomRef.current.scroll);
         const target = progressRef.current ?? 0;
-        u.uProgress.value += (target - u.uProgress.value) * 0.08;
+        u.uProgress.value += (target - u.uProgress.value) * k;
     });
 
     return (
@@ -154,6 +173,8 @@ function ParticleField({
                 fragmentShader={fragmentShader}
                 transparent
                 depthWrite={false}
+                // Additive glow reads well on dark; on a light page it would wash points out to white.
+                blending={glow ? THREE.AdditiveBlending : THREE.NormalBlending}
             />
         </points>
     );
@@ -161,14 +182,41 @@ function ParticleField({
 
 export interface HeroParticlesProps {
     progressRef: RefObject<number>;
-    eventSource: RefObject<HTMLElement | null>;
+    zoomRef: RefObject<{ intro: number; scroll: number }>;
     color: string;
+    accent: string;
+    glow: boolean;
     active: boolean;
     reduceMotion: boolean;
+    density?: number;
 }
 
-export default function HeroParticles({ progressRef, eventSource, color, active, reduceMotion }: HeroParticlesProps) {
-    const count = useMemo(() => (typeof window !== 'undefined' && window.innerWidth < 768 ? 2600 : 6500), []);
+export default function HeroParticles({
+    progressRef,
+    zoomRef,
+    color,
+    accent,
+    glow,
+    active,
+    reduceMotion,
+    density = 1,
+}: HeroParticlesProps) {
+    const count = useMemo(
+        () => Math.round((typeof window !== 'undefined' && window.innerWidth < 768 ? 2600 : 6500) * density),
+        [density]
+    );
+    const pointerRef = useRef(new THREE.Vector2(0, 0));
+
+    // The hero fills the viewport, so viewport-normalized coordinates match the scene.
+    useEffect(() => {
+        if (reduceMotion) return;
+        const onMove = (e: PointerEvent) => {
+            if (e.pointerType !== 'mouse') return;
+            pointerRef.current.set((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1));
+        };
+        window.addEventListener('pointermove', onMove, { passive: true });
+        return () => window.removeEventListener('pointermove', onMove);
+    }, [reduceMotion]);
 
     return (
         <Canvas
@@ -176,11 +224,20 @@ export default function HeroParticles({ progressRef, eventSource, color, active,
             dpr={[1, 1.5]}
             gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
             frameloop={reduceMotion ? 'demand' : active ? 'always' : 'never'}
-            eventSource={eventSource as RefObject<HTMLElement>}
-            eventPrefix="client"
+            // Measure on window resize only; scroll-driven measuring re-sizes (and clears) the canvas while scrolling.
+            resize={{ scroll: false, debounce: { scroll: 0, resize: 100 } }}
             aria-hidden="true"
         >
-            <ParticleField count={count} color={color} progressRef={progressRef} animate={!reduceMotion} />
+            <ParticleField
+                count={count}
+                color={color}
+                accent={accent}
+                glow={glow}
+                progressRef={progressRef}
+                zoomRef={zoomRef}
+                pointerRef={pointerRef}
+                animate={!reduceMotion}
+            />
         </Canvas>
     );
 }

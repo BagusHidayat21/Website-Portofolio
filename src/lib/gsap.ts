@@ -6,6 +6,8 @@ import { useGSAP } from '@gsap/react';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger, useGSAP);
+    // Mobile address bar show/hide resizes the viewport; re-measuring pins on it causes visible jumps.
+    ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 export const MOTION_OK = '(prefers-reduced-motion: no-preference)';
