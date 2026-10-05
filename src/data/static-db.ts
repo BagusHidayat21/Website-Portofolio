@@ -32,6 +32,8 @@ export interface AboutContent {
         title: string;
         description: string;
         icon: string;
+        /** Concrete evidence from the projects and experience below. */
+        proof: { label: string; href?: string }[];
     }[];
 }
 
@@ -377,27 +379,47 @@ export const aboutData: AboutContent = {
         {
             title: 'Get the details right',
             description: 'Clear structure, honest names, predictable behavior. I write code the next developer can read and change without fear.',
-            icon: 'Database'
+            icon: 'Target',
+            proof: [
+                { label: 'CV Builder: A4 page-break guides and ATS-safe layouts', href: '/projects/cv-builder' },
+                { label: 'SIMMAS: audit logs and activity tracking', href: '/projects/simmas' },
+            ]
         },
         {
             title: 'Put data to work',
             description: 'I look for places where a pipeline or a model can replace guesswork, then wire it into the product so people actually use it.',
-            icon: 'BrainCircuit'
+            icon: 'Database',
+            proof: [
+                { label: 'IEEE paper: OCR models benchmarked with CER and WER', href: 'https://ieeexplore.ieee.org/document/11252079/' },
+                { label: 'EduMatch: learning content recommendations', href: '/projects/edumatch' },
+            ]
         },
         {
             title: 'Teach what I use',
             description: 'I train vocational students on the same tools and practices I use at work, so the gap between classroom and industry gets smaller every term.',
-            icon: 'Zap'
+            icon: 'GraduationCap',
+            proof: [
+                { label: 'Industrial trainer at PT Universal Big Data' },
+                { label: 'S.Pd, Informatics Engineering Education, Universitas Negeri Malang' },
+            ]
         },
         {
             title: 'Design for people',
             description: 'Fast pages, accessible markup and interfaces that explain themselves. Software only helps when it is easy to use.',
-            icon: 'Target'
+            icon: 'HeartHandshake',
+            proof: [
+                { label: 'HealMe: anonymous forums and mood logging', href: '/projects/healme' },
+                { label: 'Jurnal Mengajar: a mobile log built for teachers', href: '/projects/jurnal-mengajar' },
+            ]
         },
         {
             title: 'Secure by default',
             description: 'Access control, input validation and careful releases. Security and reliability are part of the build, not a phase after it.',
-            icon: 'Shield'
+            icon: 'Shield',
+            proof: [
+                { label: 'SIMMAS: Supabase RLS with role-based access', href: '/projects/simmas' },
+                { label: 'JasaOne.id: HMAC-signed price negotiation codes', href: '/projects/jasaone-id' },
+            ]
         }
     ]
 };

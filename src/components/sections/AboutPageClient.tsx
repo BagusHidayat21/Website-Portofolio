@@ -1,7 +1,21 @@
 'use client';
 
 import Image from 'next/image';
-import { ArrowUpRight, BrainCircuit, Database, Github, Linkedin, Instagram, Shield, Target, Zap, FileText, type LucideIcon } from 'lucide-react';
+import Link from 'next/link';
+import {
+    ArrowUpRight,
+    Database,
+    FileText,
+    Github,
+    GraduationCap,
+    HeartHandshake,
+    Instagram,
+    Linkedin,
+    Shield,
+    Target,
+    Zap,
+    type LucideIcon,
+} from 'lucide-react';
 import { useRef } from 'react';
 import { ExperienceClient } from '@/components/sections/ExperienceClient';
 import { KineticHero } from '@/components/sections/KineticHero';
@@ -21,7 +35,7 @@ interface AboutPageClientProps {
 }
 
 // Philosophy icons come from data; only icons that match each principle are mapped.
-const PRINCIPLE_ICONS: Record<string, LucideIcon> = { Database, BrainCircuit, Zap, Target, Shield };
+const PRINCIPLE_ICONS: Record<string, LucideIcon> = { Database, GraduationCap, HeartHandshake, Target, Shield };
 const SOCIAL_ICONS: Record<string, LucideIcon> = { GitHub: Github, LinkedIn: Linkedin, Instagram };
 const STACK_MOTION = '(min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)';
 
@@ -259,32 +273,36 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
                         return (
                             <li
                                 key={item.title}
-                                className="pp-card mb-6 last:mb-0 [@media(min-width:768px)_and_(min-height:700px)]:sticky [@media(min-width:768px)_and_(min-height:700px)]:mb-[16vh]"
+                                className="pp-card mb-6 last:mb-0 [@media(min-width:768px)_and_(min-height:700px)]:sticky [@media(min-width:768px)_and_(min-height:700px)]:mb-[10vh]"
                                 style={{ top: `calc(6rem + ${i * 1}rem)` }}
                             >
                                 <article className="pp-inner shell relative origin-top">
                                     <div
                                         className={cn(
-                                            'shell-core grid grid-cols-1 gap-6 p-6 sm:p-8 md:min-h-[360px] md:grid-cols-12 md:gap-8 md:p-12',
+                                            'shell-core grid grid-cols-1 gap-8 p-6 sm:p-8 md:grid-cols-12 md:gap-10 md:p-10',
                                             current ? 'bg-ink-accent text-ink-on-accent' : 'bg-ink-bg-2 text-ink-fg'
                                         )}
                                     >
-                                        <div className="flex items-center justify-between gap-6 md:col-span-3 md:flex-col md:items-start">
-                                            <p className="pp-rise label">{String(i + 1).padStart(2, '0')}</p>
-                                            <span
-                                                className={cn(
-                                                    'pp-rise flex h-14 w-14 items-center justify-center rounded-full',
-                                                    current ? 'bg-black/10' : 'bg-ink-fg/[0.06]'
-                                                )}
-                                                aria-hidden="true"
-                                            >
-                                                <Icon className="h-6 w-6" strokeWidth={1.5} />
-                                            </span>
-                                        </div>
-                                        <div className="flex min-w-0 flex-col justify-between gap-8 md:col-span-9">
-                                            <h3 className="pp-rise font-wide text-[clamp(1.5rem,3.2vw,3rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em] [overflow-wrap:anywhere]">
+                                        <div className="flex flex-col gap-6 md:col-span-5">
+                                            <div className="flex items-center justify-between gap-4">
+                                                <p className="pp-rise label">
+                                                    {String(i + 1).padStart(2, '0')} / {String(principles.length).padStart(2, '0')}
+                                                </p>
+                                                <span
+                                                    className={cn(
+                                                        'pp-rise flex h-12 w-12 items-center justify-center rounded-full',
+                                                        current ? 'bg-black/10' : 'bg-ink-fg/[0.06]'
+                                                    )}
+                                                    aria-hidden="true"
+                                                >
+                                                    <Icon className="h-5 w-5" strokeWidth={1.5} />
+                                                </span>
+                                            </div>
+                                            <h3 className="pp-rise font-wide text-[clamp(1.5rem,3vw,2.75rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em] [overflow-wrap:anywhere]">
                                                 {item.title}
                                             </h3>
+                                        </div>
+                                        <div className="flex min-w-0 flex-col gap-6 md:col-span-7">
                                             <p
                                                 className={cn(
                                                     'pp-rise max-w-[56ch] text-lg leading-relaxed',
@@ -293,6 +311,57 @@ export function AboutPageClient({ profile, aboutContent, experience, education, 
                                             >
                                                 {item.description}
                                             </p>
+                                            {item.proof.length > 0 && (
+                                                <div className="pp-rise">
+                                                    <p className={cn('label', current ? 'text-black/60' : 'text-ink-muted')}>In practice</p>
+                                                    <ul
+                                                        className={cn(
+                                                            'mt-3 border-t',
+                                                            current ? 'border-black/15' : 'border-ink-line'
+                                                        )}
+                                                    >
+                                                        {item.proof.map((proof) => {
+                                                            const rowClass = cn(
+                                                                'flex min-h-12 items-center justify-between gap-4 border-b py-3 text-[0.9375rem] font-medium',
+                                                                current ? 'border-black/15' : 'border-ink-line'
+                                                            );
+                                                            const external = proof.href?.startsWith('http');
+                                                            const content = (
+                                                                <>
+                                                                    <span>{proof.label}</span>
+                                                                    {proof.href && (
+                                                                        <ArrowUpRight
+                                                                            className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                                                                            strokeWidth={1.75}
+                                                                            aria-hidden="true"
+                                                                        />
+                                                                    )}
+                                                                </>
+                                                            );
+                                                            return (
+                                                                <li key={proof.label}>
+                                                                    {!proof.href ? (
+                                                                        <span className={rowClass}>{content}</span>
+                                                                    ) : external ? (
+                                                                        <a
+                                                                            href={proof.href}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className={cn(rowClass, 'group')}
+                                                                        >
+                                                                            {content}
+                                                                        </a>
+                                                                    ) : (
+                                                                        <Link href={proof.href} className={cn(rowClass, 'group')}>
+                                                                            {content}
+                                                                        </Link>
+                                                                    )}
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                     <div
