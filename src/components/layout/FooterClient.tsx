@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { ArrowUp, ArrowUpRight, Check, Copy, FileText, Github, Instagram, Linkedin, Mail } from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { getLenis } from '@/components/providers/SmoothScroll';
 import { Profile } from '@/data/static-db';
 
@@ -23,28 +23,52 @@ const marqueeItems = ['Bagus Hidayat', 'Full stack engineering', 'Data and machi
 export function FooterClient({ profile }: FooterClientProps) {
     const currentYear = new Date().getFullYear();
     const [copied, setCopied] = useState(false);
-    const [malangTime, setMalangTime] = useState<string>('');
+    const clockRef = useRef<HTMLSpanElement>(null);
+    const footerRef = useRef<HTMLElement>(null);
 
+    // The marquee strip only runs while the footer is on screen; an offscreen infinite animation still costs a commit per frame.
     useEffect(() => {
-        const updateClock = () => {
-            try {
-                const now = new Date();
-                const formatter = new Intl.DateTimeFormat('en-GB', {
-                    timeZone: 'Asia/Jakarta',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false,
-                });
-                setMalangTime(formatter.format(now));
-            } catch {
-                setMalangTime('');
-            }
-        };
+        const el = footerRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(([entry]) => {
+            el.toggleAttribute('data-inview', entry.isIntersecting);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
-        updateClock();
-        const timer = setInterval(updateClock, 1000);
-        return () => clearInterval(timer);
+    // Local Malang time, written straight to the DOM (no re-render) and only ticking while the footer is on screen.
+    useEffect(() => {
+        const el = clockRef.current;
+        if (!el) return;
+        let formatter: Intl.DateTimeFormat;
+        try {
+            formatter = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Asia/Jakarta',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+            });
+        } catch {
+            return;
+        }
+        let timer = 0;
+        const tick = () => {
+            el.textContent = formatter.format(new Date());
+        };
+        const observer = new IntersectionObserver(([entry]) => {
+            window.clearInterval(timer);
+            if (entry.isIntersecting) {
+                tick();
+                timer = window.setInterval(tick, 1000);
+            }
+        });
+        observer.observe(el);
+        return () => {
+            observer.disconnect();
+            window.clearInterval(timer);
+        };
     }, []);
 
     const handleCopyEmail = async () => {
@@ -72,7 +96,7 @@ export function FooterClient({ profile }: FooterClientProps) {
     const instagram = profile.socials.find((s) => s.platform.toLowerCase() === 'instagram')?.url;
 
     return (
-        <footer className="relative z-10 w-full border-t border-ink-line bg-ink-bg-2 text-ink-fg">
+        <footer ref={footerRef} className="relative z-10 w-full border-t border-ink-line bg-ink-bg-2 text-ink-fg">
             {/* Ambient top light */}
             <div
                 aria-hidden="true"
@@ -84,7 +108,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink-line pb-8 font-mono text-xs text-ink-muted">
                     <div className="flex items-center gap-2.5">
                         <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink-accent opacity-75" />
+                            <span className="absolute inline-flex h-full w-full animate-ping [animation-iteration-count:3] rounded-full bg-ink-accent opacity-75" />
                             <span className="relative inline-flex h-2 w-2 rounded-full bg-ink-accent" />
                         </span>
                         <span className="uppercase tracking-[0.14em] text-ink-fg">{status}</span>
@@ -92,11 +116,10 @@ export function FooterClient({ profile }: FooterClientProps) {
 
                     <div className="flex items-center gap-4">
                         <span>MALANG, ID · WIB (UTC+7)</span>
-                        {malangTime && (
-                            <span className="rounded-md border border-ink-line bg-ink-fg/[0.04] px-2.5 py-1 text-ink-fg">
-                                {malangTime}
-                            </span>
-                        )}
+                        <span
+                            ref={clockRef}
+                            className="min-w-[5.5rem] rounded-md border border-ink-line bg-ink-fg/[0.04] px-2.5 py-1 text-center text-ink-fg tabular-nums empty:hidden"
+                        />
                     </div>
                 </div>
 
@@ -106,7 +129,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                         Contact
                     </p>
                     <div className="mt-4 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-                        <h2 className="max-w-3xl font-wide text-[clamp(2.25rem,5.5vw,5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
+                        <h2 className="max-w-3xl font-wide text-[clamp(1.75rem,5.5vw,5rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.04em]">
                             Start a <span className="text-ink-accent-ink">conversation.</span>
                         </h2>
 
@@ -172,14 +195,14 @@ export function FooterClient({ profile }: FooterClientProps) {
                         <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
                             Pages
                         </p>
-                        <ul className="space-y-3">
+                        <ul className="space-y-0.5">
                             {navLinks.map((link) => (
                                 <li key={link.href}>
                                     <Link
                                         href={link.href}
-                                        className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
+                                        className="group inline-flex min-h-11 items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
                                     >
-                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent-ink">
+                                        <span className="font-mono text-xs text-ink-muted transition-colors group-hover:text-ink-accent-ink">
                                             {link.index}
                                         </span>
                                         <span>{link.label}</span>
@@ -193,9 +216,9 @@ export function FooterClient({ profile }: FooterClientProps) {
                                         href={profile.resumeUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
+                                        className="group inline-flex min-h-11 items-center gap-3 text-sm font-medium text-ink-muted transition-colors hover:text-ink-fg"
                                     >
-                                        <span className="font-mono text-xs text-ink-muted/60 transition-colors group-hover:text-ink-accent-ink">
+                                        <span className="font-mono text-xs text-ink-muted transition-colors group-hover:text-ink-accent-ink">
                                             04
                                         </span>
                                         <span>Resume</span>
@@ -211,14 +234,14 @@ export function FooterClient({ profile }: FooterClientProps) {
                         <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
                             Elsewhere
                         </p>
-                        <ul className="space-y-3">
+                        <ul className="space-y-0.5">
                             {github && (
                                 <li>
                                     <a
                                         href={github}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
+                                        className="group inline-flex min-h-11 items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
                                     >
                                         <Github className="h-4 w-4" />
                                         <span>GitHub</span>
@@ -232,7 +255,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                                         href={linkedin}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
+                                        className="group inline-flex min-h-11 items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
                                     >
                                         <Linkedin className="h-4 w-4" />
                                         <span>LinkedIn</span>
@@ -246,7 +269,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                                         href={instagram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
+                                        className="group inline-flex min-h-11 items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
                                     >
                                         <Instagram className="h-4 w-4" />
                                         <span>Instagram</span>
@@ -257,7 +280,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                             <li>
                                 <a
                                     href={`mailto:${profile.email}`}
-                                    className="group inline-flex items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
+                                    className="group inline-flex min-h-11 items-center gap-2.5 text-sm text-ink-muted transition-colors hover:text-ink-fg"
                                 >
                                     <Mail className="h-4 w-4" />
                                     <span>Email</span>
@@ -270,7 +293,7 @@ export function FooterClient({ profile }: FooterClientProps) {
 
                 {/* Subdued editorial marquee strip */}
                 <div className="mt-16 overflow-hidden border-t border-ink-line py-5" aria-hidden="true">
-                    <div className="flex animate-marquee-css items-center gap-8 whitespace-nowrap font-mono text-xs uppercase tracking-[0.14em] text-ink-muted/60 select-none motion-reduce:animate-none">
+                    <div className="flex animate-marquee-css items-center marquee-offscreen-paused gap-8 whitespace-nowrap font-mono text-xs uppercase tracking-[0.14em] text-ink-muted select-none motion-reduce:animate-none">
                         {[0, 1].map((copy) =>
                             marqueeItems.map((item) => (
                                 <Fragment key={`${copy}-${item}`}>
@@ -295,7 +318,7 @@ export function FooterClient({ profile }: FooterClientProps) {
                     <button
                         type="button"
                         onClick={scrollToTop}
-                        className="group flex items-center gap-1.5 transition-colors hover:text-ink-fg"
+                        className="group flex min-h-11 items-center gap-1.5 transition-colors hover:text-ink-fg"
                         aria-label="Scroll back to top"
                     >
                         <span>Back to top</span>
