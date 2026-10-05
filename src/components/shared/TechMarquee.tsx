@@ -105,12 +105,12 @@ export function TechMarquee({ items }: { items: string[] }) {
     if (items.length === 0) return null;
 
     return (
-        <section ref={root} aria-label="Tech stack" className="relative max-w-[100vw] overflow-hidden py-12 sm:py-16 md:py-28">
-            <div className="mq-band relative overflow-hidden py-4 sm:py-6">
-                <div aria-hidden="true" className="absolute inset-x-[-5%] top-1/2 -translate-y-1/2 rotate-[4deg] border-y border-ink-line bg-ink-bg-2 py-4 md:py-6">
+        <section ref={root} aria-label="Tech stack" className="relative max-w-[100vw] overflow-x-clip py-12 sm:py-16 md:py-28">
+            <div className="mq-band relative py-4 sm:py-6">
+                <div aria-hidden="true" className="absolute inset-x-[-10%] top-1/2 -translate-y-1/2 rotate-[4deg] border-y border-ink-line bg-ink-bg-2 py-4 md:py-6">
                     <Tape items={items} outline />
                 </div>
-                <div className="relative -mx-[5%] -rotate-[3deg] bg-ink-accent py-4 text-ink-on-accent shadow-[0_20px_50px_-20px_rgba(0,0,0,0.35)] md:py-6 dark:shadow-[0_30px_60px_-30px_rgba(200,255,61,0.5)]">
+                <div className="relative -mx-[10%] -rotate-[3deg] bg-ink-accent py-4 text-ink-on-accent shadow-[0_20px_50px_-20px_rgba(0,0,0,0.35)] md:py-6 dark:shadow-[0_30px_60px_-30px_rgba(200,255,61,0.5)]">
                     <Tape items={items} />
                 </div>
             </div>

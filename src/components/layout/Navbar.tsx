@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, FileText, Menu, X } from 'lucide-react';
+import { ArrowUpRight, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLayoutEffect, useRef, useState } from 'react';
@@ -138,9 +138,25 @@ export function Navbar() {
                             aria-expanded={menuOpen}
                             aria-controls="mobile-nav"
                             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-                            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink-line transition-colors hover:border-ink-accent-ink hover:text-ink-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink md:hidden"
+                            className={cn(
+                                'flex h-11 w-11 items-center justify-center rounded-full border transition-[background-color,border-color,color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink md:hidden',
+                                menuOpen ? 'border-ink-accent bg-ink-accent text-ink-on-accent' : 'border-ink-line hover:border-ink-accent-ink hover:text-ink-accent-ink'
+                            )}
                         >
-                            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                            <span aria-hidden="true" className="relative block h-3 w-5">
+                                <span
+                                    className={cn(
+                                        'absolute left-0 top-0 h-[2px] w-full rounded-full bg-current transition-transform duration-500 ease-expo motion-reduce:transition-none',
+                                        menuOpen && 'translate-y-[5px] rotate-45'
+                                    )}
+                                />
+                                <span
+                                    className={cn(
+                                        'absolute bottom-0 right-0 h-[2px] rounded-full bg-current transition-[transform,width] duration-500 ease-expo motion-reduce:transition-none',
+                                        menuOpen ? 'w-full -translate-y-[5px] -rotate-45' : 'w-3/5'
+                                    )}
+                                />
+                            </span>
                         </button>
                     </div>
                 </nav>

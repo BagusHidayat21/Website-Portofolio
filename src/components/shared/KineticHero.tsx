@@ -110,8 +110,8 @@ export function KineticHero({ lines, srTitle, pill, pillLive = false, meta, kick
     );
 
     return (
-        <div ref={spacer}>
-            <section ref={root} className="relative isolate flex h-svh min-h-[620px] flex-col overflow-hidden text-ink-fg">
+        <div ref={spacer} className="!w-full !max-w-none">
+            <section ref={root} className="relative isolate flex h-svh min-h-[620px] !w-full !max-w-none shrink-0 flex-col overflow-hidden text-ink-fg">
                 <div aria-hidden="true" className="hero-canvas pointer-events-none absolute inset-0 -z-10">
                     <HeroParticles
                         progressRef={progressRef}
@@ -126,6 +126,14 @@ export function KineticHero({ lines, srTitle, pill, pillLive = false, meta, kick
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_55%,color-mix(in_srgb,var(--ink-bg)_60%,transparent)_100%)]"
+                />
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 h-[45%] -translate-y-1/2 bg-[radial-gradient(ellipse_70%_50%_at_center,color-mix(in_srgb,var(--ink-bg)_70%,transparent),transparent_75%)] md:bg-[radial-gradient(ellipse_55%_45%_at_center,color-mix(in_srgb,var(--ink-bg)_45%,transparent),transparent_75%)]"
+                />
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[55%] bg-[linear-gradient(to_top,var(--ink-bg)_15%,color-mix(in_srgb,var(--ink-bg)_80%,transparent)_45%,transparent)] md:h-[40%] md:bg-[linear-gradient(to_top,color-mix(in_srgb,var(--ink-bg)_85%,transparent),transparent)]"
                 />
 
                 <div className="relative flex flex-1 flex-col justify-between px-4 pb-6 pt-24 sm:px-6 md:pb-10 lg:px-10">

@@ -65,6 +65,7 @@ export function createParticleField(canvas: HTMLCanvasElement, initial: FieldSta
     let angle = 0;
     let progress = 0;
     let disposed = false;
+    let fit = 1;
 
     const draw = (dt: number) => {
         if (!gl) return;
@@ -79,7 +80,7 @@ export function createParticleField(canvas: HTMLCanvasElement, initial: FieldSta
 
         const { zoom } = inputs;
         if (zoom.intro < 1) zoom.intro = state.reduceMotion ? 1 : Math.min(1, zoom.intro + (1 - zoom.intro) * (1 - Math.exp(-dt * 1.8)) + 0.0005);
-        modelView(view, angle, zoom.intro * zoom.scroll);
+        modelView(view, angle, zoom.intro * zoom.scroll * fit);
 
         // Additive glow reads well on dark; on a light page it would wash points out to white.
         if (state.glow) gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
@@ -89,7 +90,7 @@ export function createParticleField(canvas: HTMLCanvasElement, initial: FieldSta
         gl.uniform1f(loc.uTime, time);
         gl.uniform1f(loc.uProgress, progress);
         gl.uniform2f(loc.uMouse, mouse.x, mouse.y);
-        gl.uniform1f(loc.uOpacity, state.glow ? 0.8 : 1);
+        gl.uniform1f(loc.uOpacity, (state.glow ? 0.8 : 1) * (fit < 1 ? 0.5 : 1));
         gl.uniform3fv(loc.uColor, color);
         gl.uniform3fv(loc.uAccent, accent);
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -108,9 +109,11 @@ export function createParticleField(canvas: HTMLCanvasElement, initial: FieldSta
             canvas.height = height;
         }
         gl.viewport(0, 0, width, height);
+        fit = Math.min(1, Math.max(0.5, w / Math.max(h, 1) / 0.95));
         perspective(proj, 45, w / Math.max(h, 1), 0.1, 100);
         gl.uniformMatrix4fv(loc.uProjection, false, proj);
         gl.uniform1f(loc.uPixelRatio, dpr);
+        gl.uniform1f(loc.uSize, fit < 1 ? 22 : 30);
         draw(0);
     };
 
