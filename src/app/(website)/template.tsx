@@ -1,36 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+// Templates remount on every navigation; only those later mounts fade in, so the first load paints at once.
+let hasMounted = false;
 
 export default function Template({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
-    const prevPathname = useRef(pathname);
-    const [visible, setVisible] = useState(true);
+    const [fadeIn] = useState(() => hasMounted);
 
     useEffect(() => {
-        if (prevPathname.current !== pathname) {
-            prevPathname.current = pathname;
-            setVisible(false);
-            const t = requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    setVisible(true);
-                });
-            });
-            return () => cancelAnimationFrame(t);
-        }
-    }, [pathname]);
+        hasMounted = true;
+    }, []);
 
-    return (
-        <div
-            className="relative"
-            style={{
-                opacity: visible ? 1 : 0,
-                transition: visible ? 'opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
-                willChange: 'opacity',
-            }}
-        >
-            {children}
-        </div>
-    );
+    return <div className={fadeIn ? 'relative duration-300 animate-in fade-in' : 'relative'}>{children}</div>;
 }

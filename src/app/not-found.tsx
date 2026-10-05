@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Backdrop } from "@/components/ui/backdrop";
+import { Backdrop } from "@/components/layout/Backdrop";
 
 export const metadata: Metadata = {
     title: "Page not found",
