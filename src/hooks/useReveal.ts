@@ -1,40 +1,38 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
+import { prefersReducedMotion } from '@/lib/motion';
 
-/**
- * Reveals the items matching `selector` inside `scope` as they scroll into view, with CSS transitions
- * (see [data-reveal] in globals.css). One IntersectionObserver, no per-element tweens and no layout
- * thrash at hydration. Items entering together are staggered through a `--i` custom property.
- */
+/** Reveals `selector` matches in `scope` via CSS transitions ([data-reveal] in globals.css), staggered through `--i`. */
 export function useReveal(scope: RefObject<HTMLElement | null>, selector = '[data-reveal]') {
     useEffect(() => {
         const root = scope.current;
-        if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!root || prefersReducedMotion()) return;
         const items = Array.from(root.querySelectorAll<HTMLElement>(selector));
         if (items.length === 0) return;
-        items.forEach((item) => item.setAttribute('data-reveal', ''));
 
         const observer = new IntersectionObserver(
             (entries) => {
                 let order = 0;
                 for (const entry of entries) {
                     if (!entry.isIntersecting) continue;
-                    (entry.target as HTMLElement).style.setProperty('--i', String(order++));
-                    entry.target.setAttribute('data-revealed', '');
-                    observer.unobserve(entry.target);
+                    const item = entry.target as HTMLElement;
+                    item.style.setProperty('--i', String(order++));
+                    item.toggleAttribute('data-revealed', true);
+                    observer.unobserve(item);
                 }
             },
             { rootMargin: '0px 0px -12% 0px' }
         );
-        // Anything already on screen when armed stays visible instead of flashing out and back in.
+
+        // Items already on screen stay visible instead of flashing out and back in.
         const viewport = window.innerHeight;
         for (const item of items) {
-            const top = item.getBoundingClientRect().top;
-            if (top < viewport) item.setAttribute('data-revealed', '');
+            item.toggleAttribute('data-reveal', true);
+            if (item.getBoundingClientRect().top < viewport) item.toggleAttribute('data-revealed', true);
             else observer.observe(item);
         }
-        root.setAttribute('data-reveal-ready', '');
+        root.toggleAttribute('data-reveal-ready', true);
 
         return () => {
             observer.disconnect();
