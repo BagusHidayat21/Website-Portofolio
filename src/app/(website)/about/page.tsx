@@ -10,7 +10,9 @@ export const metadata: Metadata = {
         title: "About | Bagus Hidayat",
         description: "Learn about Bagus Hidayat, Full-Stack Web Developer specializing in Data Engineering and Machine Learning.",
         url: "https://www.bagus-hidayat.my.id/about",
+        images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Bagus Hidayat Portfolio" }],
     },
+    alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

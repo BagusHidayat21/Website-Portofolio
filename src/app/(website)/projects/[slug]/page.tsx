@@ -31,8 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             title: `${project.title} | Bagus Hidayat`,
             description: project.description || `${project.title} - A project by Bagus Hidayat.`,
             url: `https://www.bagus-hidayat.my.id/projects/${project.slug}`,
-            images: project.thumbnail ? [{ url: project.thumbnail }] : undefined,
+            images: project.thumbnail ? [{ url: project.thumbnail }] : [{ url: "/og-image.png", width: 1200, height: 630 }],
         },
+        alternates: { canonical: `/projects/${project.slug}` },
     };
 }
 

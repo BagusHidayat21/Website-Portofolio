@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'Portfolio of Bagus Hidayat, specializing in Data Engineering and Full-Stack Development.',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#000000',
+        background_color: '#08080a',
+        theme_color: '#08080a',
         icons: [
             {
                 src: '/icon.png',

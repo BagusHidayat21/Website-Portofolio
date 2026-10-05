@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         .filter(p => p.isVisible)
         .map((project) => ({
             url: `${baseUrl}/projects/${project.slug}`,
-            lastModified: new Date(),
+            lastModified: project.updatedAt,
             changeFrequency: 'monthly' as const,
             priority: 0.6,
         }));

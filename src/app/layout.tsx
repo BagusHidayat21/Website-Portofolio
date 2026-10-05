@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Archivo } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -9,9 +10,12 @@ const geist = Geist({
   display: "swap",
 });
 
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
+// Archivo, the single instance the site uses (width 125, weight 800), self-hosted as a 14 KB latin subset
+// instead of the 88 KB variable font with every width and weight.
+const archivo = localFont({
+  src: "./fonts/archivo-expanded-800.woff2",
+  weight: "800",
+  style: "normal",
   variable: "--font-archivo",
   display: "swap",
 });
@@ -20,13 +24,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
   display: "swap",
+  // Only small labels use mono; not preloading keeps it off the LCP path.
+  preload: false,
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.bagus-hidayat.my.id'),
-  alternates: {
-    canonical: '/',
-  },
   title: {
     default: "Bagus Hidayat | Full-Stack Web Developer",
     template: "Bagus Hidayat | %s"
@@ -94,6 +97,15 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f2f1ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#08080a" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -102,6 +114,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} ${archivo.variable} font-sans relative`}>
+        {/* Decide on the first-visit splash before first paint (no flash, no hydration wait). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!sessionStorage.getItem('splashShown')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.setAttribute('data-splash','')}catch(e){}",
+          }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ink-accent focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-ink-on-accent"
@@ -121,28 +140,33 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "Bagus Hidayat",
-              "url": "https://www.bagus-hidayat.my.id",
-              "image": "https://www.bagus-hidayat.my.id/avatars/profile.png",
-              "description": "Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies.",
-              "jobTitle": "Full-Stack Web Developer",
-              "alumniOf": {
-                "@type": "CollegeOrUniversity",
-                "name": "Universitas Negeri Malang"
-              },
-              "knowsAbout": [
-                "Next.js",
-                "React",
-                "Laravel",
-                "Machine Learning",
-                "Data Engineering",
-                "TypeScript",
-                "PostgreSQL"
-              ],
-              "sameAs": [
-                "https://github.com/BagusHidayat21",
-                "https://www.linkedin.com/in/bagushidayat-id/"
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://www.bagus-hidayat.my.id/#website",
+                  "url": "https://www.bagus-hidayat.my.id",
+                  "name": "Bagus Hidayat",
+                  "inLanguage": "en",
+                  "publisher": { "@id": "https://www.bagus-hidayat.my.id/#person" },
+                },
+                {
+                  "@type": "Person",
+                  "@id": "https://www.bagus-hidayat.my.id/#person",
+                  "name": "Bagus Hidayat",
+                  "url": "https://www.bagus-hidayat.my.id",
+                  "image": "https://www.bagus-hidayat.my.id/avatars/profile.webp",
+                  "description": "Full-Stack Web Developer specializing in Data Engineering, Machine Learning, and modern web technologies.",
+                  "jobTitle": "Full-Stack Web Developer",
+                  "worksFor": { "@type": "Organization", "name": "PT Universal Big Data" },
+                  "address": { "@type": "PostalAddress", "addressLocality": "Malang", "addressCountry": "ID" },
+                  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universitas Negeri Malang" },
+                  "knowsAbout": ["Next.js", "React", "Laravel", "Machine Learning", "Data Engineering", "TypeScript", "PostgreSQL"],
+                  "sameAs": [
+                    "https://github.com/BagusHidayat21",
+                    "https://www.linkedin.com/in/bagushidayat-id/",
+                    "https://www.instagram.com/hid.bgs/"
+                  ]
+                }
               ]
             })
           }}

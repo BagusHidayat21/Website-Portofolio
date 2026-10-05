@@ -5,12 +5,14 @@ import { Contact } from "@/components/sections/Contact";
 
 export const metadata: Metadata = {
     title: "Projects",
-    description: "Explore the portfolio of projects by Bagus Hidayat - featuring web applications, mobile apps, and data engineering solutions built with Next.js, Laravel, React Native, and more.",
+    description: "Explore the portfolio of projects by Bagus Hidayat - featuring web applications, mobile apps, and data engineering solutions built with Next.js, Laravel, Flutter, and more.",
     openGraph: {
         title: "Projects | Bagus Hidayat",
         description: "Explore web applications, mobile apps, and data engineering solutions by Bagus Hidayat.",
         url: "https://www.bagus-hidayat.my.id/projects",
+        images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Bagus Hidayat Portfolio" }],
     },
+    alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {
