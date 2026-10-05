@@ -6,7 +6,7 @@ export function Experience() {
         .filter((e) => e.isVisible)
         .sort((a, b) => a.order - b.order)
         .slice(0, 5)
-        .map(({ id, title, company, year, description, skills, category }) => ({
+        .map(({ id, title, company, year, description, skills, category, url }) => ({
             id,
             title,
             company,
@@ -14,6 +14,7 @@ export function Experience() {
             description,
             skills,
             category: category ?? 'Work',
+            url,
         }));
 
     if (items.length === 0) {

@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { Fragment, useRef } from 'react';
+import { useRef } from 'react';
+import { ScrollWords } from './ScrollWords';
 import { gsap, useGSAP, applyParallax, MOTION_OK, DESKTOP_MOTION } from '@/lib/gsap';
 
 interface Stat {
@@ -18,32 +19,19 @@ interface AboutManifestoClientProps {
     stats: Stat[];
 }
 
-// Manifesto copy, condensed from the existing About section. The portrait pill is inserted after PILL_AFTER words.
+// Manifesto copy, condensed from the About story.
 const MANIFESTO =
     'I build full stack products, put data and machine learning to work inside them, and teach vocational students to ship software the way real teams do.';
-const HIGHLIGHT = new Set(['full', 'stack', 'data', 'machine', 'learning']);
+const HIGHLIGHT = ['full', 'stack', 'data', 'machine', 'learning'];
 
 export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoClientProps) {
     const root = useRef<HTMLElement>(null);
-    const words = MANIFESTO.split(' ');
 
     useGSAP(
         () => {
             const mm = gsap.matchMedia();
 
             mm.add(MOTION_OK, () => {
-                // Words light up one by one as the paragraph scrolls through.
-                gsap.fromTo(
-                    '.mf-word',
-                    { opacity: 0.12 },
-                    {
-                        opacity: 1,
-                        ease: 'none',
-                        stagger: 0.08,
-                        scrollTrigger: { trigger: '.mf-text', start: 'top 75%', end: 'bottom 40%', scrub: true },
-                    }
-                );
-
                 // Portrait: frame rises, photo inside moves the other way.
                 gsap.fromTo(
                     '.mf-photo',
@@ -101,33 +89,19 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
 
     return (
         <section ref={root} id="about" className="relative overflow-hidden py-14 text-ink-fg sm:py-20 md:py-28">
-            <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-                <div className="mb-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+            <div className="page-x relative">
+                <div className="label mb-6 flex items-center gap-2 text-ink-muted">
                     <span className="h-1.5 w-1.5 rounded-full bg-ink-accent" />
-                    <span>01 / About</span>
+                    <span>About</span>
                 </div>
                 <h2 className="sr-only">About {name}</h2>
-                <p className="mf-text max-w-6xl text-balance font-sans text-[clamp(1.75rem,4vw,4.25rem)] font-medium leading-[1.15] tracking-[-0.03em]">
-                    {words.map((word, i) => (
-                        <Fragment key={i}>
-                            <span
-                                className={
-                                    HIGHLIGHT.has(word.toLowerCase())
-                                        ? 'mf-word text-ink-accent-ink'
-                                        : 'mf-word'
-                                }
-                            >
-                                {word}
-                            </span>{' '}
-                        </Fragment>
-                    ))}
-                </p>
+                <ScrollWords text={MANIFESTO} highlight={HIGHLIGHT} />
 
                 <div className="mt-10 grid grid-cols-1 gap-10 sm:mt-14 md:mt-20 md:gap-12 lg:grid-cols-12 lg:gap-10">
-                    <div className="lg:col-span-5" data-speed="-1">
+                    <div className="lg:col-span-5" data-speed="-0.4">
                         {/* Double-bezel portrait frame */}
-                        <div className="rounded-[2.25rem] bg-ink-fg/[0.04] p-2 ring-1 ring-ink-line">
-                            <div className="mf-frame relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.5rem)] bg-ink-bg-2">
+                        <div className="shell">
+                            <div className="mf-frame relative aspect-[4/5] overflow-hidden shell-core bg-ink-bg-2">
                                 <Image
                                     src={avatarUrl}
                                     alt={`Portrait of ${name}`}
@@ -151,7 +125,7 @@ export function AboutManifestoClient({ name, avatarUrl, stats }: AboutManifestoC
                     <div className="flex flex-col justify-end lg:col-span-6 lg:col-start-7">
                         <div className="mf-stats grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
                             {stats.map((stat, i) => (
-                                <div key={stat.label} data-speed={String(0.6 + i * 0.5)}>
+                                <div key={stat.label} data-speed={String(0.3 + i * 0.25)}>
                                 <div className="mf-stat border-t border-ink-line pt-6">
                                     <p className="font-wide text-[clamp(3rem,6vw,5.5rem)] font-extrabold leading-none tracking-[-0.04em] tabular-nums">
                                         <span className="mf-count" data-value={stat.value}>

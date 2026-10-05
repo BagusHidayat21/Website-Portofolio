@@ -35,9 +35,16 @@ export function TechMarquee({ items }: { items: string[] }) {
             const mm = gsap.matchMedia();
             mm.add(MOTION_OK, () => {
                 const tracks = gsap.utils.toArray<HTMLElement>('.mq-track', root.current);
-                const state = { dir: 1, boost: 0 };
+                const state = { dir: 1, boost: 0, lastScroll: 0, skewed: false };
                 const offsets = tracks.map(() => 0);
+                const setX = tracks.map((t) => gsap.quickSetter(t, 'x', 'px'));
                 const skewers = tracks.map((t) => gsap.quickTo(t, 'skewX', { duration: 0.5, ease: 'power3' }));
+                // Half-widths are measured once and on resize; reading scrollWidth every tick forced a reflow per frame.
+                let halves = tracks.map((t) => t.scrollWidth / 2);
+                const ro = new ResizeObserver(() => {
+                    halves = tracks.map((t) => t.scrollWidth / 2);
+                });
+                tracks.forEach((t) => ro.observe(t));
 
                 const st = ScrollTrigger.create({
                     trigger: root.current,
@@ -49,18 +56,28 @@ export function TechMarquee({ items }: { items: string[] }) {
                         state.boost = Math.min(Math.abs(v) / 120, 14);
                         const skew = gsap.utils.clamp(-10, 10, v / -300);
                         skewers.forEach((s, i) => s(i % 2 === 0 ? skew : -skew));
+                        state.lastScroll = performance.now();
+                        state.skewed = true;
                     },
                 });
 
                 const tick = (_t: number, delta: number) => {
-                    const step = (0.06 + state.boost * 0.03) * delta;
-                    tracks.forEach((track, i) => {
-                        const half = track.scrollWidth / 2;
+                    // Skip work while the tape is off screen.
+                    if (!st.isActive) return;
+                    const step = (0.06 + state.boost * 0.03) * Math.min(delta, 50);
+                    tracks.forEach((_track, i) => {
+                        const half = halves[i];
+                        if (!half) return;
                         const sign = (i % 2 === 0 ? -1 : 1) * state.dir;
                         offsets[i] = gsap.utils.wrap(-half, 0, offsets[i] + sign * step);
-                        gsap.set(track, { x: offsets[i] });
+                        setX[i](offsets[i]);
                     });
                     state.boost *= 0.92;
+                    // onUpdate only fires while scrolling, so settle the skew once scrolling has stopped.
+                    if (state.skewed && performance.now() - state.lastScroll > 140) {
+                        skewers.forEach((s) => s(0));
+                        state.skewed = false;
+                    }
                 };
                 gsap.ticker.add(tick);
 
@@ -77,6 +94,7 @@ export function TechMarquee({ items }: { items: string[] }) {
 
                 return () => {
                     gsap.ticker.remove(tick);
+                    ro.disconnect();
                     st.kill();
                 };
             });

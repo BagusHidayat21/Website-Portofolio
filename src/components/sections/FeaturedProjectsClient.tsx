@@ -108,7 +108,7 @@ export function FeaturedProjectsClient({ projects: baseProjects }: { projects: P
 
     return (
         <section ref={root} id="projects" className="relative text-ink-fg">
-            <div className="pj-pin relative overflow-hidden py-16 sm:py-24 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100dvh] lg:motion-safe:items-center lg:motion-safe:py-0">
+            <div className="pj-pin relative overflow-hidden py-16 sm:py-24 md:py-40 lg:motion-safe:flex lg:motion-safe:h-[100svh] lg:motion-safe:items-center lg:motion-safe:py-0">
                 <div
                     className="pj-track flex flex-col gap-14 sm:gap-20 lg:motion-safe:w-max lg:motion-safe:flex-row lg:motion-safe:items-center lg:motion-safe:gap-[5vw] lg:motion-safe:pl-10 lg:motion-safe:pr-[12vw]"
                 >

@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Check, Copy, Github, Linkedin } from 'lucide-react';
 import { useRef, useState, type PointerEvent } from 'react';
-import { gsap, useGSAP, applyParallax, MOTION_OK } from '@/lib/gsap';
+import { gsap, useGSAP, MOTION_OK } from '@/lib/gsap';
 
 interface ContactProps {
     email: string;
@@ -33,17 +33,14 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                 const range = { trigger: root.current, start: 'top bottom', end: 'center center', scrub: 1 };
                 gsap.fromTo('.ct-left', { xPercent: -45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
                 gsap.fromTo('.ct-right', { xPercent: 45 }, { xPercent: 0, ease: 'none', scrollTrigger: range });
-                gsap.fromTo(
-                    '.ct-orb-wrap',
-                    { scale: 0.4, rotate: -90 },
-                    {
-                        scale: 1,
-                        rotate: 0,
-                        ease: 'none',
-                        scrollTrigger: { trigger: '.ct-orb-wrap', start: 'top bottom', end: 'center 55%', scrub: 1 },
-                    }
-                );
-                applyParallax(root.current);
+                // One-shot entrance, no rotation: a scrubbed tween could stall mid-way near the page end and leave the orb tilted.
+                gsap.from('.ct-orb', {
+                    scale: 0.6,
+                    autoAlpha: 0,
+                    duration: 1,
+                    ease: 'expo.out',
+                    scrollTrigger: { trigger: '.ct-orb-wrap', start: 'top 85%', once: true },
+                });
             });
             return () => mm.revert();
         },
@@ -61,7 +58,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
     };
 
     const onOrbLeave = (e: PointerEvent<HTMLAnchorElement>) => {
-        gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
+        gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.6, ease: 'power3.out', overwrite: 'auto' });
     };
 
     const socials = [
@@ -81,7 +78,7 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
             </div>
 
             <div className="mx-auto mt-12 grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:mt-16 sm:px-6 md:mt-24 lg:grid-cols-12 lg:px-10">
-                <div className="lg:col-span-6" data-speed="0.8">
+                <div className="lg:col-span-6">
                     <p className="max-w-[44ch] text-lg leading-relaxed text-ink-muted md:text-xl">
                         I work full-time at PT Universal Big Data and still make room for good collaborations,
                         technical work and data projects. Email is the fastest way to reach me.
@@ -135,13 +132,13 @@ export function ContactClient({ email, socialLinks }: ContactProps) {
                         href={`mailto:${email}`}
                         onPointerMove={onOrbMove}
                         onPointerLeave={onOrbLeave}
-                        className="group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink-accent-ink/40"
+                        className="ct-orb group relative flex aspect-square w-[min(72vw,22rem)] flex-col items-center justify-center gap-3 rounded-full bg-ink-accent text-ink-on-accent shadow-[0_40px_120px_-40px_rgba(200,255,61,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-accent-ink focus-visible:ring-offset-4 focus-visible:ring-offset-ink-bg"
                     >
-                        <span className="font-wide text-[clamp(1.75rem,3.4vw,3rem)] font-extrabold uppercase leading-none tracking-[-0.03em]">
+                        <span className="px-10 text-center font-wide text-[clamp(1.5rem,2.6vw,2.25rem)] font-extrabold uppercase leading-none tracking-[-0.03em]">
                             Say Hello
                         </span>
                         <ArrowUpRight
-                            className="h-9 w-9 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:rotate-45"
+                            className="h-9 w-9 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-y-1 group-hover:translate-x-1"
                             strokeWidth={1.5}
                             aria-hidden="true"
                         />
