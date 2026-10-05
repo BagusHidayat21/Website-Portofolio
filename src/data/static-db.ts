@@ -352,7 +352,7 @@ export const profileData: Profile = {
     name: 'Bagus Hidayat',
     tagline: 'Full Stack Web Developer',
     bio: 'I build web products end to end, from the database schema to the screen people actually use. Software engineer at PT Universal Big Data and graduate of Universitas Negeri Malang, now working where data engineering and machine learning meet everyday web apps.',
-    avatarUrl: '/avatars/profile.png',
+    avatarUrl: '/avatars/profile.webp',
     resumeUrl: '/resume.pdf',
     email: 'bagus.hidayat.id@gmail.com',
     location: 'Malang, Indonesia',
